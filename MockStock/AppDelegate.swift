@@ -3,7 +3,7 @@
 //  MockStock
 //
 //  Created by Theodore Hecht on 2/1/19.
-//  Comment by Luke round 2
+//  Luke comment round 2
 //  Copyright © 2019 Theodore Hecht. All rights reserved.
 //
 
