@@ -11,6 +11,7 @@
 		919D2757220485CA00405E04 /* PortfolioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 919D2756220485CA00405E04 /* PortfolioViewController.swift */; };
 		919D275C220485CC00405E04 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 919D275B220485CC00405E04 /* Assets.xcassets */; };
 		919D275F220485CC00405E04 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 919D275D220485CC00405E04 /* LaunchScreen.storyboard */; };
+		91C4141F2208C767004A8807 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 91C4141E2208C767004A8807 /* .gitignore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +21,7 @@
 		919D275B220485CC00405E04 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		919D275E220485CC00405E04 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		919D2760220485CC00405E04 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		91C4141E2208C767004A8807 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -36,6 +38,7 @@
 		919D2748220485CA00405E04 = {
 			isa = PBXGroup;
 			children = (
+				91C4141E2208C767004A8807 /* .gitignore */,
 				919D2753220485CA00405E04 /* MockStock */,
 				919D2752220485CA00405E04 /* Products */,
 			);
@@ -120,6 +123,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				919D275F220485CC00405E04 /* LaunchScreen.storyboard in Resources */,
+				91C4141F2208C767004A8807 /* .gitignore in Resources */,
 				919D275C220485CC00405E04 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
