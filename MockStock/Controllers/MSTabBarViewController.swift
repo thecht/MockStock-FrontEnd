@@ -48,7 +48,7 @@ class MSTabBarViewController: UIViewController {
     var leaguesButton: UIButton = {
         let b = UIButton()
         b.translatesAutoresizingMaskIntoConstraints = false
-        b.setTitle("LEAGUE", for: .normal)
+        b.setTitle("LEAGUES", for: .normal)
         b.titleLabel?.font = UIFont(name: "Futura-CondensedExtraBold", size: 18)
         b.setTitleColor(.gray, for: .normal)
         b.setTitleColor(.black, for: .selected)
