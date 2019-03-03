@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		911AD04A222AEB6800B9A361 /* MSTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911AD049222AEB6800B9A361 /* MSTabBarViewController.swift */; };
+		91915132222C7EA20078CEA0 /* MarketplaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91915131222C7EA20078CEA0 /* MarketplaceViewController.swift */; };
+		91915134222C7ECF0078CEA0 /* LeaguesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91915133222C7ECF0078CEA0 /* LeaguesViewController.swift */; };
 		919D2755220485CA00405E04 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 919D2754220485CA00405E04 /* AppDelegate.swift */; };
 		919D2757220485CA00405E04 /* PortfolioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 919D2756220485CA00405E04 /* PortfolioViewController.swift */; };
 		919D275C220485CC00405E04 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 919D275B220485CC00405E04 /* Assets.xcassets */; };
@@ -17,6 +19,8 @@
 
 /* Begin PBXFileReference section */
 		911AD049222AEB6800B9A361 /* MSTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSTabBarViewController.swift; sourceTree = "<group>"; };
+		91915131222C7EA20078CEA0 /* MarketplaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketplaceViewController.swift; sourceTree = "<group>"; };
+		91915133222C7ECF0078CEA0 /* LeaguesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaguesViewController.swift; sourceTree = "<group>"; };
 		919D2751220485CA00405E04 /* MockStock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MockStock.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		919D2754220485CA00405E04 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		919D2756220485CA00405E04 /* PortfolioViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioViewController.swift; sourceTree = "<group>"; };
@@ -42,6 +46,8 @@
 			children = (
 				919D2756220485CA00405E04 /* PortfolioViewController.swift */,
 				911AD049222AEB6800B9A361 /* MSTabBarViewController.swift */,
+				91915131222C7EA20078CEA0 /* MarketplaceViewController.swift */,
+				91915133222C7ECF0078CEA0 /* LeaguesViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -172,6 +178,8 @@
 			files = (
 				919D2757220485CA00405E04 /* PortfolioViewController.swift in Sources */,
 				919D2755220485CA00405E04 /* AppDelegate.swift in Sources */,
+				91915134222C7ECF0078CEA0 /* LeaguesViewController.swift in Sources */,
+				91915132222C7EA20078CEA0 /* MarketplaceViewController.swift in Sources */,
 				911AD04A222AEB6800B9A361 /* MSTabBarViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -37,6 +37,7 @@ class MSTabBarViewController: UIViewController {
         b.setTitle("PORTFOLIO", for: .normal)
         b.titleLabel?.font = UIFont(name: "Futura-CondensedExtraBold", size: 18)
         b.setTitleColor(.black, for: .normal)
+        b.tag = 0
         return b
     }()
     var marketplaceButton: UIButton = {
@@ -45,6 +46,7 @@ class MSTabBarViewController: UIViewController {
         b.setTitle("MARKETPLACE", for: .normal)
         b.titleLabel?.font = UIFont(name: "Futura-CondensedExtraBold", size: 18)
         b.setTitleColor(.gray, for: .normal)
+        b.tag = 1
         return b
     }()
     var leaguesButton: UIButton = {
@@ -53,34 +55,30 @@ class MSTabBarViewController: UIViewController {
         b.setTitle("LEAGUES", for: .normal)
         b.titleLabel?.font = UIFont(name: "Futura-CondensedExtraBold", size: 18)
         b.setTitleColor(.gray, for: .normal)
+        b.tag = 2
         return b
     }()
     
-    // ViewController Pages
-    var portfolioViewController: PortfolioViewController = {
-        let vc = PortfolioViewController()
-        return vc
-    }()
-    var marketplaceViewController: UIViewController = {
-        let vc = UIViewController()
-        vc.view.backgroundColor = UIColor.blue
-        return vc
-    }()
-    var leaguesViewController: UIViewController = {
-        let vc = UIViewController()
-        vc.view.backgroundColor = UIColor.yellow
-        return vc
-    }()
+    // 
+    var barButtons = [UIButton]()
+    var viewControllers = [UIViewController]()
     var currentlySelectedButton: UIButton!
     
     // MARK: View Controller lifecycle methods
     override func viewDidLoad() {
         view.backgroundColor = UIColor.clear
         
-        // create the view controllers
-        portfolioViewController = PortfolioViewController()
+        // Create the view controllers
+        viewControllers.append(PortfolioViewController())
+        viewControllers.append(MarketplaceViewController())
+        viewControllers.append(LeaguesViewController())
         
-        // add views to screen
+        // Add buttons to buttons array
+        barButtons.append(portfolioButton)
+        barButtons.append(marketplaceButton)
+        barButtons.append(leaguesButton)
+        
+        // Add views to screen
         view.addSubview(contentView)
         contentView.addSubview(separationBar)
         contentView.addSubview(portfolioButton)
@@ -88,10 +86,12 @@ class MSTabBarViewController: UIViewController {
         contentView.addSubview(leaguesButton)
         contentView.addSubview(pageIndicator)
         
-        // setup button tab bar selection state
+        // Flag portfolio as initial screen
         currentlySelectedButton = portfolioButton
+        self.addChild(viewControllers[0])
+        view.insertSubview(viewControllers[0].view, belowSubview: contentView)
         
-        // autolayout constraints
+        // Add autolayout constraints
         contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
@@ -126,47 +126,29 @@ class MSTabBarViewController: UIViewController {
     }
     
     @objc func barButtonPressed(button: UIButton) {
-        // dont press if already selected
+        // Dont press if already selected.
         if button == currentlySelectedButton { return }
         
-        // select new button
+        // Flag new button as selected.
         currentlySelectedButton = button
-        button.setTitleColor(UIColor.black, for: .normal)
         
-        switch button {
-            case self.portfolioButton:
-                for vc in children {
-                    vc.view.removeFromSuperview()
-                    vc.removeFromParent()
-                }
-                self.addChild(portfolioViewController)
-                view.insertSubview(portfolioViewController.view, belowSubview: contentView)
-            case self.marketplaceButton:
-                for vc in children {
-                    vc.view.removeFromSuperview()
-                    vc.removeFromParent()
-                }
-                self.addChild(marketplaceViewController)
-                view.insertSubview(marketplaceViewController.view, belowSubview: contentView)
-            case self.leaguesButton:
-                for vc in children {
-                    vc.view.removeFromSuperview()
-                    vc.removeFromParent()
-                }
-                self.addChild(leaguesViewController)
-                view.insertSubview(leaguesViewController.view, belowSubview: contentView)
-            default:
-                print("none")
+        // Swap View Controllers.
+        for vc in children {
+            vc.view.removeFromSuperview()
+            vc.removeFromParent()
         }
-        if button != self.portfolioButton {
-            self.portfolioButton.setTitleColor(UIColor.gray, for: .normal)
+        self.addChild(viewControllers[button.tag])
+        view.insertSubview(viewControllers[button.tag].view, belowSubview: contentView)
+        
+        // Change tab bar button colors.
+        for btn in barButtons {
+            if btn == button {
+                btn.setTitleColor(.black, for: .normal)
+            } else {
+                btn.setTitleColor(.gray, for: .normal)
+            }
         }
-        if button != self.marketplaceButton {
-            self.marketplaceButton.setTitleColor(UIColor.gray, for: .normal)
-        }
-        if button != self.leaguesButton {
-            self.leaguesButton.setTitleColor(UIColor.gray, for: .normal)
-        }
+        
     }
     
     
