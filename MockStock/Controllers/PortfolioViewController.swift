@@ -9,6 +9,47 @@
 import UIKit
 
 class PortfolioViewController: UIViewController {
+    
+    var headerLabel: UILabel = {
+        let l = UILabel()
+        l.text = "Portfolio"
+        return l
+    }()
+    var networth: UILabel = {
+        let l = UILabel()
+        l.text = "Net Worth:"
+        return l
+    }()
+    var networthValue: UILabel = {
+        let l = UILabel()
+        l.text = "9001"
+        return l
+    }()
+    var buyingPower: UILabel = {
+        let l = UILabel()
+        l.text = "Buying Power:"
+        return l
+    }()
+    var buyingpowerValue: UILabel = {
+        let l = UILabel()
+        l.text = "9001"
+        return l
+    }()
+    var portfolio: UILabel = {
+        let l = UILabel()
+        l.text = "Portfolio Value:"
+        return l
+    }()
+    var portfolioValue: UILabel = {
+        let l = UILabel()
+        l.text = "9001"
+        return l
+    }()
+    var divider: UIView = {
+        let v = UIView()
+        return v
+    }()
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
