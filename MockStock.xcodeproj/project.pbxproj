@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		911AD04A222AEB6800B9A361 /* MSTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911AD049222AEB6800B9A361 /* MSTabBarViewController.swift */; };
+		9133E4302236D6B7003213A6 /* MSPortfolioItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9133E42F2236D6B7003213A6 /* MSPortfolioItem.swift */; };
 		91915132222C7EA20078CEA0 /* MarketplaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91915131222C7EA20078CEA0 /* MarketplaceViewController.swift */; };
 		91915134222C7ECF0078CEA0 /* LeaguesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91915133222C7ECF0078CEA0 /* LeaguesViewController.swift */; };
 		919D2755220485CA00405E04 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 919D2754220485CA00405E04 /* AppDelegate.swift */; };
@@ -19,6 +20,7 @@
 
 /* Begin PBXFileReference section */
 		911AD049222AEB6800B9A361 /* MSTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSTabBarViewController.swift; sourceTree = "<group>"; };
+		9133E42F2236D6B7003213A6 /* MSPortfolioItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSPortfolioItem.swift; sourceTree = "<group>"; };
 		91915131222C7EA20078CEA0 /* MarketplaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketplaceViewController.swift; sourceTree = "<group>"; };
 		91915133222C7ECF0078CEA0 /* LeaguesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaguesViewController.swift; sourceTree = "<group>"; };
 		919D2751220485CA00405E04 /* MockStock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MockStock.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -52,25 +54,12 @@
 			path = Controllers;
 			sourceTree = "<group>";
 		};
-		911AD044222AD79400B9A361 /* Views */ = {
+		9133E42E2236D6A7003213A6 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		911AD045222AD79B00B9A361 /* Models */ = {
-			isa = PBXGroup;
-			children = (
+				9133E42F2236D6B7003213A6 /* MSPortfolioItem.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		911AD046222AD7A600B9A361 /* Helpers */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Helpers;
 			sourceTree = "<group>";
 		};
 		919D2748220485CA00405E04 = {
@@ -93,9 +82,7 @@
 		919D2753220485CA00405E04 /* MockStock */ = {
 			isa = PBXGroup;
 			children = (
-				911AD046222AD7A600B9A361 /* Helpers */,
-				911AD045222AD79B00B9A361 /* Models */,
-				911AD044222AD79400B9A361 /* Views */,
+				9133E42E2236D6A7003213A6 /* Models */,
 				911AD043222AD75D00B9A361 /* Controllers */,
 				919D2754220485CA00405E04 /* AppDelegate.swift */,
 				919D275B220485CC00405E04 /* Assets.xcassets */,
@@ -177,6 +164,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				919D2757220485CA00405E04 /* PortfolioViewController.swift in Sources */,
+				9133E4302236D6B7003213A6 /* MSPortfolioItem.swift in Sources */,
 				919D2755220485CA00405E04 /* AppDelegate.swift in Sources */,
 				91915134222C7ECF0078CEA0 /* LeaguesViewController.swift in Sources */,
 				91915132222C7EA20078CEA0 /* MarketplaceViewController.swift in Sources */,

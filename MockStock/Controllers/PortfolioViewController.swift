@@ -10,6 +10,7 @@ import UIKit
 
 class PortfolioViewController: UIViewController {
     
+    // MARK: Properties
     var headerLabel: UILabel = {
         let l = UILabel()
         l.text = "Portfolio"
@@ -28,7 +29,7 @@ class PortfolioViewController: UIViewController {
     }()
     var networthValue: UILabel = {
         let l = UILabel()
-        l.text = "9001"
+        l.text = "$13,000.42"
         l.font = UIFont(name: "HelveticaNeue-Thin", size: 22)
         l.textColor = .gray
         l.translatesAutoresizingMaskIntoConstraints = false
@@ -45,7 +46,7 @@ class PortfolioViewController: UIViewController {
     }()
     var buyingpowerValue: UILabel = {
         let l = UILabel()
-        l.text = "9001"
+        l.text = "$9,001.34"
         l.font = UIFont(name: "HelveticaNeue-Thin", size: 22)
         l.textColor = .gray
         l.translatesAutoresizingMaskIntoConstraints = false
@@ -62,7 +63,7 @@ class PortfolioViewController: UIViewController {
     }()
     var portfolioValue: UILabel = {
         let l = UILabel()
-        l.text = "9001"
+        l.text = "$3,999.00"
         l.font = UIFont(name: "HelveticaNeue-Thin", size: 22)
         l.textColor = .gray
         l.translatesAutoresizingMaskIntoConstraints = false
@@ -76,7 +77,15 @@ class PortfolioViewController: UIViewController {
         return v
     }()
     
-
+    var collectionView: UICollectionView = {
+        let v = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.backgroundColor = .red
+        return v
+    }()
+    var portfolioItems = [MSPortfolioItem]()
+    
+    // MARK: Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -91,6 +100,9 @@ class PortfolioViewController: UIViewController {
         view.addSubview(portfolio)
         view.addSubview(portfolioValue)
         view.addSubview(divider)
+        
+        // add collection view
+        view.addSubview(collectionView)
         
         // Add constraints to the header views
         let leftInset = CGFloat(30.0)
@@ -137,9 +149,37 @@ class PortfolioViewController: UIViewController {
         divider.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         divider.heightAnchor.constraint(equalToConstant: 1).isActive = true
         
+        // collection view constraints
+        collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: leftInset).isActive = true
+        collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: rightInset).isActive = true
+        collectionView.topAnchor.constraint(equalTo: divider.bottomAnchor, constant: 0).isActive = true
+        collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50).isActive = true
         
     }
 
 
 }
 
+extension PortfolioViewController: UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return portfolioItems.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let c = collectionView.dequeueReusableCell(withReuseIdentifier: "PortfolioItem", for: indexPath) as! MSPortfolioItemCell
+        return c
+    }
+    
+}
+
+extension PortfolioViewController: UICollectionViewDelegate {
+    
+}
+
+class MSPortfolioItemCell: UICollectionViewCell {
+    
+}
