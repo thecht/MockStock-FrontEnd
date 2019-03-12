@@ -154,8 +154,8 @@ class PortfolioViewController: UIViewController {
         divider.heightAnchor.constraint(equalToConstant: 1).isActive = true
         
         // collection view constraints
-        collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: leftInset).isActive = true
-        collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: rightInset).isActive = true
+        collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0).isActive = true
+        collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0).isActive = true
         collectionView.topAnchor.constraint(equalTo: divider.bottomAnchor, constant: 0).isActive = true
         collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50).isActive = true
         
@@ -166,10 +166,10 @@ class PortfolioViewController: UIViewController {
         
         self.view.layoutIfNeeded()
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.sectionInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
-            layout.minimumInteritemSpacing = 10
-            layout.minimumLineSpacing = 10
-            layout.itemSize = CGSize(width: collectionView.frame.width, height: collectionView.frame.width * 0.25)
+            layout.sectionInset = UIEdgeInsets(top: 35, left: 0, bottom: 45, right: 0)
+            layout.minimumInteritemSpacing = 15
+            layout.minimumLineSpacing = 15
+            layout.itemSize = CGSize(width: collectionView.frame.width - 60, height: collectionView.frame.width * 0.225)
         }
     }
 
@@ -188,7 +188,7 @@ extension PortfolioViewController: UICollectionViewDataSource {
 //        let modelItem = portfolioItems[indexPath.item]
         let c = collectionView.dequeueReusableCell(withReuseIdentifier: "PortfolioItem", for: indexPath) as! MSPortfolioItemCell
         c.translatesAutoresizingMaskIntoConstraints = false
-        c.backgroundColor = .yellow
+        c.backgroundColor = .green
         return c
     }
     
@@ -202,6 +202,10 @@ class MSPortfolioItemCell: UICollectionViewCell {
     
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
-        print(self.frame)
+        layer.cornerRadius = self.frame.width / 3
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOffset = CGSize(width: 1.0, height: 2.0)
+        layer.shadowOpacity = 0.4
+        layer.shadowRadius = 4.0
     }
 }
