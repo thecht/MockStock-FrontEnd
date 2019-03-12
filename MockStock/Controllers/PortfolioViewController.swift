@@ -80,7 +80,9 @@ class PortfolioViewController: UIViewController {
     var collectionView: UICollectionView = {
         let v = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
         v.translatesAutoresizingMaskIntoConstraints = false
-        v.backgroundColor = .red
+        v.alwaysBounceVertical = true
+        v.backgroundColor = .white
+        v.register(MSPortfolioItemCell.self, forCellWithReuseIdentifier: "PortfolioItem")
         return v
     }()
     var portfolioItems = [MSPortfolioItem]()
@@ -103,6 +105,8 @@ class PortfolioViewController: UIViewController {
         
         // add collection view
         view.addSubview(collectionView)
+        collectionView.delegate = self
+        collectionView.dataSource = self
         
         // Add constraints to the header views
         let leftInset = CGFloat(30.0)
@@ -157,6 +161,17 @@ class PortfolioViewController: UIViewController {
         
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.view.layoutIfNeeded()
+        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.sectionInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+            layout.minimumInteritemSpacing = 10
+            layout.minimumLineSpacing = 10
+            layout.itemSize = CGSize(width: collectionView.frame.width, height: collectionView.frame.width * 0.25)
+        }
+    }
 
 }
 
@@ -166,11 +181,14 @@ extension PortfolioViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return portfolioItems.count
+        return 5 //portfolioItems.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        let modelItem = portfolioItems[indexPath.item]
         let c = collectionView.dequeueReusableCell(withReuseIdentifier: "PortfolioItem", for: indexPath) as! MSPortfolioItemCell
+        c.translatesAutoresizingMaskIntoConstraints = false
+        c.backgroundColor = .yellow
         return c
     }
     
@@ -182,4 +200,8 @@ extension PortfolioViewController: UICollectionViewDelegate {
 
 class MSPortfolioItemCell: UICollectionViewCell {
     
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        print(self.frame)
+    }
 }
