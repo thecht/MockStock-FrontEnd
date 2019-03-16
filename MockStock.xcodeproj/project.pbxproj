@@ -16,6 +16,7 @@
 		919D275C220485CC00405E04 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 919D275B220485CC00405E04 /* Assets.xcassets */; };
 		919D275F220485CC00405E04 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 919D275D220485CC00405E04 /* LaunchScreen.storyboard */; };
 		91C4141F2208C767004A8807 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 91C4141E2208C767004A8807 /* .gitignore */; };
+		91DE5F5D223C5E1200C6D745 /* MSPortfolioItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DE5F5C223C5E1200C6D745 /* MSPortfolioItemCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		919D275E220485CC00405E04 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		919D2760220485CC00405E04 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		91C4141E2208C767004A8807 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		91DE5F5C223C5E1200C6D745 /* MSPortfolioItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSPortfolioItemCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +84,7 @@
 		919D2753220485CA00405E04 /* MockStock */ = {
 			isa = PBXGroup;
 			children = (
+				91DE5F5B223C5DE800C6D745 /* Views */,
 				9133E42E2236D6A7003213A6 /* Models */,
 				911AD043222AD75D00B9A361 /* Controllers */,
 				919D2754220485CA00405E04 /* AppDelegate.swift */,
@@ -90,6 +93,14 @@
 				919D2760220485CC00405E04 /* Info.plist */,
 			);
 			path = MockStock;
+			sourceTree = "<group>";
+		};
+		91DE5F5B223C5DE800C6D745 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				91DE5F5C223C5E1200C6D745 /* MSPortfolioItemCell.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -165,6 +176,7 @@
 			files = (
 				919D2757220485CA00405E04 /* PortfolioViewController.swift in Sources */,
 				9133E4302236D6B7003213A6 /* MSPortfolioItem.swift in Sources */,
+				91DE5F5D223C5E1200C6D745 /* MSPortfolioItemCell.swift in Sources */,
 				919D2755220485CA00405E04 /* AppDelegate.swift in Sources */,
 				91915134222C7ECF0078CEA0 /* LeaguesViewController.swift in Sources */,
 				91915132222C7EA20078CEA0 /* MarketplaceViewController.swift in Sources */,
