@@ -9,5 +9,8 @@
 import Foundation
 
 class MSPortfolioItem {
-    
+    var symbol = ""
+    var price = 0.0
+    var quantity = 0
+    var percentChange = 0.0
 }
