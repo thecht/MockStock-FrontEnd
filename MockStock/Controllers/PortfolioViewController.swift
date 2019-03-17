@@ -193,7 +193,7 @@ extension PortfolioViewController: UICollectionViewDataSource, UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.frame.width - 60, height: collectionView.frame.width * 0.225)
+        return CGSize(width: collectionView.frame.width - 60, height: collectionView.frame.width * 0.24)
     }
     
 }

@@ -24,15 +24,78 @@ class MSPortfolioItemCell: UICollectionViewCell {
     }()
     
     // Labels
-    var priceLabel: UILabel!
-    var priceValueLabel: UILabel!
-    var quantityLabel: UILabel!
-    var quantityValueLabel: UILabel!
-    var tcbLabel: UILabel!
-    var tcbValueLabel: UILabel!
-    var tickerLabel: UILabel!
-    var valuePercentLabel: UILabel!
-    var valueLabel: UILabel!
+    var priceLabel: UILabel = {
+        let l = UILabel()
+        l.text = "PRICE:"
+        l.font = UIFont(name: "Futura-CondensedMedium", size: 16)
+        l.textColor = .white
+        l.textAlignment = .left
+        return l
+    }()
+    var priceValueLabel: UILabel = {
+        let l = UILabel()
+        l.text = "123.12"
+        l.font = UIFont(name: "HelveticaNeue-Thin", size: 22)
+        l.textColor = .white
+        l.textAlignment = .left
+        return l
+    }()
+    var quantityLabel: UILabel = {
+        let l = UILabel()
+        l.text = "QTY:"
+        l.font = UIFont(name: "Futura-CondensedMedium", size: 16)
+        l.textColor = .white
+        l.textAlignment = .left
+        return l
+    }()
+    var quantityValueLabel: UILabel = {
+        let l = UILabel()
+        l.text = "71"
+        l.font = UIFont(name: "HelveticaNeue-Thin", size: 22)
+        l.textColor = .white
+        l.textAlignment = .left
+        return l
+    }()
+    var tcbLabel: UILabel = {
+        let l = UILabel()
+        l.text = "TOTAL COST BASIS:"
+        l.font = UIFont(name: "Futura-CondensedMedium", size: 16)
+        l.textColor = .white
+        l.textAlignment = .left
+        return l
+    }()
+    var tcbValueLabel: UILabel = {
+        let l = UILabel()
+        l.text = "$70981.21"
+        l.font = UIFont(name: "HelveticaNeue-Thin", size: 22)
+        l.textColor = .white
+        l.textAlignment = .left
+        return l
+    }()
+    var tickerLabel: UILabel = {
+        let l = UILabel()
+        l.text = "APPL"
+        l.font = UIFont(name: "Futura", size: 22)
+        l.textColor = .white
+        l.textAlignment = .left
+        return l
+    }()
+    var valuePercentLabel: UILabel = {
+        let l = UILabel()
+        l.text = "+3.08%"
+        l.font = UIFont(name: "Futura", size: 22)
+        l.textColor = .white
+        l.textAlignment = .left
+        return l
+    }()
+    var valueLabel: UILabel = {
+        let l = UILabel()
+        l.text = "$12,345"
+        l.font = UIFont(name: "Futura", size: 22)
+        l.textColor = .white
+        l.textAlignment = .left
+        return l
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -51,16 +114,39 @@ class MSPortfolioItemCell: UICollectionViewCell {
         addSubview(colorView1)
         addSubview(colorView2)
         
-        
-        
+        addSubview(priceLabel)
+        addSubview(priceValueLabel)
+        addSubview(quantityLabel)
+        addSubview(quantityValueLabel)
+        addSubview(tcbLabel)
+        addSubview(tcbValueLabel)
+        addSubview(tickerLabel)
+        addSubview(valuePercentLabel)
+        addSubview(valueLabel)
     }
+    
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
         
         // Size background views
         colorView2.frame = CGRect(x: 0, y: frame.height - frame.height * 0.4, width: frame.width, height: frame.height * 0.4)
         colorView2.layer.cornerRadius = colorView2.frame.width / 25
-        colorView1.frame = CGRect(x: 0, y: frame.height - frame.height * 0.5, width: frame.width, height: frame.height * 0.2)
+        colorView1.frame = CGRect(x: 0, y: frame.height - frame.height * 0.4, width: frame.width, height: frame.height * 0.2)
+    
+        setupLabels()
+    }
+    
+    private func setupLabels() {
+        let leftLabelInset = CGFloat(10.0)
+        priceLabel.frame = CGRect(x: leftLabelInset, y: 5.0, width: 115.0, height: 20.0)
+        priceValueLabel.frame = CGRect(x: leftLabelInset, y: priceLabel.frame.height + 5.0, width: 115.0, height: 25.0)
+        quantityLabel.frame = CGRect(x: leftLabelInset + priceLabel.frame.width, y: 5.0, width: 85.0, height: 20.0)
+        quantityValueLabel.frame = CGRect(x: leftLabelInset + priceLabel.frame.width, y: quantityLabel.frame.height + 5.0, width: 70.0, height: 25.0)
+        tcbLabel.frame = CGRect(x: quantityLabel.frame.maxX, y: 5.0, width: 120.0, height: 20.0)
+        tcbValueLabel.frame = CGRect(x: quantityLabel.frame.maxX, y: tcbLabel.frame.height + 5.0, width: 120.0, height: 25.0)
+        tickerLabel.frame = CGRect(x: leftLabelInset, y: colorView1.frame.minY + 5.0, width: 120, height: 30)
+        valuePercentLabel.frame = CGRect(x: tickerLabel.frame.maxX - 30, y: tickerLabel.frame.minY, width: 115, height: 30)
+        valueLabel.frame = CGRect(x: valuePercentLabel.frame.maxX, y: tickerLabel.frame.minY, width: 120, height: 30)
     }
     
     func setColors(topView: UIColor, bottomViewColor: UIColor) {
