@@ -58,7 +58,7 @@ class MSPortfolioItemCell: UICollectionViewCell {
     }()
     var tcbLabel: UILabel = {
         let l = UILabel()
-        l.text = "TOTAL COST BASIS:"
+        l.text = "TOTAL VALUE:"
         l.font = UIFont(name: "Futura-CondensedMedium", size: 16)
         l.textColor = .white
         l.textAlignment = .left
@@ -121,7 +121,7 @@ class MSPortfolioItemCell: UICollectionViewCell {
         addSubview(tcbLabel)
         addSubview(tcbValueLabel)
         addSubview(tickerLabel)
-        addSubview(valuePercentLabel)
+        //addSubview(valuePercentLabel)
         addSubview(valueLabel)
     }
     

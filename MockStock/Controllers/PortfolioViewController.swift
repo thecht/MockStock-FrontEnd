@@ -86,11 +86,26 @@ class PortfolioViewController: UIViewController {
         v.backgroundColor = .white
         return v
     }()
+    // MARK: Initialization
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        MSRestMock.fetchPortfolioData()
+        
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        // Fetch Data
+        self.view.isUserInteractionEnabled = false
+        fetchData()
+
+        // Configure View
         view.backgroundColor = .white
         
         // Add header views to the root view
@@ -171,6 +186,26 @@ class PortfolioViewController: UIViewController {
             layout.minimumInteritemSpacing = 15
             layout.minimumLineSpacing = 15
         }
+        
+        changePortfolioMetaData()
+    }
+    
+    func fetchData() {
+        guard let url = URL(string: "") else {
+            self.view.isUserInteractionEnabled = true
+            return
+        }
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "GET"
+        URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+            // add the data to the data model. Call changePortfolioMetaData method?
+            }.resume() // fires the session
+    }
+    
+    func changePortfolioMetaData() {
+        networthValue.text = String(format: "$%.02f", MSPortfolioData.sharedInstance.buyingPower + MSPortfolioData.sharedInstance.portfolioValue)
+        buyingpowerValue.text = String(format: "$%.02f", MSPortfolioData.sharedInstance.buyingPower)
+        portfolioValue.text = String(format: "$%.02f", MSPortfolioData.sharedInstance.portfolioValue)
     }
 
 }
@@ -189,9 +224,21 @@ extension PortfolioViewController: UICollectionViewDataSource, UICollectionViewD
         let c = collectionView.dequeueReusableCell(withReuseIdentifier: "PortfolioItem", for: indexPath) as! MSPortfolioItemCell
         c.translatesAutoresizingMaskIntoConstraints = false
         c.backgroundColor = .gray
-//        if modelItem.percentChange > 0 {
-//            c.setColors(topView: <#T##UIColor#>, bottomViewColor: <#T##UIColor#>)
-//        }
+        c.tickerLabel.text = modelItem.symbol
+        c.priceValueLabel.text = String(format: "%.02f", modelItem.price)
+        c.quantityValueLabel.text = String(modelItem.quantity)
+        c.tcbValueLabel.text = String(format: "$%.02f", modelItem.price * Double(modelItem.quantity))
+        
+        var percentDoubleSign = ""
+        if modelItem.percentChange >= 0 {
+            percentDoubleSign = "+"
+            c.setColors(topView: UIColor(red: 87, green: 210, blue: 2), bottomViewColor: UIColor(red: 70, green: 166, blue: 1))
+        } else {
+            percentDoubleSign = "-"
+            c.setColors(topView: UIColor(red: 247, green: 13, blue: 31), bottomViewColor: UIColor(red: 191, green: 11, blue: 25))
+        }
+        c.valueLabel.text = String("\(percentDoubleSign)\(modelItem.percentChange)%")
+        
         return c
     }
     

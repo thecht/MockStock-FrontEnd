@@ -17,7 +17,7 @@
 		91B7F760223FD10E006F8FBD /* MSRest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B7F75F223FD10E006F8FBD /* MSRest.swift */; };
 		91B7F762223FD11D006F8FBD /* MSRestMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B7F761223FD11D006F8FBD /* MSRestMock.swift */; };
 		91B7F764223FE1C0006F8FBD /* MSPortfolioData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B7F763223FE1C0006F8FBD /* MSPortfolioData.swift */; };
-		91B7F765224002F4006F8FBD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 919D275D220485CC00405E04 /* LaunchScreen.storyboard */; };
+		91B7F76722401560006F8FBD /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B7F76622401560006F8FBD /* ColorExtensions.swift */; };
 		91C4141F2208C767004A8807 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 91C4141E2208C767004A8807 /* .gitignore */; };
 		91DE5F5D223C5E1200C6D745 /* MSPortfolioItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DE5F5C223C5E1200C6D745 /* MSPortfolioItemCell.swift */; };
 /* End PBXBuildFile section */
@@ -31,11 +31,11 @@
 		919D2754220485CA00405E04 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		919D2756220485CA00405E04 /* PortfolioViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioViewController.swift; sourceTree = "<group>"; };
 		919D275B220485CC00405E04 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		919D275E220485CC00405E04 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		919D2760220485CC00405E04 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		91B7F75F223FD10E006F8FBD /* MSRest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSRest.swift; sourceTree = "<group>"; };
 		91B7F761223FD11D006F8FBD /* MSRestMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSRestMock.swift; sourceTree = "<group>"; };
 		91B7F763223FE1C0006F8FBD /* MSPortfolioData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSPortfolioData.swift; sourceTree = "<group>"; };
+		91B7F76622401560006F8FBD /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
 		91C4141E2208C767004A8807 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		91DE5F5C223C5E1200C6D745 /* MSPortfolioItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSPortfolioItemCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -97,7 +97,6 @@
 				911AD043222AD75D00B9A361 /* Controllers */,
 				919D2754220485CA00405E04 /* AppDelegate.swift */,
 				919D275B220485CC00405E04 /* Assets.xcassets */,
-				919D275D220485CC00405E04 /* LaunchScreen.storyboard */,
 				919D2760220485CC00405E04 /* Info.plist */,
 			);
 			path = MockStock;
@@ -108,6 +107,7 @@
 			children = (
 				91B7F75F223FD10E006F8FBD /* MSRest.swift */,
 				91B7F761223FD11D006F8FBD /* MSRestMock.swift */,
+				91B7F76622401560006F8FBD /* ColorExtensions.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -178,7 +178,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				91B7F765224002F4006F8FBD /* LaunchScreen.storyboard in Resources */,
 				91C4141F2208C767004A8807 /* .gitignore in Resources */,
 				919D275C220485CC00405E04 /* Assets.xcassets in Resources */,
 			);
@@ -191,6 +190,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				91B7F76722401560006F8FBD /* ColorExtensions.swift in Sources */,
 				919D2757220485CA00405E04 /* PortfolioViewController.swift in Sources */,
 				9133E4302236D6B7003213A6 /* MSPortfolioItem.swift in Sources */,
 				91B7F764223FE1C0006F8FBD /* MSPortfolioData.swift in Sources */,
@@ -205,17 +205,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		919D275D220485CC00405E04 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				919D275E220485CC00405E04 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		919D2761220485CC00405E04 /* Debug */ = {
