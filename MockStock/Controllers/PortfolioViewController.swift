@@ -9,8 +9,10 @@
 import UIKit
 
 class PortfolioViewController: UIViewController {
+    // MARK: Data Properties
+    var portfolioData = MSPortfolioData.sharedInstance
     
-    // MARK: Properties
+    // MARK: View Properties
     var headerLabel: UILabel = {
         let l = UILabel()
         l.text = "Portfolio"
@@ -84,7 +86,6 @@ class PortfolioViewController: UIViewController {
         v.backgroundColor = .white
         return v
     }()
-    var portfolioItems = [MSPortfolioItem]()
     
     // MARK: Methods
     override func viewDidLoad() {
@@ -169,7 +170,6 @@ class PortfolioViewController: UIViewController {
             layout.sectionInset = UIEdgeInsets(top: 35, left: 0, bottom: 45, right: 0)
             layout.minimumInteritemSpacing = 15
             layout.minimumLineSpacing = 15
-            //layout.itemSize = CGSize(width: collectionView.frame.width - 60, height: collectionView.frame.width * 0.225)
         }
     }
 
@@ -181,14 +181,17 @@ extension PortfolioViewController: UICollectionViewDataSource, UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5 // portfolioItems.count
+        return MSPortfolioData.sharedInstance.items.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        let modelItem = portfolioItems[indexPath.item]
+        let modelItem = MSPortfolioData.sharedInstance.items[indexPath[0]]
         let c = collectionView.dequeueReusableCell(withReuseIdentifier: "PortfolioItem", for: indexPath) as! MSPortfolioItemCell
         c.translatesAutoresizingMaskIntoConstraints = false
         c.backgroundColor = .gray
+//        if modelItem.percentChange > 0 {
+//            c.setColors(topView: <#T##UIColor#>, bottomViewColor: <#T##UIColor#>)
+//        }
         return c
     }
     
@@ -197,70 +200,3 @@ extension PortfolioViewController: UICollectionViewDataSource, UICollectionViewD
     }
     
 }
-
-//class MSPortfolioItemCell: UICollectionViewCell {
-//
-//    var colorView1: UIView = {
-//        let v = UIView()
-//        v.backgroundColor = UIColor.darkGray
-//        return v
-//    }()
-//    var colorView2: UIView = {
-//        let v = UIView()
-//        v.backgroundColor = UIColor.darkGray
-//        return v
-//    }()
-//
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//        setupViews()
-//    }
-//
-//
-//    func setupViews() {
-//        // Configure view properties
-//        layer.cornerRadius = self.frame.width / 25
-//        layer.shadowColor = UIColor.black.cgColor
-//        layer.shadowOffset = CGSize(width: 1.0, height: 2.0)
-//        layer.shadowOpacity = 0.4
-//        layer.shadowRadius = 4.0
-//
-//        // Add & Configure subviews
-//        addSubview(colorView1)
-//        addSubview(colorView2)
-//
-//
-//
-//    }
-//    override func didMoveToSuperview() {
-//        super.didMoveToSuperview()
-//
-////        // Configure view properties
-////        layer.cornerRadius = self.frame.width / 3
-////        layer.shadowColor = UIColor.black.cgColor
-////        layer.shadowOffset = CGSize(width: 1.0, height: 2.0)
-////        layer.shadowOpacity = 0.4
-////        layer.shadowRadius = 4.0
-////
-////        // Add & Configure subviews
-////        addSubview(colorView1)
-////        addSubview(colorView2)
-////
-////        colorView2.layer.cornerRadius = layer.cornerRadius
-////
-////        colorView2.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0).isActive = true
-////        colorView2.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0).isActive = true
-////        colorView2.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0).isActive = true
-////        colorView2.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 0.333).isActive = true
-//
-//
-//        colorView2.frame = CGRect(x: 0, y: frame.height - frame.height * 0.4, width: frame.width, height: frame.height * 0.4)
-//        colorView2.layer.cornerRadius = colorView2.frame.width / 25
-//
-//        colorView1.frame = CGRect(x: 0, y: frame.height - frame.height * 0.5, width: frame.width, height: frame.height * 0.2)
-//    }
-//
-//    required init?(coder aDecoder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-//}
