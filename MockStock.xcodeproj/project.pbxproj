@@ -14,7 +14,6 @@
 		919D2755220485CA00405E04 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 919D2754220485CA00405E04 /* AppDelegate.swift */; };
 		919D2757220485CA00405E04 /* PortfolioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 919D2756220485CA00405E04 /* PortfolioViewController.swift */; };
 		919D275C220485CC00405E04 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 919D275B220485CC00405E04 /* Assets.xcassets */; };
-		91B7F760223FD10E006F8FBD /* MSRest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B7F75F223FD10E006F8FBD /* MSRest.swift */; };
 		91B7F762223FD11D006F8FBD /* MSRestMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B7F761223FD11D006F8FBD /* MSRestMock.swift */; };
 		91B7F764223FE1C0006F8FBD /* MSPortfolioData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B7F763223FE1C0006F8FBD /* MSPortfolioData.swift */; };
 		91B7F76722401560006F8FBD /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B7F76622401560006F8FBD /* ColorExtensions.swift */; };
@@ -32,7 +31,6 @@
 		919D2756220485CA00405E04 /* PortfolioViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioViewController.swift; sourceTree = "<group>"; };
 		919D275B220485CC00405E04 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		919D2760220485CC00405E04 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		91B7F75F223FD10E006F8FBD /* MSRest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSRest.swift; sourceTree = "<group>"; };
 		91B7F761223FD11D006F8FBD /* MSRestMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSRestMock.swift; sourceTree = "<group>"; };
 		91B7F763223FE1C0006F8FBD /* MSPortfolioData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSPortfolioData.swift; sourceTree = "<group>"; };
 		91B7F76622401560006F8FBD /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
@@ -105,7 +103,6 @@
 		91B7F75E223FD0D4006F8FBD /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				91B7F75F223FD10E006F8FBD /* MSRest.swift */,
 				91B7F761223FD11D006F8FBD /* MSRestMock.swift */,
 				91B7F76622401560006F8FBD /* ColorExtensions.swift */,
 			);
@@ -198,7 +195,6 @@
 				91B7F762223FD11D006F8FBD /* MSRestMock.swift in Sources */,
 				919D2755220485CA00405E04 /* AppDelegate.swift in Sources */,
 				91915134222C7ECF0078CEA0 /* LeaguesViewController.swift in Sources */,
-				91B7F760223FD10E006F8FBD /* MSRest.swift in Sources */,
 				91915132222C7EA20078CEA0 /* MarketplaceViewController.swift in Sources */,
 				911AD04A222AEB6800B9A361 /* MSTabBarViewController.swift in Sources */,
 			);

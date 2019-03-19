@@ -102,8 +102,7 @@ class PortfolioViewController: UIViewController {
         super.viewDidLoad()
         
         // Fetch Data
-        self.view.isUserInteractionEnabled = false
-        fetchData()
+        //fetchData()
 
         // Configure View
         view.backgroundColor = .white
@@ -191,15 +190,21 @@ class PortfolioViewController: UIViewController {
     }
     
     func fetchData() {
-        guard let url = URL(string: "") else {
+        let urlString = "https://localhost:5001/api/tests" // localhost:5001/api/tests"
+        guard let url = URL(string: urlString) else {
             self.view.isUserInteractionEnabled = true
             return
         }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "GET"
         URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+            if let e = error {
+                print(e)
+            }
             // add the data to the data model. Call changePortfolioMetaData method?
-            }.resume() // fires the session
+//            print(data)
+            
+        }.resume() // fires the session
     }
     
     func changePortfolioMetaData() {
