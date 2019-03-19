@@ -57,6 +57,7 @@ class MSLoginViewController: UIViewController {
         let b = UIButton()
         b.setTitle("REGISTER", for: .normal)
         b.setTitleColor(.blue, for: .normal)
+        b.contentHorizontalAlignment = .left
         b.translatesAutoresizingMaskIntoConstraints = false
         return b
     }()
@@ -81,6 +82,7 @@ class MSLoginViewController: UIViewController {
         view.addSubview(loginField)
         view.addSubview(passwordField)
         view.addSubview(loginButton)
+        view.addSubview(registerButton)
         
         setupConstraints()
     }
@@ -107,7 +109,10 @@ class MSLoginViewController: UIViewController {
         passwordField.topAnchor.constraint(equalTo: loginField.bottomAnchor, constant: 25).isActive = true
         passwordField.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
-        
+        registerButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 25).isActive = true
+        registerButton.widthAnchor.constraint(equalToConstant: 120).isActive = true
+        registerButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        registerButton.topAnchor.constraint(equalTo: passwordField.bottomAnchor, constant: 30).isActive = true
         
         loginButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -25).isActive = true
         loginButton.widthAnchor.constraint(equalToConstant: 120).isActive = true
