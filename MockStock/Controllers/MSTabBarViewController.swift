@@ -128,10 +128,10 @@ class MSTabBarViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        // If keychain data doesn't exist, then present login vc
+        // If keychain data doesn't exist, then present login vc. Else, begin data fetching
         let loginVC = MSLoginViewController()
         loginVC.modalPresentationStyle = .currentContext
-        loginVC.modalTransitionStyle = .crossDissolve
+        loginVC.modalTransitionStyle = .coverVertical
         present(loginVC, animated: true, completion: nil)
     }
     
