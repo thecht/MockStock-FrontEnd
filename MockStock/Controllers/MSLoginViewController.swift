@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class MSLoginViewController: UIViewController {
+class MSLoginViewController: UIViewController, UITextFieldDelegate {
     
     var welcomeLabel: UILabel = {
         var l = UILabel()
@@ -95,6 +95,7 @@ class MSLoginViewController: UIViewController {
         // Add button handlers
         loginButton.addTarget(self, action: #selector(MSLoginViewController.loginClicked), for: .touchUpInside)
         registerButton.addTarget(self, action: #selector(MSLoginViewController.registerClicked), for: .touchUpInside)
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self.view, action: #selector(view.endEditing)))
     }
     
     func setupConstraints() {
@@ -102,7 +103,7 @@ class MSLoginViewController: UIViewController {
         welcomeLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0).isActive = true
         welcomeLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0).isActive = true
         welcomeLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
-        welcomeLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 150).isActive = true
+        welcomeLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 100).isActive = true
         
         loginBackground.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 25).isActive = true
         loginBackground.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -25).isActive = true
@@ -147,7 +148,22 @@ class MSLoginViewController: UIViewController {
     }
     
     @objc func loginClicked() {
-        print("login clicked")
+        guard let usernameText = loginField.text else { return }
+        guard let passwordText = passwordField.text else { return }
+        if usernameText.isEmpty || passwordText.isEmpty {
+            // set error message
+            print("Cannot be empty.")
+            return
+        }
+        let trimmedUsernameText = removeCharacters(string: usernameText, characterSet: [.whitespaces, .illegalCharacters, .controlCharacters, .newlines, .punctuationCharacters, .symbols])
+        let trimmedPasswordText = removeCharacters(string: passwordText, characterSet: [.whitespaces, .illegalCharacters, .controlCharacters, .newlines, .punctuationCharacters, .symbols])
+        if usernameText != trimmedUsernameText || passwordText != trimmedPasswordText {
+            print("Invalid username or password text.")
+            return
+        }
+        
+        print("LOGIN")
+//        UserDefaults.standard.set("SomeVal", forKey: "saved")
         // Check (1) fields are entered correctly (2) network activity isn't currently running
         
         // Activate network activity animation
@@ -155,27 +171,56 @@ class MSLoginViewController: UIViewController {
     }
     
     @objc func registerClicked() {
-        print("register clicked")
-        func fetchData() {
-            let urlString = "https://thtest.azurewebsites.net/"//"https://localhost:5001/api/stock" // localhost:5001/api/tests"
-            guard let url = URL(string: urlString) else {
-                self.view.isUserInteractionEnabled = true
-                return
-            }
-            var urlRequest = URLRequest(url: url)
-            urlRequest.httpMethod = "GET"
-            //urlRequest.addValue("aapl", forHTTPHeaderField: "symbol")
-            URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
-                if let e = error {
-                    print(e)
-                }
-                // add the data to the data model. Call changePortfolioMetaData method?
-                //            print(data)
-                //print(data)
-                print("got data")
-                print(data!)
-                }.resume() // fires the session
+        guard let usernameText = loginField.text else { return }
+        guard let passwordText = passwordField.text else { return }
+        if usernameText.isEmpty || passwordText.isEmpty {
+            // set error message
+            print("Cannot be empty.")
+            return
         }
-        fetchData()
+        let trimmedUsernameText = removeCharacters(string: usernameText, characterSet: [.whitespaces, .illegalCharacters, .controlCharacters, .newlines, .punctuationCharacters, .symbols])
+        let trimmedPasswordText = removeCharacters(string: passwordText, characterSet: [.whitespaces, .illegalCharacters, .controlCharacters, .newlines, .punctuationCharacters, .symbols])
+        if usernameText != trimmedUsernameText || passwordText != trimmedPasswordText {
+            print("Invalid username or password text.")
+            return
+        }
+        
+        
+        
+        print(UserDefaults.standard.string(forKey: "saved") ?? "")
+//        let urlString = "https://mockstock.azurewebsites.net/api/users"//"https://localhost:5001/api/stock" // localhost:5001/api/tests"
+//        guard let url = URL(string: urlString) else {
+//            self.view.isUserInteractionEnabled = true
+//            return
+//        }
+//        var urlRequest = URLRequest(url: url)
+//        urlRequest.httpMethod = "POST"
+//        urlRequest.addValue("T1", forHTTPHeaderField: "username")
+//        urlRequest.addValue("PW", forHTTPHeaderField: "password")
+//        URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+//            if let e = error {
+//                print(e)
+//            }
+//            // add the data to the data model. Call changePortfolioMetaData method?
+//            //            print(data)
+//            //print(data)
+//            print("got data")
+//            print(data!)
+//            }.resume() // fires the session
+    }
+    
+    func removeCharacters(string: String, characterSet: [CharacterSet]) -> String {
+        var retVal = string
+        for set in characterSet {
+            let stringComponents = retVal.components(separatedBy: set)
+            let trimmedString = stringComponents.joined(separator: "")
+            retVal = trimmedString
+        }
+        return retVal
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }
