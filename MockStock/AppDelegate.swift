@@ -17,9 +17,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // For Testing the MSLoginController
-        UserDefaults.standard.removeObject(forKey: "UserName")
-        UserDefaults.standard.removeObject(forKey: "Password")
-        
+//        UserDefaults.standard.removeObject(forKey: "UserName")
+//        UserDefaults.standard.removeObject(forKey: "Password")
+//        UserDefaults.standard.removeObject(forKey: "Token")
         // Override point for customization after application launch.
         window = UIWindow(frame: UIScreen.main.bounds)
         let username = UserDefaults.standard.string(forKey: "UserName")

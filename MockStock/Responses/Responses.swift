@@ -11,10 +11,20 @@ import Foundation
 struct RegistrationResponse: Decodable {
     var UserId: Int
     var UserName: String
-    var UserCurrency: Decimal
+    var UserCurrency: Double
 }
 
 struct TokenResponse: Decodable {
     var userId: Int
     var token: String
+}
+
+struct PortfolioResponse: Decodable {
+    var UserCurrency: Double
+    var Stock: [Stock]
+}
+
+struct Stock: Decodable {
+    var StockId: String
+    var StockQuantity: Int
 }
