@@ -18,10 +18,39 @@ class MSRestMock {
         item.price = 45.00
         
         let data = MSPortfolioData.sharedInstance
-        data.buyingPower = 45000.00
-        data.portfolioValue = 13000.00
+        data.buyingPower = 0
+        data.portfolioValue = 0
         data.items.append(item)
         data.items.append(item)
         data.items.append(item)
+    }
+    
+    static func fetchAuthenticationToken(callback: @escaping ()->Void) {
+        let urlString = "https://mockstock.azurewebsites.net/api/users/token"
+        guard let username = UserDefaults.standard.string(forKey: "UserName") else { return }
+        guard let password = UserDefaults.standard.string(forKey: "Password") else { return }
+        guard let url = URL(string: urlString) else { return }
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        urlRequest.addValue(username, forHTTPHeaderField: "username")
+        urlRequest.addValue(password, forHTTPHeaderField: "password")
+        
+        URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+            if let e = error {
+                print(e)
+                return
+            }
+            guard let data = data else { return }
+            print(String(data: data, encoding: .utf8) ?? "")
+            do {
+                let tokenData = try JSONDecoder().decode(TokenResponse.self, from: data)
+                UserDefaults.standard.set("Bearer \(tokenData.token)", forKey: "Token")
+            } catch let jsonErr {
+                print(jsonErr)
+            }
+            DispatchQueue.main.async {
+                callback()
+            }
+        }.resume() // fires the session
     }
 }

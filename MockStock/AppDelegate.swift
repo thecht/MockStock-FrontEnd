@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // For Testing the MSLoginController
 //        UserDefaults.standard.removeObject(forKey: "UserName")
 //        UserDefaults.standard.removeObject(forKey: "Password")
-        
+//        UserDefaults.standard.removeObject(forKey: "Token")
         // Override point for customization after application launch.
         window = UIWindow(frame: UIScreen.main.bounds)
         let username = UserDefaults.standard.string(forKey: "UserName")
