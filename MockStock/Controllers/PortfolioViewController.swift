@@ -21,6 +21,18 @@ class PortfolioViewController: UIViewController {
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
     }()
+    var networkActivityIndicator: UIActivityIndicatorView = {
+        let v = UIActivityIndicatorView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.style = .gray
+        return v
+    }()
+    var logoutButton: UIButton = {
+        let b = UIButton()
+        b.setBackgroundImage(UIImage(named:"logout"), for: .normal)
+        b.translatesAutoresizingMaskIntoConstraints = false
+        return b
+    }()
     var networth: UILabel = {
         let l = UILabel()
         l.text = "Net Worth:"
@@ -109,6 +121,8 @@ class PortfolioViewController: UIViewController {
         
         // Add header views to the root view
         view.addSubview(headerLabel)
+        view.addSubview(logoutButton)
+        view.addSubview(networkActivityIndicator)
         view.addSubview(networth)
         view.addSubview(networthValue)
         view.addSubview(buyingPower)
@@ -132,6 +146,14 @@ class PortfolioViewController: UIViewController {
         headerLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: leftInset).isActive = true
         headerLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: rightInset).isActive = true
         headerLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        logoutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: rightInset).isActive = true
+        logoutButton.centerYAnchor.constraint(equalTo: headerLabel.centerYAnchor, constant: 0).isActive = true
+        logoutButton.heightAnchor.constraint(equalTo: headerLabel.heightAnchor, multiplier: 0.7).isActive = true
+        logoutButton.widthAnchor.constraint(equalTo: headerLabel.heightAnchor, multiplier: 0.7).isActive = true
+        
+        networkActivityIndicator.trailingAnchor.constraint(equalTo: logoutButton.leadingAnchor, constant: 0).isActive = true
+        networkActivityIndicator.centerYAnchor.constraint(equalTo: logoutButton.centerYAnchor, constant: 0).isActive = true
         
         networth.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 10).isActive = true
         networth.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: leftInset).isActive = true
