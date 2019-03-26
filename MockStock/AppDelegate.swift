@@ -16,12 +16,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        // For Testing the MSLoginController
+        UserDefaults.standard.removeObject(forKey: "UserName")
+        UserDefaults.standard.removeObject(forKey: "Password")
+        
         // Override point for customization after application launch.
         window = UIWindow(frame: UIScreen.main.bounds)
-        let tabBarController = MSTabBarViewController()
-        window!.rootViewController = tabBarController
-        window!.makeKeyAndVisible()
-        
+        let username = UserDefaults.standard.string(forKey: "UserName")
+        let password = UserDefaults.standard.string(forKey: "Password")
+        if username == nil || password == nil {
+            let loginViewController = MSLoginViewController()
+            window!.rootViewController = loginViewController
+            window!.makeKeyAndVisible()
+        } else {
+            let tabBarController = MSTabBarViewController()
+            window!.rootViewController = tabBarController
+            window!.makeKeyAndVisible()
+        }
         return true
     }
 

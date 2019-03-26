@@ -129,14 +129,7 @@ class MSTabBarViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         // If keychain data doesn't exist, then present login vc.
-        let username = UserDefaults.standard.string(forKey: "username")// ?? ""
-        let password = UserDefaults.standard.string(forKey: "password")// ?? ""
-        if username == nil || password == nil {
-            let loginVC = MSLoginViewController()
-            loginVC.modalPresentationStyle = .currentContext
-            loginVC.modalTransitionStyle = .coverVertical
-            present(loginVC, animated: true, completion: nil)
-        }
+        
     }
     
     @objc func barButtonPressed(button: UIButton) {

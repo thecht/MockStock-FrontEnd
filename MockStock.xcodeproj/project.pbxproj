@@ -10,6 +10,7 @@
 		911AD04A222AEB6800B9A361 /* MSTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911AD049222AEB6800B9A361 /* MSTabBarViewController.swift */; };
 		912DA0042241167C00978E4E /* MSLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912DA0032241167C00978E4E /* MSLoginViewController.swift */; };
 		9133E4302236D6B7003213A6 /* MSPortfolioItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9133E42F2236D6B7003213A6 /* MSPortfolioItem.swift */; };
+		9188EB27224954FF00F17B4C /* Responses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9188EB26224954FF00F17B4C /* Responses.swift */; };
 		91915132222C7EA20078CEA0 /* MarketplaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91915131222C7EA20078CEA0 /* MarketplaceViewController.swift */; };
 		91915134222C7ECF0078CEA0 /* LeaguesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91915133222C7ECF0078CEA0 /* LeaguesViewController.swift */; };
 		919D2755220485CA00405E04 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 919D2754220485CA00405E04 /* AppDelegate.swift */; };
@@ -26,6 +27,7 @@
 		911AD049222AEB6800B9A361 /* MSTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSTabBarViewController.swift; sourceTree = "<group>"; };
 		912DA0032241167C00978E4E /* MSLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSLoginViewController.swift; sourceTree = "<group>"; };
 		9133E42F2236D6B7003213A6 /* MSPortfolioItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSPortfolioItem.swift; sourceTree = "<group>"; };
+		9188EB26224954FF00F17B4C /* Responses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Responses.swift; sourceTree = "<group>"; };
 		91915131222C7EA20078CEA0 /* MarketplaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketplaceViewController.swift; sourceTree = "<group>"; };
 		91915133222C7ECF0078CEA0 /* LeaguesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaguesViewController.swift; sourceTree = "<group>"; };
 		919D2751220485CA00405E04 /* MockStock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MockStock.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -72,6 +74,14 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		9188EB25224954E100F17B4C /* Responses */ = {
+			isa = PBXGroup;
+			children = (
+				9188EB26224954FF00F17B4C /* Responses.swift */,
+			);
+			path = Responses;
+			sourceTree = "<group>";
+		};
 		919D2748220485CA00405E04 = {
 			isa = PBXGroup;
 			children = (
@@ -92,6 +102,7 @@
 		919D2753220485CA00405E04 /* MockStock */ = {
 			isa = PBXGroup;
 			children = (
+				9188EB25224954E100F17B4C /* Responses */,
 				91B7F75E223FD0D4006F8FBD /* Helpers */,
 				91DE5F5B223C5DE800C6D745 /* Views */,
 				9133E42E2236D6A7003213A6 /* Models */,
@@ -193,6 +204,7 @@
 				91B7F76722401560006F8FBD /* ColorExtensions.swift in Sources */,
 				919D2757220485CA00405E04 /* PortfolioViewController.swift in Sources */,
 				9133E4302236D6B7003213A6 /* MSPortfolioItem.swift in Sources */,
+				9188EB27224954FF00F17B4C /* Responses.swift in Sources */,
 				91B7F764223FE1C0006F8FBD /* MSPortfolioData.swift in Sources */,
 				91DE5F5D223C5E1200C6D745 /* MSPortfolioItemCell.swift in Sources */,
 				91B7F762223FD11D006F8FBD /* MSRestMock.swift in Sources */,

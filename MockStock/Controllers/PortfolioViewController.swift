@@ -187,6 +187,7 @@ class PortfolioViewController: UIViewController {
         }
         
         changePortfolioMetaData()
+        print("Portfolio View Appeared")
     }
     
     func fetchData() {

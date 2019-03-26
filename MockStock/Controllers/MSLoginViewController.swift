@@ -20,6 +20,13 @@ class MSLoginViewController: UIViewController, UITextFieldDelegate {
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
     }()
+    var networkActivityIndicator: UIActivityIndicatorView = {
+        let v = UIActivityIndicatorView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.hidesWhenStopped = true
+        v.style = .gray
+        return v
+    }()
     var loginBackground: UIView = {
         let v = UIView()
         v.translatesAutoresizingMaskIntoConstraints = false
@@ -82,6 +89,7 @@ class MSLoginViewController: UIViewController, UITextFieldDelegate {
         
         // Add views to container
         view.addSubview(welcomeLabel)
+        view.addSubview(networkActivityIndicator)
         view.addSubview(loginBackground)
         view.addSubview(loginField)
         view.addSubview(passwordBackground)
@@ -96,6 +104,8 @@ class MSLoginViewController: UIViewController, UITextFieldDelegate {
         loginButton.addTarget(self, action: #selector(MSLoginViewController.loginClicked), for: .touchUpInside)
         registerButton.addTarget(self, action: #selector(MSLoginViewController.registerClicked), for: .touchUpInside)
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self.view, action: #selector(view.endEditing)))
+        loginField.delegate = self
+        passwordField.delegate = self
     }
     
     func setupConstraints() {
@@ -104,6 +114,11 @@ class MSLoginViewController: UIViewController, UITextFieldDelegate {
         welcomeLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0).isActive = true
         welcomeLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
         welcomeLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 100).isActive = true
+        
+        networkActivityIndicator.bottomAnchor.constraint(equalTo: loginBackground.topAnchor, constant: -15).isActive = true
+        networkActivityIndicator.widthAnchor.constraint(equalToConstant: 25).isActive = true
+        networkActivityIndicator.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        networkActivityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
         
         loginBackground.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 25).isActive = true
         loginBackground.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -25).isActive = true
@@ -145,6 +160,16 @@ class MSLoginViewController: UIViewController, UITextFieldDelegate {
         passwordBackground.layer.cornerRadius = passwordBackground.frame.height/12
         loginButton.layer.cornerRadius = loginButton.frame.height/12
         registerButton.layer.cornerRadius = registerButton.frame.height/12
+        
+        // Set default if exists
+        if let username = UserDefaults.standard.object(forKey: "UserName") as! String? {
+            loginField.text = username
+        }
+        if let password = UserDefaults.standard.object(forKey: "Password") as! String? {
+            passwordField.text = password
+        }
+        
+        
     }
     
     @objc func loginClicked() {
@@ -162,12 +187,40 @@ class MSLoginViewController: UIViewController, UITextFieldDelegate {
             return
         }
         
-        print("LOGIN")
-//        UserDefaults.standard.set("SomeVal", forKey: "saved")
-        // Check (1) fields are entered correctly (2) network activity isn't currently running
-        
-        // Activate network activity animation
-        // Send network request
+        networkActivityIndicator.startAnimating()
+        let urlString = "https://mockstock.azurewebsites.net/api/users/token"
+        guard let url = URL(string: urlString) else {
+            self.view.isUserInteractionEnabled = true
+            return
+        }
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        urlRequest.addValue(trimmedUsernameText, forHTTPHeaderField: "username")
+        urlRequest.addValue(trimmedPasswordText, forHTTPHeaderField: "password")
+        URLSession.shared.dataTask(with: urlRequest) { [weak self] (data, response, error) in
+            if let e = error {
+                print(e)
+                return
+            }
+            guard let data = data else { return }
+            print(String(data: data, encoding: .utf8) ?? "")
+            do {
+                let tokenData = try JSONDecoder().decode(TokenResponse.self, from: data)
+                UserDefaults.standard.set(tokenData.userId, forKey: "UserId")
+                UserDefaults.standard.set(trimmedUsernameText, forKey: "UserName")
+                UserDefaults.standard.set(trimmedPasswordText, forKey: "Password")
+                UserDefaults.standard.set("Bearer \(tokenData.token)", forKey: "Token")
+                DispatchQueue.main.async {
+                    self?.networkActivityIndicator.stopAnimating()
+                    self?.showMainApp()
+                }
+            } catch let jsonErr {
+                print(jsonErr)
+            }
+            DispatchQueue.main.async {
+                self?.networkActivityIndicator.stopAnimating()
+            }
+        }.resume() // fires the session
     }
     
     @objc func registerClicked() {
@@ -185,30 +238,49 @@ class MSLoginViewController: UIViewController, UITextFieldDelegate {
             return
         }
         
+        networkActivityIndicator.startAnimating()
         
-        
-        print(UserDefaults.standard.string(forKey: "saved") ?? "")
-//        let urlString = "https://mockstock.azurewebsites.net/api/users"//"https://localhost:5001/api/stock" // localhost:5001/api/tests"
-//        guard let url = URL(string: urlString) else {
-//            self.view.isUserInteractionEnabled = true
-//            return
-//        }
-//        var urlRequest = URLRequest(url: url)
-//        urlRequest.httpMethod = "POST"
-//        urlRequest.addValue("T1", forHTTPHeaderField: "username")
-//        urlRequest.addValue("PW", forHTTPHeaderField: "password")
-//        URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
-//            if let e = error {
-//                print(e)
-//            }
-//            // add the data to the data model. Call changePortfolioMetaData method?
-//            //            print(data)
-//            //print(data)
-//            print("got data")
-//            print(data!)
-//            }.resume() // fires the session
+        let urlString = "https://mockstock.azurewebsites.net/api/users"
+        guard let url = URL(string: urlString) else {
+            self.view.isUserInteractionEnabled = true
+            return
+        }
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        urlRequest.addValue(trimmedUsernameText, forHTTPHeaderField: "username")
+        urlRequest.addValue(trimmedPasswordText, forHTTPHeaderField: "password")
+        URLSession.shared.dataTask(with: urlRequest) { [weak self] (data, response, error) in
+            if let e = error {
+                print(e)
+                return
+            }
+            guard let data = data else { return }
+            do {
+                let registrationData = try JSONDecoder().decode(RegistrationResponse.self, from: data)
+                UserDefaults.standard.set(registrationData.UserId, forKey: "UserId")
+                UserDefaults.standard.set(registrationData.UserName, forKey: "UserName")
+                UserDefaults.standard.set(trimmedPasswordText, forKey: "Password")
+                
+                DispatchQueue.main.async {
+                    self?.networkActivityIndicator.stopAnimating()
+                    self?.showMainApp()
+                }
+            } catch let jsonErr {
+                print(jsonErr)
+            }
+            DispatchQueue.main.async {
+                self?.networkActivityIndicator.stopAnimating()
+            }
+        }.resume() // fires the session
     }
     
+    
+    func loginResponse(data: Data) {
+        networkActivityIndicator.stopAnimating()
+    }
+    func registrationResponse() {
+        
+    }
     func removeCharacters(string: String, characterSet: [CharacterSet]) -> String {
         var retVal = string
         for set in characterSet {
@@ -217,6 +289,15 @@ class MSLoginViewController: UIViewController, UITextFieldDelegate {
             retVal = trimmedString
         }
         return retVal
+    }
+    
+    func showMainApp() {
+        guard let appdelegate = UIApplication.shared.delegate else { return }
+        guard let window = appdelegate.window else { return }
+        
+        let tabBarViewController = MSTabBarViewController()
+        removeFromParent()
+        window!.rootViewController = tabBarViewController
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
