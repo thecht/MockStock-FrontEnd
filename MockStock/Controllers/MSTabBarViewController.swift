@@ -123,6 +123,13 @@ class MSTabBarViewController: UIViewController {
         portfolioButton.addTarget(self, action: #selector(MSTabBarViewController.barButtonPressed(button:)), for: .touchUpInside)
         marketplaceButton.addTarget(self, action: #selector(MSTabBarViewController.barButtonPressed(button:)), for: .touchUpInside)
         leaguesButton.addTarget(self, action: #selector(MSTabBarViewController.barButtonPressed(button:)), for: .touchUpInside)
+        
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        // If keychain data doesn't exist, then present login vc.
+        
     }
     
     @objc func barButtonPressed(button: UIButton) {

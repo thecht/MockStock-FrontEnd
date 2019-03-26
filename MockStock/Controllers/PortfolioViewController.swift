@@ -187,10 +187,12 @@ class PortfolioViewController: UIViewController {
         }
         
         changePortfolioMetaData()
+        print("Portfolio View Appeared")
     }
     
     func fetchData() {
         let urlString = "https://localhost:5001/api/tests" // localhost:5001/api/tests"
+        
         guard let url = URL(string: urlString) else {
             self.view.isUserInteractionEnabled = true
             return
