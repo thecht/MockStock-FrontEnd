@@ -206,6 +206,7 @@ class DetailedViewController: UIViewController {
         sixMonth.addTarget(self, action: #selector(DetailedViewController.barButtonPressed(button:)), for: .touchUpInside)
         oneYear.addTarget(self, action: #selector(DetailedViewController.barButtonPressed(button:)), for: .touchUpInside)
         backButton.addTarget(self, action: #selector(DetailedViewController.backButtonPressed(button:)), for: .touchUpInside)
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self.view, action: #selector(view.endEditing)))
     }
     @objc func barButtonPressed(button: UIButton) {
         // Dont press if already selected.
