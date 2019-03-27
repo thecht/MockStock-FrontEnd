@@ -9,6 +9,14 @@
 import Foundation
 import UIKit
 
+var viewLabel: UIButton = {
+    let b = UIButton()
+    b.setTitle("MarketPlace", for: .normal)
+    b.titleLabel?.font = UIFont(name: "Futura-CondensedExtraBold", size: 18)
+    b.setTitleColor(.red, for: .normal)
+    b.frame = CGRect(x: 25, y: 100, width: 500, height: 25)
+    return b
+}()
 class MarketplaceViewController: UIViewController {
     
     override func viewDidLoad() {
@@ -17,14 +25,14 @@ class MarketplaceViewController: UIViewController {
         view.backgroundColor = .gray
         
         // Test label -- Remove it later
-        let labelView = UILabel()
-        labelView.text = "Marketplace View! (Remove this label later)."
-        labelView.textColor = UIColor.black
-        labelView.frame = CGRect(x: 25, y: 100, width: 500, height: 25)
-        view.addSubview(labelView)
+        view.addSubview(viewLabel)
         // End test label
+        viewLabel.addTarget(self, action: #selector(MarketplaceViewController.detailedButtonPressed(button:)), for: .touchUpInside)
+    }
+
+    @objc func detailedButtonPressed(button:UIButton){
+        let mainVC = DetailedViewController()
+        present(mainVC, animated: true, completion: nil)
         
     }
-    
-    
 }
