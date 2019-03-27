@@ -53,4 +53,15 @@ class MSRestMock {
             }
         }.resume() // fires the session
     }
+    
+    static func checkUnauthorizedStatusCode(response:URLResponse?) -> Bool {
+        guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
+            return false
+        }
+        
+        if statusCode != 401 {
+            return false
+        }
+        return true
+    }
 }

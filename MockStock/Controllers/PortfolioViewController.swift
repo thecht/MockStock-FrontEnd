@@ -216,35 +216,32 @@ class PortfolioViewController: UIViewController {
         networkActivityIndicator.startAnimating()
         
         // 1. Get valid token
-//        guard let token = UserDefaults.standard.string(forKey: "Token") else {
-//            return
-//        }
         guard let token = UserDefaults.standard.string(forKey: "Token") else {
             MSRestMock.fetchAuthenticationToken(callback: fetchData)
             return
         }
         
         // 2. Send portfolio data request to server using authentication token
-        
-        // possibilities:
-        // Good request/response
-        // Token invalid
-        // if statuscode != ~200 -> Request new token and resend fetchData request
         let urlString = "https://mockstock.azurewebsites.net/api/portfolio" // localhost:5001/api/tests"
         guard let url = URL(string: urlString) else { return }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "GET"
         urlRequest.addValue(token, forHTTPHeaderField: "Authorization")
         URLSession.shared.dataTask(with: urlRequest) { [weak self] (data, response, error) in
-            if let e = error {
-                print(e)
-            }
-            // add the data to the data model. Call changePortfolioMetaData method?
-//            print(data)
+            if let e = error { print(e) }
             guard let data = data else { return }
-            print("DATA STRING: \(String(data: data, encoding: .utf8) ?? "")")
+            
+            // Check for expired token
+            if MSRestMock.checkUnauthorizedStatusCode(response: response) {
+                print("unauthorized: getting token")
+                MSRestMock.fetchAuthenticationToken(callback: self!.fetchData)
+            }
+
             do {
+                // Decode JSON
                 let portfolio = try JSONDecoder().decode(PortfolioResponse.self, from: data)
+                
+                // Populate portfolio items from JSON
                 var items = [MSPortfolioItem]()
                 for stock in portfolio.Stock {
                     let item = MSPortfolioItem()
