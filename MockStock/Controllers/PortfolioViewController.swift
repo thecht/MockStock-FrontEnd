@@ -151,7 +151,7 @@ class PortfolioViewController: UIViewController {
         logoutButton.widthAnchor.constraint(equalTo: headerLabel.heightAnchor, multiplier: 0.7).isActive = true
         
         networkActivityIndicator.trailingAnchor.constraint(equalTo: logoutButton.leadingAnchor, constant: 0).isActive = true
-        networkActivityIndicator.centerYAnchor.constraint(equalTo: logoutButton.centerYAnchor, constant: 0).isActive = true
+        networkActivityIndicator.centerYAnchor.constraint(equalTo: logoutButton.centerYAnchor, constant: -15).isActive = true
         
         networth.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 10).isActive = true
         networth.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: leftInset).isActive = true
