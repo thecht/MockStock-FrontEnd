@@ -369,7 +369,7 @@ class DetailedViewController: UIViewController {
             
         }
         
-        func hideFoodPopup() {
+        func hideTransactionPopup() {
             // 2 - Remove dim background
             let bg = self.view.viewWithTag(99)!
             UIView.animate(withDuration: 0.3, animations: {
@@ -380,7 +380,7 @@ class DetailedViewController: UIViewController {
         }
         
         func closePopup() {
-            hideFoodPopup()
+            hideTransactionPopup()
         }
         
         
