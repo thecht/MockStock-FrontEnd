@@ -107,7 +107,45 @@ class LeaguesViewController: UIViewController {
         print("League View Appeared")
     }
     func fetchData() {
+        // 0. Start activity indicator animation
+        networkActivityIndicator.startAnimating()
         
+        // 1. Get valid token
+        guard let token = UserDefaults.standard.string(forKey: "Token") else {
+            MSRestMock.fetchAuthenticationToken(callback: fetchData)
+            return
+        }
+        
+        // 2. Send portfolio data request to server using authentication token
+        let urlString = "https://mockstock.azurewebsites.net/api/leagues"
+        guard let url = URL(string: urlString) else { return }
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "GET"
+        urlRequest.addValue(token, forHTTPHeaderField: "Authorization")
+        URLSession.shared.dataTask(with: urlRequest) { [weak self] (data, response, error) in
+            if let e = error { print(e) }
+            guard let data = data else { return }
+            
+            // Check for expired token
+            if MSRestMock.checkUnauthorizedStatusCode(response: response) {
+                print("unauthorized: getting token")
+                MSRestMock.fetchAuthenticationToken(callback: self!.fetchData)
+            }
+            
+            do {
+                // Decode JSON
+                let leagues = try JSONDecoder().decode([League].self, from: data)
+                
+                // Populate leagues from JSON
+                self?.leagueData = leagues
+            } catch let jsonErr {
+                print(jsonErr)
+            }
+            DispatchQueue.main.async {
+                self?.collectionView.reloadData()
+                self?.networkActivityIndicator.stopAnimating()
+            }
+        }.resume() // fires the session
     }
     
 }
@@ -118,15 +156,17 @@ extension LeaguesViewController: UICollectionViewDataSource, UICollectionViewDel
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 2 //leagueData.count
+        return leagueData.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        //let modelItem = leagueData[indexPath.item]
+        let modelItem = leagueData[indexPath.item]
+        
         let c = collectionView.dequeueReusableCell(withReuseIdentifier: "LeagueCell", for: indexPath) as! MSLeagueCell
         c.translatesAutoresizingMaskIntoConstraints = false
         c.backgroundColor = .gray
-        
+        c.leagueCode.text = "Code: \(modelItem.LeagueId)"
+        c.leagueName.text = modelItem.LeagueName
         c.layer.borderWidth = 5.0
         c.layer.borderColor = UIColor.darkGray.cgColor
         

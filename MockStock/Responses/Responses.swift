@@ -30,10 +30,13 @@ struct Stock: Decodable {
 }
 
 struct LeagueResponse: Decodable {
-    
+    var UserId: Int
+    var Leagues: [League]
+//    var OpenEnrollment: Bool
 }
 
 struct League: Decodable {
+    var LeagueId: String
     var LeagueName: String
-    var LeagueId: Int
+    var LeagueHost: Int
 }
