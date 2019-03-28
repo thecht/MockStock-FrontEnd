@@ -28,3 +28,12 @@ struct Stock: Decodable {
     var StockId: String
     var StockQuantity: Int
 }
+
+struct LeagueResponse: Decodable {
+    
+}
+
+struct League: Decodable {
+    var LeagueName: String
+    var LeagueId: Int
+}
