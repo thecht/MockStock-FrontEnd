@@ -194,6 +194,7 @@ class PortfolioViewController: UIViewController {
         collectionView.topAnchor.constraint(equalTo: divider.bottomAnchor, constant: 0).isActive = true
         collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50).isActive = true
         
+        logoutButton.addTarget(self, action: #selector(logOut), for: .touchUpInside)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -268,6 +269,10 @@ class PortfolioViewController: UIViewController {
         networthValue.text = String(format: "$%.02f", MSPortfolioData.sharedInstance.buyingPower + MSPortfolioData.sharedInstance.portfolioValue)
         buyingpowerValue.text = String(format: "$%.02f", MSPortfolioData.sharedInstance.buyingPower)
         portfolioValue.text = String(format: "$%.02f", MSPortfolioData.sharedInstance.portfolioValue)
+    }
+    
+    @objc func logOut() {
+        present(MSLoginViewController(), animated: false, completion: nil)
     }
 
 }
