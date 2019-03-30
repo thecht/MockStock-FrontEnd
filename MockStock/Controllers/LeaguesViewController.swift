@@ -169,7 +169,7 @@ class LeaguesViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
         alert.addAction(UIAlertAction(title: "Submit", style: .default, handler: {(action) in
             if let alertTextField = alert.textFields?.first, alertTextField.text != nil {
-                print("And the text is... \(alertTextField.text!)!")
+                self.createLeagueRequest(leagueName: alertTextField.text!)
             }
         }))
         present(alert, animated: true)
@@ -197,36 +197,20 @@ class LeaguesViewController: UIViewController {
             return
         }
         
-        // 2. Send portfolio data request to server using authentication token
-        let urlString = "https://mockstock.azurewebsites.net/api/leagues"
+        // 2. Send create league request to server using authentication token
+        let urlString = "https://mockstock.azurewebsites.net/api/leagues/createleague"
         guard let url = URL(string: urlString) else { return }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
         urlRequest.addValue(token, forHTTPHeaderField: "Authorization")
+        urlRequest.addValue(leagueName, forHTTPHeaderField: "leagueName")
         URLSession.shared.dataTask(with: urlRequest) { [weak self] (data, response, error) in
             if let e = error { print(e) }
-            guard let data = data else { return }
-            
-            // Check for expired token
-            if MSRestMock.checkUnauthorizedStatusCode(response: response) {
-                print("unauthorized: getting token")
-                MSRestMock.fetchAuthenticationToken(callback: self!.fetchData)
-            }
-            
-            do {
-                // Decode JSON
-                let leagues = try JSONDecoder().decode([League].self, from: data)
-                
-                // Populate leagues from JSON
-                self?.leagueData = leagues
-            } catch let jsonErr {
-                print(jsonErr)
-            }
             DispatchQueue.main.async {
-                self?.collectionView.reloadData()
                 self?.networkActivityIndicator.stopAnimating()
+                self?.fetchData()
             }
-            }.resume() // fires the session
+        }.resume() // fires the session
     }
     
     func joinLeagueRequest(leagueCode: String) {
