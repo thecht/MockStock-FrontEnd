@@ -91,6 +91,7 @@ class LeaguesViewController: UIViewController {
         collectionView.topAnchor.constraint(equalTo: divider.bottomAnchor, constant: 0).isActive = true
         collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50).isActive = true
         
+        addLeagueButton.addTarget(self, action: #selector(newLeagueButtonPressed), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -148,6 +149,73 @@ class LeaguesViewController: UIViewController {
         }.resume() // fires the session
     }
     
+    @objc func newLeagueButtonPressed() {
+        let alert = UIAlertController(title: "Add League", message: "Join or create new league?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Create League", style: .default, handler: { [weak self] (alert) in
+            self?.createLeaugePressed()
+        }))
+        alert.addAction(UIAlertAction(title: "Join League", style: .default, handler: { [weak self] (alert) in
+            self?.joinLeaguePressed()
+        }))
+        alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
+        
+        present(alert, animated: true)
+        
+    }
+    
+    func createLeaugePressed() {
+        let alert = UIAlertController(title: "Create League", message: "Enter New League Name", preferredStyle: .alert)
+        alert.addTextField(configurationHandler: nil)
+        alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Submit", style: .default, handler: {(action) in
+            if let alertTextField = alert.textFields?.first, alertTextField.text != nil {
+                self.createLeagueRequest(leagueName: alertTextField.text!)
+            }
+        }))
+        present(alert, animated: true)
+    }
+    
+    func joinLeaguePressed() {
+        let alert = UIAlertController(title: "Join League", message: "Enter League Code", preferredStyle: .alert)
+        alert.addTextField(configurationHandler: nil)
+        alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Submit", style: .default, handler: {(action) in
+            if let alertTextField = alert.textFields?.first, alertTextField.text != nil {
+                print("And the text is... \(alertTextField.text!)!")
+            }
+        }))
+        present(alert, animated: true)
+    }
+    
+    func createLeagueRequest(leagueName: String) {
+        // 0. Start activity indicator animation
+        networkActivityIndicator.startAnimating()
+        
+        // 1. Get valid token
+        guard let token = UserDefaults.standard.string(forKey: "Token") else {
+            MSRestMock.fetchAuthenticationToken(callback: fetchData)
+            return
+        }
+        
+        // 2. Send create league request to server using authentication token
+        let urlString = "https://mockstock.azurewebsites.net/api/leagues/createleague"
+        guard let url = URL(string: urlString) else { return }
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        urlRequest.addValue(token, forHTTPHeaderField: "Authorization")
+        urlRequest.addValue(leagueName, forHTTPHeaderField: "leagueName")
+        URLSession.shared.dataTask(with: urlRequest) { [weak self] (data, response, error) in
+            if let e = error { print(e) }
+            DispatchQueue.main.async {
+                self?.networkActivityIndicator.stopAnimating()
+                self?.fetchData()
+            }
+        }.resume() // fires the session
+    }
+    
+    func joinLeagueRequest(leagueCode: String) {
+        
+    }
 }
 
 extension LeaguesViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
