@@ -181,7 +181,7 @@ class LeaguesViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
         alert.addAction(UIAlertAction(title: "Submit", style: .default, handler: {(action) in
             if let alertTextField = alert.textFields?.first, alertTextField.text != nil {
-                print("And the text is... \(alertTextField.text!)!")
+                self.joinLeagueRequest(leagueCode: alertTextField.text!)
             }
         }))
         present(alert, animated: true)
@@ -214,7 +214,28 @@ class LeaguesViewController: UIViewController {
     }
     
     func joinLeagueRequest(leagueCode: String) {
+        // 0. Start activity indicator animation
+        networkActivityIndicator.startAnimating()
         
+        // 1. Get valid token
+        guard let token = UserDefaults.standard.string(forKey: "Token") else {
+            MSRestMock.fetchAuthenticationToken(callback: fetchData)
+            return
+        }
+        
+        // 2. Send create league request to server using authentication token
+        let urlString = "https://mockstock.azurewebsites.net/api/leagues/join/\(leagueCode)"
+        guard let url = URL(string: urlString) else { return }
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        urlRequest.addValue(token, forHTTPHeaderField: "Authorization")
+        URLSession.shared.dataTask(with: urlRequest) { [weak self] (data, response, error) in
+            if let e = error { print(e) }
+            DispatchQueue.main.async {
+                self?.networkActivityIndicator.stopAnimating()
+                self?.fetchData()
+            }
+        }.resume() // fires the session
     }
 }
 
