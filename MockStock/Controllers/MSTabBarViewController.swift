@@ -71,7 +71,7 @@ class MSTabBarViewController: UIViewController {
         // Create the view controllers
         viewControllers.append(PortfolioViewController())
         viewControllers.append(MarketplaceViewController())
-        viewControllers.append(LeaguesViewController())
+        viewControllers.append(UINavigationController(rootViewController: LeaguesViewController()))
         
         // Add buttons to buttons array
         barButtons.append(portfolioButton)
