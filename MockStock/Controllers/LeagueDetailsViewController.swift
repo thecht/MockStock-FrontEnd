@@ -12,6 +12,7 @@ import UIKit
 class LeagueDetailsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     var leagueUsers = [LeagueUser]()
     var leagueName = "League Name"
+    var leagueId: String?
     
     var tableView: UITableView = {
         let tv = UITableView()
@@ -31,7 +32,7 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDataSource,
         
         view.backgroundColor = .white
         self.navigationItem.title = leagueName
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(leavueLeague))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(leaveLeaguePressed))
         
         // Add collection view
         view.addSubview(collectionView)
@@ -87,10 +88,41 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDataSource,
         let lu5 = LeagueUser(UserId: 42121, UserName: "SomeDude5", NetWorth: 14211.13)
         let lu6 = LeagueUser(UserId: 4212, UserName: "Another Person", NetWorth: 9000.13)
         leagueUsers = [lu1, lu2, lu3, lu4, lu5, lu6]
+        
+        leagueUsers = leagueUsers.sorted(by: {$0.NetWorth > $1.NetWorth})
+    }
+    @objc func leaveLeaguePressed() {
+        let alert = UIAlertController(title: "Leave League", message: "Do you want to leave the League?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "NO", style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "YES", style: .default, handler: {(action) in
+            self.leaveLeague()
+        }))
+        present(alert, animated: true)
     }
     
-    @objc func leavueLeague() {
+    @objc func leaveLeague() {
+        // 0. Start activity indicator animation
+        //networkActivityIndicator.startAnimating()
+        guard let lid = leagueId else { return }
         
+        // 1. Get valid token
+        guard let token = UserDefaults.standard.string(forKey: "Token") else {
+            MSRestMock.fetchAuthenticationToken(callback: fetchData)
+            return
+        }
+        // DGS43SSI
+        // 2. Send create league request to server using authentication token
+        let urlString = "https://mockstock.azurewebsites.net/api/leagues/leave/\(lid)"
+        guard let url = URL(string: urlString) else { return }
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "DELETE"
+        urlRequest.addValue(token, forHTTPHeaderField: "Authorization")
+        URLSession.shared.dataTask(with: urlRequest) { [weak self] (data, response, error) in
+            if let e = error { print(e) }
+            DispatchQueue.main.async {
+                self?.navigationController?.popViewController(animated: true)
+            }
+        }.resume() // fires the session
     }
     
 }

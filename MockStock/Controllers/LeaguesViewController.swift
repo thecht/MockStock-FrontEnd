@@ -68,28 +68,6 @@ class LeaguesViewController: UIViewController {
         collectionView.register(MSLeagueCell.self, forCellWithReuseIdentifier: "LeagueCell")
         
         // Add constraints to the header views
-        let leftInset = CGFloat(30.0)
-        let rightInset = CGFloat(-30.0)
-        let topInset = CGFloat(30.0)
-        
-//        headerLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: topInset).isActive = true
-//        headerLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: leftInset).isActive = true
-//        headerLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: rightInset).isActive = true
-//        headerLabel.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        
-//        addLeagueButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: rightInset).isActive = true
-//        addLeagueButton.centerYAnchor.constraint(equalTo: headerLabel.centerYAnchor, constant: 0).isActive = true
-//        addLeagueButton.heightAnchor.constraint(equalTo: headerLabel.heightAnchor, multiplier: 0.5).isActive = true
-//        addLeagueButton.widthAnchor.constraint(equalTo: headerLabel.heightAnchor, multiplier: 0.5).isActive = true
-        
-//        networkActivityIndicator.trailingAnchor.constraint(equalTo: addLeagueButton.leadingAnchor, constant: -15).isActive = true
-//        networkActivityIndicator.centerYAnchor.constraint(equalTo: addLeagueButton.centerYAnchor, constant: 0).isActive = true
-        
-//        divider.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 20).isActive = true
-//        divider.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-//        divider.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-//        divider.heightAnchor.constraint(equalToConstant: 1).isActive = true
-        
         collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0).isActive = true
         collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0).isActive = true
         collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
@@ -275,6 +253,7 @@ extension LeaguesViewController: UICollectionViewDataSource, UICollectionViewDel
         if let nav = navigationController {
             let vc = LeagueDetailsViewController()
             vc.leagueName = modelItem.LeagueName
+            vc.leagueId = modelItem.LeagueId
             print(vc.leagueName)
             nav.pushViewController(vc, animated: true)
         }
