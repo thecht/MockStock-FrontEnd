@@ -254,6 +254,7 @@ extension LeaguesViewController: UICollectionViewDataSource, UICollectionViewDel
             let vc = LeagueDetailsViewController()
             vc.leagueName = modelItem.LeagueName
             vc.leagueId = modelItem.LeagueId
+            vc.hostId = modelItem.LeagueHost
             print(vc.leagueName)
             nav.pushViewController(vc, animated: true)
         }

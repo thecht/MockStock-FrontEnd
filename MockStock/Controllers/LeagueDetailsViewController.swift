@@ -13,6 +13,7 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDataSource,
     var leagueUsers = [LeagueUser]()
     var leagueName = "League Name"
     var leagueId: String?
+    var hostId: Int?
     
     var tableView: UITableView = {
         let tv = UITableView()
@@ -94,10 +95,26 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDataSource,
         leagueUsers = leagueUsers.sorted(by: {$0.NetWorth > $1.NetWorth})
     }
     @objc func leaveLeaguePressed() {
-        let alert = UIAlertController(title: "Leave League", message: "Do you want to leave the League?", preferredStyle: .alert)
+        guard let hid = self.hostId else { return }
+        let userid = UserDefaults.standard.integer(forKey: "UserId")
+        
+        // Configure's alert text
+        var alertTitle = "Leave League"
+        var alertMessage = "Do you want to leave the league?"
+        if userid == hid {
+            alertTitle = "Delete League"
+            alertMessage = "Do you want to delete the league?"
+        }
+        
+        // Configure alert view
+        let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "NO", style: .default, handler: nil))
         alert.addAction(UIAlertAction(title: "YES", style: .default, handler: {(action) in
-            self.leaveLeague()
+            if userid == hid {
+                self.deleteLeague()
+            } else {
+                self.leaveLeague()
+            }
         }))
         present(alert, animated: true)
     }
@@ -112,8 +129,8 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDataSource,
             MSRestMock.fetchAuthenticationToken(callback: fetchData)
             return
         }
-        // DGS43SSI
-        // 2. Send create league request to server using authentication token
+        
+        // 2. Send leave league request to server using authentication token
         let urlString = "https://mockstock.azurewebsites.net/api/leagues/leave/\(lid)"
         guard let url = URL(string: urlString) else { return }
         var urlRequest = URLRequest(url: url)
@@ -125,6 +142,33 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDataSource,
                 self?.navigationController?.popViewController(animated: true)
             }
         }.resume() // fires the session
+    }
+    
+    func deleteLeague() {
+        // 0. Start activity indicator animation
+        //networkActivityIndicator.startAnimating()
+        guard let lid = leagueId else { return }
+        
+        // 1. Get valid token
+        guard let token = UserDefaults.standard.string(forKey: "Token") else {
+            MSRestMock.fetchAuthenticationToken(callback: fetchData)
+            return
+        }
+        
+        // 2. Send delete league request to server using authentication token
+        let urlString = "https://mockstock.azurewebsites.net/api/leagues/deleteLeague"
+        guard let url = URL(string: urlString) else { return }
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "DELETE"
+        urlRequest.addValue(lid, forHTTPHeaderField: "leagueID")
+        urlRequest.addValue(token, forHTTPHeaderField: "Authorization")
+        URLSession.shared.dataTask(with: urlRequest) { [weak self] (data, response, error) in
+            if let e = error { print(e) }
+            print(String(data: data!, encoding: .utf8) ?? "")
+            DispatchQueue.main.async {
+                self?.navigationController?.popViewController(animated: true)
+            }
+            }.resume() // fires the session
     }
     
 }
