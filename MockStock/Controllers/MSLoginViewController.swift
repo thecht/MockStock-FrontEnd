@@ -260,7 +260,7 @@ class MSLoginViewController: UIViewController, UITextFieldDelegate {
                 UserDefaults.standard.set(registrationData.UserId, forKey: "UserId")
                 UserDefaults.standard.set(registrationData.UserName, forKey: "UserName")
                 UserDefaults.standard.set(trimmedPasswordText, forKey: "Password")
-                
+                UserDefaults.standard.set("", forKey: "Token")
                 DispatchQueue.main.async {
                     self?.networkActivityIndicator.stopAnimating()
                     self?.showMainApp()
