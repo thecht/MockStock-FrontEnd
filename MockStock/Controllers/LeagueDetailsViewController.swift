@@ -70,8 +70,10 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDataSource,
         // Configure Cell
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as! MSLeagueUserCell
         cell.userName.text = modelItem.UserName
+        cell.userName.textColor = .black
         cell.netWorth.text = "$\(modelItem.NetWorth)"
-        cell.setColors(topView: .gray, bottomViewColor: .darkGray)
+        cell.netWorth.textColor = .black
+        cell.setColors(topView: UIColor(red: 229, green: 229, blue: 229), bottomViewColor: UIColor(red: 255, green: 255, blue: 255))
         
         return cell
     }
