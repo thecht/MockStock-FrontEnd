@@ -52,43 +52,25 @@ class LeaguesViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         view.backgroundColor = .white
-        
+        self.navigationController?.navigationBar.topItem?.title = "Leagues"
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(newLeagueButtonPressed))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: networkActivityIndicator)
+        networkActivityIndicator.startAnimating()
         //Add subviews
-        view.addSubview(headerLabel)
-        view.addSubview(divider)
+//        view.addSubview(headerLabel)
+//        view.addSubview(divider)
         view.addSubview(collectionView)
-        view.addSubview(addLeagueButton)
+//        view.addSubview(addLeagueButton)
         view.addSubview(networkActivityIndicator)
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(MSLeagueCell.self, forCellWithReuseIdentifier: "LeagueCell")
         
         // Add constraints to the header views
-        let leftInset = CGFloat(30.0)
-        let rightInset = CGFloat(-30.0)
-        let topInset = CGFloat(30.0)
-        
-        headerLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: topInset).isActive = true
-        headerLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: leftInset).isActive = true
-        headerLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: rightInset).isActive = true
-        headerLabel.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        
-        addLeagueButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: rightInset).isActive = true
-        addLeagueButton.centerYAnchor.constraint(equalTo: headerLabel.centerYAnchor, constant: 0).isActive = true
-        addLeagueButton.heightAnchor.constraint(equalTo: headerLabel.heightAnchor, multiplier: 0.5).isActive = true
-        addLeagueButton.widthAnchor.constraint(equalTo: headerLabel.heightAnchor, multiplier: 0.5).isActive = true
-        
-        networkActivityIndicator.trailingAnchor.constraint(equalTo: addLeagueButton.leadingAnchor, constant: -15).isActive = true
-        networkActivityIndicator.centerYAnchor.constraint(equalTo: addLeagueButton.centerYAnchor, constant: 0).isActive = true
-        
-        divider.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 20).isActive = true
-        divider.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        divider.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        divider.heightAnchor.constraint(equalToConstant: 1).isActive = true
-        
         collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0).isActive = true
         collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0).isActive = true
-        collectionView.topAnchor.constraint(equalTo: divider.bottomAnchor, constant: 0).isActive = true
+        collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
         collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50).isActive = true
         
         addLeagueButton.addTarget(self, action: #selector(newLeagueButtonPressed), for: .touchUpInside)
@@ -105,7 +87,6 @@ class LeaguesViewController: UIViewController {
         }
         
         fetchData()
-        print("League View Appeared")
     }
     func fetchData() {
         // 0. Start activity indicator animation
@@ -265,4 +246,17 @@ extension LeaguesViewController: UICollectionViewDataSource, UICollectionViewDel
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.frame.width - 60, height: collectionView.frame.width * 0.24)
     }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let modelItem = leagueData[indexPath.item]
+
+        if let nav = navigationController {
+            let vc = LeagueDetailsViewController()
+            vc.leagueName = modelItem.LeagueName
+            vc.leagueId = modelItem.LeagueId
+            print(vc.leagueName)
+            nav.pushViewController(vc, animated: true)
+        }
+    }
+
 }

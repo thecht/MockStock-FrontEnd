@@ -40,3 +40,9 @@ struct League: Decodable {
     var LeagueName: String
     var LeagueHost: Int
 }
+
+struct LeagueUser: Decodable {
+    var UserId: Int
+    var UserName: String
+    var NetWorth: Double
+}

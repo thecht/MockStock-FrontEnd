@@ -13,6 +13,7 @@
 		0EDFC069224C17DE000DB02B /* GraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EDFC067224C17DE000DB02B /* GraphViewController.swift */; };
 		0EDFC06A224C17DE000DB02B /* DetailedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EDFC068224C17DE000DB02B /* DetailedViewController.swift */; };
 		56D46CEFB1AAA216E1E5105F /* Pods_MockStock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A06C4C64695778BCF7B879F /* Pods_MockStock.framework */; };
+		910556EA22525F0E0088A264 /* LeagueDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910556E922525F0E0088A264 /* LeagueDetailsViewController.swift */; };
 		911AD04A222AEB6800B9A361 /* MSTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911AD049222AEB6800B9A361 /* MSTabBarViewController.swift */; };
 		912DA0042241167C00978E4E /* MSLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912DA0032241167C00978E4E /* MSLoginViewController.swift */; };
 		9133E4302236D6B7003213A6 /* MSPortfolioItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9133E42F2236D6B7003213A6 /* MSPortfolioItem.swift */; };
@@ -38,6 +39,7 @@
 		0EDFC067224C17DE000DB02B /* GraphViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphViewController.swift; sourceTree = "<group>"; };
 		0EDFC068224C17DE000DB02B /* DetailedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailedViewController.swift; sourceTree = "<group>"; };
 		3C591927FB463B62565669DD /* Pods-MockStock.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MockStock.release.xcconfig"; path = "Target Support Files/Pods-MockStock/Pods-MockStock.release.xcconfig"; sourceTree = "<group>"; };
+		910556E922525F0E0088A264 /* LeagueDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeagueDetailsViewController.swift; sourceTree = "<group>"; };
 		911AD049222AEB6800B9A361 /* MSTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSTabBarViewController.swift; sourceTree = "<group>"; };
 		912DA0032241167C00978E4E /* MSLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSLoginViewController.swift; sourceTree = "<group>"; };
 		9133E42F2236D6B7003213A6 /* MSPortfolioItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSPortfolioItem.swift; sourceTree = "<group>"; };
@@ -90,6 +92,7 @@
 				91915131222C7EA20078CEA0 /* MarketplaceViewController.swift */,
 				91915133222C7ECF0078CEA0 /* LeaguesViewController.swift */,
 				912DA0032241167C00978E4E /* MSLoginViewController.swift */,
+				910556E922525F0E0088A264 /* LeagueDetailsViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -298,6 +301,7 @@
 				9133E4302236D6B7003213A6 /* MSPortfolioItem.swift in Sources */,
 				0EDFC066224C17D5000DB02B /* transactionPopup.swift in Sources */,
 				0EDFC069224C17DE000DB02B /* GraphViewController.swift in Sources */,
+				910556EA22525F0E0088A264 /* LeagueDetailsViewController.swift in Sources */,
 				0EDFC064224C17BF000DB02B /* ExampleDefaults.swift in Sources */,
 				9188EB27224954FF00F17B4C /* Responses.swift in Sources */,
 				91B0F3F3224C53F600DABFEA /* MSLeagueCell.swift in Sources */,
