@@ -168,7 +168,7 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDataSource,
             DispatchQueue.main.async {
                 self?.navigationController?.popViewController(animated: true)
             }
-            }.resume() // fires the session
+        }.resume() // fires the session
     }
     
 }
