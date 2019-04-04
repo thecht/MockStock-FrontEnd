@@ -197,8 +197,8 @@ class DetailedViewController: UIViewController {
         // Add autolayout constraints
     setupLayout()
         // Add button touch handlers
-        buyButton.addTarget(self, action: #selector(self.addBuyTransactionPopup), for: .touchUpInside)
-        sellButton.addTarget(self, action: #selector(self.addSellTransactionPopup), for: .touchUpInside)
+        buyButton.addTarget(self, action: #selector(self.buyPressed), for: .touchUpInside)
+        sellButton.addTarget(self, action: #selector(self.sellPressed), for: .touchUpInside)
         oneMonth.addTarget(self, action: #selector(DetailedViewController.barButtonPressed(button:)), for: .touchUpInside)
         threeMonth.addTarget(self, action: #selector(DetailedViewController.barButtonPressed(button:)), for: .touchUpInside)
         sixMonth.addTarget(self, action: #selector(DetailedViewController.barButtonPressed(button:)), for: .touchUpInside)
@@ -356,6 +356,44 @@ class DetailedViewController: UIViewController {
         */
         
          
+    }
+    
+    @objc func buyPressed() {
+        let alert = UIAlertController(title: "Buy Stock", message: "How much do you want?", preferredStyle: .alert)
+        alert.addTextField(configurationHandler: nil)
+        alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Buy", style: .default, handler: {(action) in
+            if let alertTextField = alert.textFields?.first, alertTextField.text != nil {
+                self.buyStockRequest(quantity: alertTextField.text!)
+            }
+        }))
+        present(alert, animated: true)
+    }
+    
+    @objc func sellPressed() {
+        let alert = UIAlertController(title: "Sell Stock", message: "How much do you want to sell?", preferredStyle: .alert)
+        alert.addTextField(configurationHandler: nil)
+        alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Sell", style: .default, handler: {(action) in
+            if let alertTextField = alert.textFields?.first, alertTextField.text != nil {
+                self.sellStockRequest(quantity: alertTextField.text!)
+            }
+        }))
+        present(alert, animated: true)
+    }
+    
+    func buyStockRequest(quantity: String) {
+        print("buy pressed")
+        // Convert quantity to int. (If fail, return early)
+        
+        // Then, submit buy network request
+    }
+    
+    func sellStockRequest(quantity: String) {
+        print("sell pressed")
+        // Convert quantity to int. (If fail, return early)
+        
+        // Then, submit sell network request
     }
 }
     extension DetailedViewController: UICollectionViewDelegate {
