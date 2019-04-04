@@ -7,12 +7,6 @@ import UIKit
 class DetailedViewController: UIViewController {
     
     // Tab bar widgets
-    var contentView: UIView = {
-        let v = UIView()
-        v.translatesAutoresizingMaskIntoConstraints = false
-        v.backgroundColor = UIColor.clear
-        return v
-    }()
     var graphView: UIView = {
         let v = UIView()
         v.translatesAutoresizingMaskIntoConstraints = false
@@ -59,7 +53,7 @@ class DetailedViewController: UIViewController {
         let b = UIButton()
         b.setTitle("1M", for: .normal)
         b.titleLabel?.font = UIFont(name: "Futura-CondensedExtraBold", size: 18)
-        b.setTitleColor(.black, for: .normal)
+        b.setTitleColor(.gray, for: .normal)
         b.translatesAutoresizingMaskIntoConstraints = false
         b.tag = 0
         return b
@@ -77,7 +71,7 @@ class DetailedViewController: UIViewController {
         let b = UIButton()
         b.setTitle("6M", for: .normal)
         b.titleLabel?.font = UIFont(name: "Futura-CondensedExtraBold", size: 18)
-        b.setTitleColor(.black, for: .normal)
+        b.setTitleColor(.gray, for: .normal)
         b.translatesAutoresizingMaskIntoConstraints = false
         b.tag = 2
         return b
@@ -86,7 +80,7 @@ class DetailedViewController: UIViewController {
         let b = UIButton()
         b.setTitle("1Y", for: .normal)
         b.titleLabel?.font = UIFont(name: "Futura-CondensedExtraBold", size: 18)
-        b.setTitleColor(.black, for: .normal)
+        b.setTitleColor(.gray, for: .normal)
         b.translatesAutoresizingMaskIntoConstraints = false
         b.tag = 3
         return b
@@ -160,7 +154,7 @@ class DetailedViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         self.navigationItem.title = symbolTitle
-//        self.navigationController?.navigationBar.barTintColor = .white
+        self.navigationController?.navigationBar.barTintColor = .white
         
         viewControllers.append(GraphViewController())
         //Appending buttons to array
@@ -168,34 +162,27 @@ class DetailedViewController: UIViewController {
         barButtons.append(threeMonth)
         barButtons.append(sixMonth)
         barButtons.append(oneYear)
+        currentlySelectedButton = threeMonth
         
         // Add views to screen
-//        view.addSubview(contentView)
         view.addSubview(graphView)
-//        contentView.addSubview(oneMonth)
-//        contentView.addSubview(threeMonth)
-//        contentView.addSubview(sixMonth)
-//        contentView.addSubview(oneYear)
         view.addSubview(oneMonth)
         view.addSubview(threeMonth)
         view.addSubview(sixMonth)
         view.addSubview(oneYear)
         view.addSubview(buyButton)
         view.addSubview(sellButton)
-//        view.addSubview(symbolLabel)
         view.addSubview(priceLabel)
         view.addSubview(percentLabel)
         view.addSubview(highLabel)
         view.addSubview(lowLabel)
         view.addSubview(yearChangeLabel)
-//        view.addSubview(backButton)
         
         currentlySelectedButton = oneMonth
         self.addChild(viewControllers[0])
         graphView.insertSubview(viewControllers[0].view, aboveSubview:graphView)
-        //view.insertSubview(viewControllers[0].view, belowSubview: contentView)
-        // Add autolayout constraints
-    setupLayout()
+        
+        setupLayout()
         // Add button touch handlers
         buyButton.addTarget(self, action: #selector(self.buyPressed), for: .touchUpInside)
         sellButton.addTarget(self, action: #selector(self.sellPressed), for: .touchUpInside)
@@ -203,42 +190,6 @@ class DetailedViewController: UIViewController {
         threeMonth.addTarget(self, action: #selector(DetailedViewController.barButtonPressed(button:)), for: .touchUpInside)
         sixMonth.addTarget(self, action: #selector(DetailedViewController.barButtonPressed(button:)), for: .touchUpInside)
         oneYear.addTarget(self, action: #selector(DetailedViewController.barButtonPressed(button:)), for: .touchUpInside)
-        backButton.addTarget(self, action: #selector(DetailedViewController.backButtonPressed(button:)), for: .touchUpInside)
-    }
-    @objc func barButtonPressed(button: UIButton) {
-        // Dont press if already selected.
-        if button == currentlySelectedButton { return }
-        
-        // Flag new button as selected.
-        currentlySelectedButton = button
-        
-        // Swap View Controllers.
-        for vc in children {
-            vc.view.removeFromSuperview()
-            vc.removeFromParent()
-        }
-        self.addChild(viewControllers[button.tag])
-        view.insertSubview(viewControllers[button.tag].view, belowSubview: contentView)
-        
-        // Change tab bar button colors.
-        for btn in barButtons {
-            if btn == button {
-                btn.setTitleColor(.black, for: .normal)
-            } else {
-                btn.setTitleColor(.gray, for: .normal)
-            }
-        }
-        
-    }
-    
-    /*@objc func transactionButtonPressed(button:UIButton){
-        let mainVC = transactionView()
-        present(mainVC, animated: true, completion: nil)
-        
-    }
-    */
-    @objc func backButtonPressed(button:UIButton){
-        dismiss(animated: true, completion: nil)
     }
     
     func setupLayout(){
@@ -257,13 +208,11 @@ class DetailedViewController: UIViewController {
         lowLabel.widthAnchor.constraint(equalToConstant: 170).isActive = true
         lowLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
         
-//        buyButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
         buyButton.centerYAnchor.constraint(equalTo: highLabel.centerYAnchor, constant: 0).isActive = true
         buyButton.trailingAnchor.constraint(equalTo: sellButton.leadingAnchor, constant: -10).isActive = true
         buyButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
         buyButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
-//        sellButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
         sellButton.centerYAnchor.constraint(equalTo: highLabel.centerYAnchor, constant: 0).isActive = true
         sellButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10).isActive = true
         sellButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
@@ -307,55 +256,6 @@ class DetailedViewController: UIViewController {
         yearChangeLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
         yearChangeLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0).isActive = true
         yearChangeLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        /*
-        graphView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        graphView.topAnchor.constraint(equalTo: view.topAnchor, constant: 300).isActive = true
-        graphView.widthAnchor.constraint(equalToConstant: 365).isActive = true
-        graphView.heightAnchor.constraint(equalToConstant: 300).isActive = true
-        
-        
-        contentView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        contentView.topAnchor.constraint(equalTo: graphView.bottomAnchor, constant: 0).isActive = true
-        contentView.widthAnchor.constraint(equalToConstant: 365).isActive = true
-        contentView.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        
-        oneMonth.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
-        oneMonth.trailingAnchor.constraint(equalTo: threeMonth.leadingAnchor).isActive = true
-        oneMonth.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        oneMonth.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
-        oneMonth.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.25).isActive = true
-        
-        threeMonth.leadingAnchor.constraint(equalTo: oneMonth.trailingAnchor).isActive = true
-        threeMonth.trailingAnchor.constraint(equalTo: sixMonth.leadingAnchor).isActive = true
-        threeMonth.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        threeMonth.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
-        threeMonth.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.25).isActive = true
-        
-        sixMonth.leadingAnchor.constraint(equalTo: threeMonth.trailingAnchor).isActive = true
-        sixMonth.trailingAnchor.constraint(equalTo: oneYear.leadingAnchor).isActive = true
-        sixMonth.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
-        sixMonth.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
-        sixMonth.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.25).isActive = true
-        
-        oneYear.leadingAnchor.constraint(equalTo: sixMonth.trailingAnchor).isActive = true
-        oneYear.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
-        oneYear.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
-        oneYear.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
-        oneYear.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.25).isActive = true
-        
-        percentLabel.bottomAnchor.constraint(equalTo: graphView.topAnchor, constant: -40).isActive = true
-        percentLabel.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        percentLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -200).isActive = true
-        
-        
-        
-        
-        yearChangeLabel.topAnchor.constraint(equalTo: lowLabel.bottomAnchor, constant: 30).isActive = true
-        yearChangeLabel.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        yearChangeLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -200).isActive = true
-        */
-        
-         
     }
     
     @objc func buyPressed() {
@@ -394,6 +294,28 @@ class DetailedViewController: UIViewController {
         // Convert quantity to int. (If fail, return early)
         
         // Then, submit sell network request
+    }
+    
+    @objc func barButtonPressed(button: UIButton) {
+        // Dont press if already selected.
+        if button == currentlySelectedButton { return }
+        
+        // Flag new button as selected.
+        currentlySelectedButton = button
+        
+        // Change graph based on selection (use buttonText to determine the selection. E.g. 3M, 6M, etc.)
+        guard let buttonText = button.currentTitle else { return }
+        
+        
+        // Change tab bar button colors.
+        for btn in barButtons {
+            if btn == button {
+                btn.setTitleColor(.black, for: .normal)
+            } else {
+                btn.setTitleColor(.gray, for: .normal)
+            }
+        }
+        
     }
 }
     extension DetailedViewController: UICollectionViewDelegate {
