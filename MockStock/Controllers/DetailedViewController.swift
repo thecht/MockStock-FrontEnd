@@ -118,7 +118,7 @@ class DetailedViewController: UIViewController {
         b.textColor = UIColor.gray
         b.font = UIFont(name: "HelveticaNeue-Thin", size: 18)
         b.translatesAutoresizingMaskIntoConstraints = false
-        b.textAlignment = .left
+        b.textAlignment = .center
         return b
     }()
     
@@ -148,7 +148,7 @@ class DetailedViewController: UIViewController {
         b.textColor = UIColor.gray
         b.font = UIFont(name: "HelveticaNeue-Thin", size: 18)
         b.translatesAutoresizingMaskIntoConstraints = false
-        b.textAlignment = .left
+        b.textAlignment = .center
         return b
     }()
     
@@ -184,10 +184,10 @@ class DetailedViewController: UIViewController {
         view.addSubview(sellButton)
 //        view.addSubview(symbolLabel)
         view.addSubview(priceLabel)
-//        view.addSubview(percentLabel)
+        view.addSubview(percentLabel)
         view.addSubview(highLabel)
         view.addSubview(lowLabel)
-//        view.addSubview(yearChangeLabel)
+        view.addSubview(yearChangeLabel)
 //        view.addSubview(backButton)
         
         currentlySelectedButton = oneMonth
@@ -297,6 +297,16 @@ class DetailedViewController: UIViewController {
         oneYear.heightAnchor.constraint(equalToConstant: 50).isActive = true
         oneYear.topAnchor.constraint(equalTo: graphView.bottomAnchor).isActive = true
         oneYear.widthAnchor.constraint(equalTo: graphView.widthAnchor, multiplier: 0.25).isActive = true
+        
+        percentLabel.topAnchor.constraint(equalTo: oneYear.bottomAnchor, constant: 20).isActive = true
+        percentLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
+        percentLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor, constant: 0).isActive = true
+        percentLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        
+        yearChangeLabel.topAnchor.constraint(equalTo: oneYear.bottomAnchor, constant: 20).isActive = true
+        yearChangeLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
+        yearChangeLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0).isActive = true
+        yearChangeLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
         /*
         graphView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         graphView.topAnchor.constraint(equalTo: view.topAnchor, constant: 300).isActive = true
