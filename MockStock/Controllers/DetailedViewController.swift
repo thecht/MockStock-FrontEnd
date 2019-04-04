@@ -50,7 +50,7 @@ class DetailedViewController: UIViewController {
         let b = UIButton()
         b.setTitle("1M", for: .normal)
         b.titleLabel?.font = UIFont(name: "Futura-CondensedExtraBold", size: 18)
-        b.setTitleColor(.gray, for: .normal)
+        b.setTitleColor(.black, for: .normal)
         b.translatesAutoresizingMaskIntoConstraints = false
         b.tag = 0
         return b
@@ -59,7 +59,7 @@ class DetailedViewController: UIViewController {
         let b = UIButton()
         b.setTitle("3M", for: .normal)
         b.titleLabel?.font = UIFont(name: "Futura-CondensedExtraBold", size: 18)
-        b.setTitleColor(.black, for: .normal)
+        b.setTitleColor(.gray, for: .normal)
         b.translatesAutoresizingMaskIntoConstraints = false
         b.tag = 1
         return b
