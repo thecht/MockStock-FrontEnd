@@ -45,6 +45,7 @@ class MSRestMock {
             do {
                 let tokenData = try JSONDecoder().decode(TokenResponse.self, from: data)
                 UserDefaults.standard.set("Bearer \(tokenData.token)", forKey: "Token")
+                UserDefaults.standard.set(tokenData.userId, forKey: "UserId")
             } catch let jsonErr {
                 print(jsonErr)
             }

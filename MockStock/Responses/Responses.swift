@@ -28,3 +28,21 @@ struct Stock: Decodable {
     var StockId: String
     var StockQuantity: Int
 }
+
+struct LeagueResponse: Decodable {
+    var UserId: Int
+    var Leagues: [League]
+//    var OpenEnrollment: Bool
+}
+
+struct League: Decodable {
+    var LeagueId: String
+    var LeagueName: String
+    var LeagueHost: Int
+}
+
+struct LeagueUser: Decodable {
+    var UserId: Int
+    var UserName: String
+    var NetWorth: Double
+}
