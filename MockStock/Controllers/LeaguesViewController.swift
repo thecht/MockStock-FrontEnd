@@ -56,6 +56,7 @@ class LeaguesViewController: UIViewController {
         self.navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(newLeagueButtonPressed))
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: networkActivityIndicator)
+        
         networkActivityIndicator.startAnimating()
         //Add subviews
 //        view.addSubview(headerLabel)
