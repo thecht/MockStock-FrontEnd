@@ -12,8 +12,10 @@
 		0EDFC066224C17D5000DB02B /* transactionPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EDFC065224C17D4000DB02B /* transactionPopup.swift */; };
 		0EDFC069224C17DE000DB02B /* GraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EDFC067224C17DE000DB02B /* GraphViewController.swift */; };
 		0EDFC06A224C17DE000DB02B /* DetailedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EDFC068224C17DE000DB02B /* DetailedViewController.swift */; };
-		0EDFC06E224C1F0F000DB02B /* MSMarketPlaceItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EDFC06D224C1F0F000DB02B /* MSMarketPlaceItem.swift */; };
-		0EE21D80224C63C800929696 /* MSFeaturedItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE21D7F224C63C800929696 /* MSFeaturedItemCell.swift */; };
+		0EE4B7A522559E580066E3B3 /* MSFeaturedItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE4B7A422559E580066E3B3 /* MSFeaturedItemCell.swift */; };
+		0EE4B7A722559E610066E3B3 /* MSMarketPlaceItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE4B7A622559E610066E3B3 /* MSMarketPlaceItem.swift */; };
+		0EE4B7A92255A8550066E3B3 /* MSMarketPlaceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE4B7A82255A8550066E3B3 /* MSMarketPlaceData.swift */; };
+		0EE4B7AB2255B0250066E3B3 /* MSMarketPlaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE4B7AA2255B0250066E3B3 /* MSMarketPlaceCell.swift */; };
 		56D46CEFB1AAA216E1E5105F /* Pods_MockStock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A06C4C64695778BCF7B879F /* Pods_MockStock.framework */; };
 		910556EA22525F0E0088A264 /* LeagueDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910556E922525F0E0088A264 /* LeagueDetailsViewController.swift */; };
 		911AD04A222AEB6800B9A361 /* MSTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911AD049222AEB6800B9A361 /* MSTabBarViewController.swift */; };
@@ -40,8 +42,10 @@
 		0EDFC065224C17D4000DB02B /* transactionPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = transactionPopup.swift; sourceTree = "<group>"; };
 		0EDFC067224C17DE000DB02B /* GraphViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphViewController.swift; sourceTree = "<group>"; };
 		0EDFC068224C17DE000DB02B /* DetailedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailedViewController.swift; sourceTree = "<group>"; };
-		0EDFC06D224C1F0F000DB02B /* MSMarketPlaceItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSMarketPlaceItem.swift; sourceTree = "<group>"; };
-		0EE21D7F224C63C800929696 /* MSFeaturedItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSFeaturedItemCell.swift; sourceTree = "<group>"; };
+		0EE4B7A422559E580066E3B3 /* MSFeaturedItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MSFeaturedItemCell.swift; sourceTree = "<group>"; };
+		0EE4B7A622559E610066E3B3 /* MSMarketPlaceItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MSMarketPlaceItem.swift; sourceTree = "<group>"; };
+		0EE4B7A82255A8550066E3B3 /* MSMarketPlaceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSMarketPlaceData.swift; sourceTree = "<group>"; };
+		0EE4B7AA2255B0250066E3B3 /* MSMarketPlaceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSMarketPlaceCell.swift; sourceTree = "<group>"; };
 		3C591927FB463B62565669DD /* Pods-MockStock.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MockStock.release.xcconfig"; path = "Target Support Files/Pods-MockStock/Pods-MockStock.release.xcconfig"; sourceTree = "<group>"; };
 		910556E922525F0E0088A264 /* LeagueDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeagueDetailsViewController.swift; sourceTree = "<group>"; };
 		911AD049222AEB6800B9A361 /* MSTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSTabBarViewController.swift; sourceTree = "<group>"; };
@@ -104,9 +108,10 @@
 		9133E42E2236D6A7003213A6 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				0EE4B7A622559E610066E3B3 /* MSMarketPlaceItem.swift */,
 				9133E42F2236D6B7003213A6 /* MSPortfolioItem.swift */,
 				91B7F763223FE1C0006F8FBD /* MSPortfolioData.swift */,
-				0EDFC06D224C1F0F000DB02B /* MSMarketPlaceItem.swift */,
+				0EE4B7A82255A8550066E3B3 /* MSMarketPlaceData.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -167,12 +172,10 @@
 		91DE5F5B223C5DE800C6D745 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				0EE4B7A422559E580066E3B3 /* MSFeaturedItemCell.swift */,
 				91DE5F5C223C5E1200C6D745 /* MSPortfolioItemCell.swift */,
-<<<<<<< HEAD
-				0EE21D7F224C63C800929696 /* MSFeaturedItemCell.swift */,
-=======
 				91B0F3F2224C53F600DABFEA /* MSLeagueCell.swift */,
->>>>>>> dev
+				0EE4B7AA2255B0250066E3B3 /* MSMarketPlaceCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -306,24 +309,26 @@
 			files = (
 				91B7F76722401560006F8FBD /* ColorExtensions.swift in Sources */,
 				0EDFC063224C17BF000DB02B /* Env.swift in Sources */,
-				0EE21D80224C63C800929696 /* MSFeaturedItemCell.swift in Sources */,
 				919D2757220485CA00405E04 /* PortfolioViewController.swift in Sources */,
 				9133E4302236D6B7003213A6 /* MSPortfolioItem.swift in Sources */,
 				0EDFC066224C17D5000DB02B /* transactionPopup.swift in Sources */,
 				0EDFC069224C17DE000DB02B /* GraphViewController.swift in Sources */,
+				0EE4B7AB2255B0250066E3B3 /* MSMarketPlaceCell.swift in Sources */,
 				910556EA22525F0E0088A264 /* LeagueDetailsViewController.swift in Sources */,
+				0EE4B7A92255A8550066E3B3 /* MSMarketPlaceData.swift in Sources */,
 				0EDFC064224C17BF000DB02B /* ExampleDefaults.swift in Sources */,
+				0EE4B7A722559E610066E3B3 /* MSMarketPlaceItem.swift in Sources */,
 				9188EB27224954FF00F17B4C /* Responses.swift in Sources */,
 				91B0F3F3224C53F600DABFEA /* MSLeagueCell.swift in Sources */,
 				0EDFC06A224C17DE000DB02B /* DetailedViewController.swift in Sources */,
 				91B7F764223FE1C0006F8FBD /* MSPortfolioData.swift in Sources */,
 				91DE5F5D223C5E1200C6D745 /* MSPortfolioItemCell.swift in Sources */,
 				91B7F762223FD11D006F8FBD /* MSRestMock.swift in Sources */,
+				0EE4B7A522559E580066E3B3 /* MSFeaturedItemCell.swift in Sources */,
 				919D2755220485CA00405E04 /* AppDelegate.swift in Sources */,
 				91915134222C7ECF0078CEA0 /* LeaguesViewController.swift in Sources */,
 				91915132222C7EA20078CEA0 /* MarketplaceViewController.swift in Sources */,
 				911AD04A222AEB6800B9A361 /* MSTabBarViewController.swift in Sources */,
-				0EDFC06E224C1F0F000DB02B /* MSMarketPlaceItem.swift in Sources */,
 				912DA0042241167C00978E4E /* MSLoginViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

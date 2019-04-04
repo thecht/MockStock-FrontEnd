@@ -13,7 +13,7 @@ import UIKit
 
 class MSFeaturedItemCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
-    var marketPlaceCategory: MarketPlaceCategory? {
+    /*var marketPlaceCategory: MarketPlaceCategory? {
         didSet{
             
             if let name = marketPlaceCategory?.name {
@@ -22,7 +22,7 @@ class MSFeaturedItemCell: UICollectionViewCell, UICollectionViewDataSource, UICo
             
         }
         
-    }
+    }*/
     var categoryLabel: UILabel = {
         let l = UILabel()
         l.text = "Today's Winners"
@@ -61,7 +61,8 @@ class MSFeaturedItemCell: UICollectionViewCell, UICollectionViewDataSource, UICo
         return collectionView
     }()
     
-
+    
+    
     func setupViews() {
         backgroundColor = UIColor.clear
         
@@ -73,30 +74,31 @@ class MSFeaturedItemCell: UICollectionViewCell, UICollectionViewDataSource, UICo
         featuredCollectionView.register(FeaturedCell.self, forCellWithReuseIdentifier: cellId)
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-14-[v0]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0" : categoryLabel]))
         
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-14-[v0]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0" : dividerLineView]))
-        
+       /* addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-14-[v0]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0" : dividerLineView]))
+        */
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0" : featuredCollectionView]))
         
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[categoryLabel(30)][v0][v1(0.5)]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0" : featuredCollectionView, "v1": dividerLineView, "categoryLabel": categoryLabel]))
-        
+       /* addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[categoryLabel(30)][v0][v1(0.5)]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0" : featuredCollectionView, "v1": dividerLineView, "categoryLabel": categoryLabel]))
+        */
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[categoryLabel(30)][v0]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0" : featuredCollectionView, "categoryLabel": categoryLabel]))
         
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if let count = marketPlaceCategory?.stocks?.count{
+        /*if let count = marketPlaceCategory?.stocks?.count{
             return count
-        }
-        return 0
+        }*/
+        return 5
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell =  collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)as!FeaturedCell
-        cell.stock = marketPlaceCategory?.stocks?[indexPath.item]
+        //cell.stock = marketPlaceCategory?.stocks?[indexPath.item]
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 130, height: collectionView.frame.width - 30)
+        return CGSize(width: 110, height: 110)
     }
     private func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionView, insetForSectionAtIndex section: Int) -> UIEdgeInsets{
         return UIEdgeInsets(top: 0, left: 14, bottom: 0, right: 14)
@@ -108,7 +110,7 @@ class FeaturedCell: UICollectionViewCell{
     var stock: stock? {
         didSet{
             if let name = stock?.tickerSymbol{
-            tickerLabel.text = name
+                tickerLabel.text = name
             }
             if let price = stock?.price{
                 priceValueLabel.text = "$\(price)"
@@ -200,10 +202,10 @@ class FeaturedCell: UICollectionViewCell{
     override init(frame:CGRect){
         super.init(frame: frame)
         setupViews()
-}
+    }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-}
+    }
     
     
     func setupViews(){
@@ -218,12 +220,12 @@ class FeaturedCell: UICollectionViewCell{
         addSubview(percentLabel)
         backgroundColor = UIColor.white
         let leftLabelInset = CGFloat(5.0)
-        imageView.frame = CGRect(x: leftLabelInset, y: 150, width: 30, height: 30)
-        divider.frame = CGRect(x: 0, y: 185, width: frame.width, height: 1)
-        tickerLabel.frame = CGRect(x: 40, y: 140, width: 50, height: 50)
-        priceLabel.frame = CGRect(x: 3, y: 175, width: 50, height: 50)
-        priceValueLabel.frame = CGRect(x: 43, y: 175, width: 100, height: 50)
-        valuePercentLabel.frame = CGRect(x: 3, y: 200, width: 100, height: 50)
-        categoryLabel.frame = CGRect(x: 3, y: 200, width: 100, height: 50)
+        imageView.frame = CGRect(x: leftLabelInset, y: 2, width: 30, height: 30)
+        divider.frame = CGRect(x: 0, y: 35, width: frame.width, height: 1)
+        tickerLabel.frame = CGRect(x: 40, y: 0, width: 50, height: 50)
+        priceLabel.frame = CGRect(x: 3, y: 25, width: 50, height: 50)
+        priceValueLabel.frame = CGRect(x: 43, y: 25, width: 100, height: 50)
+        valuePercentLabel.frame = CGRect(x: 3, y: 50, width: 100, height: 50)
+        categoryLabel.frame = CGRect(x: 3, y: 50, width: 100, height: 50)
     }
 }

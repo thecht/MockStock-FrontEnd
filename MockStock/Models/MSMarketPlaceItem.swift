@@ -9,6 +9,18 @@
 import Foundation
 import UIKit
 
+class MSMarketPlaceItem{
+    var symbol = ""
+    var price = 0.0
+    var imageName = ""
+    var percent = 0.0
+    
+}
+
+
+
+
+
 class MarketPlaceCategory: NSObject {
     var name: String?
     var stocks: [stock]?
