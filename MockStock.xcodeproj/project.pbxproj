@@ -15,6 +15,7 @@
 		0EDFC06E224C1F0F000DB02B /* MSMarketPlaceItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EDFC06D224C1F0F000DB02B /* MSMarketPlaceItem.swift */; };
 		0EE21D80224C63C800929696 /* MSFeaturedItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE21D7F224C63C800929696 /* MSFeaturedItemCell.swift */; };
 		56D46CEFB1AAA216E1E5105F /* Pods_MockStock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A06C4C64695778BCF7B879F /* Pods_MockStock.framework */; };
+		910556EA22525F0E0088A264 /* LeagueDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910556E922525F0E0088A264 /* LeagueDetailsViewController.swift */; };
 		911AD04A222AEB6800B9A361 /* MSTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911AD049222AEB6800B9A361 /* MSTabBarViewController.swift */; };
 		912DA0042241167C00978E4E /* MSLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912DA0032241167C00978E4E /* MSLoginViewController.swift */; };
 		9133E4302236D6B7003213A6 /* MSPortfolioItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9133E42F2236D6B7003213A6 /* MSPortfolioItem.swift */; };
@@ -24,6 +25,7 @@
 		919D2755220485CA00405E04 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 919D2754220485CA00405E04 /* AppDelegate.swift */; };
 		919D2757220485CA00405E04 /* PortfolioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 919D2756220485CA00405E04 /* PortfolioViewController.swift */; };
 		919D275C220485CC00405E04 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 919D275B220485CC00405E04 /* Assets.xcassets */; };
+		91B0F3F3224C53F600DABFEA /* MSLeagueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B0F3F2224C53F600DABFEA /* MSLeagueCell.swift */; };
 		91B7F762223FD11D006F8FBD /* MSRestMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B7F761223FD11D006F8FBD /* MSRestMock.swift */; };
 		91B7F764223FE1C0006F8FBD /* MSPortfolioData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B7F763223FE1C0006F8FBD /* MSPortfolioData.swift */; };
 		91B7F76722401560006F8FBD /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B7F76622401560006F8FBD /* ColorExtensions.swift */; };
@@ -41,6 +43,7 @@
 		0EDFC06D224C1F0F000DB02B /* MSMarketPlaceItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSMarketPlaceItem.swift; sourceTree = "<group>"; };
 		0EE21D7F224C63C800929696 /* MSFeaturedItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSFeaturedItemCell.swift; sourceTree = "<group>"; };
 		3C591927FB463B62565669DD /* Pods-MockStock.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MockStock.release.xcconfig"; path = "Target Support Files/Pods-MockStock/Pods-MockStock.release.xcconfig"; sourceTree = "<group>"; };
+		910556E922525F0E0088A264 /* LeagueDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeagueDetailsViewController.swift; sourceTree = "<group>"; };
 		911AD049222AEB6800B9A361 /* MSTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSTabBarViewController.swift; sourceTree = "<group>"; };
 		912DA0032241167C00978E4E /* MSLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSLoginViewController.swift; sourceTree = "<group>"; };
 		9133E42F2236D6B7003213A6 /* MSPortfolioItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSPortfolioItem.swift; sourceTree = "<group>"; };
@@ -52,6 +55,7 @@
 		919D2756220485CA00405E04 /* PortfolioViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioViewController.swift; sourceTree = "<group>"; };
 		919D275B220485CC00405E04 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		919D2760220485CC00405E04 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		91B0F3F2224C53F600DABFEA /* MSLeagueCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSLeagueCell.swift; sourceTree = "<group>"; };
 		91B7F761223FD11D006F8FBD /* MSRestMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSRestMock.swift; sourceTree = "<group>"; };
 		91B7F763223FE1C0006F8FBD /* MSPortfolioData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSPortfolioData.swift; sourceTree = "<group>"; };
 		91B7F76622401560006F8FBD /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
@@ -92,6 +96,7 @@
 				91915131222C7EA20078CEA0 /* MarketplaceViewController.swift */,
 				91915133222C7ECF0078CEA0 /* LeaguesViewController.swift */,
 				912DA0032241167C00978E4E /* MSLoginViewController.swift */,
+				910556E922525F0E0088A264 /* LeagueDetailsViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -163,7 +168,11 @@
 			isa = PBXGroup;
 			children = (
 				91DE5F5C223C5E1200C6D745 /* MSPortfolioItemCell.swift */,
+<<<<<<< HEAD
 				0EE21D7F224C63C800929696 /* MSFeaturedItemCell.swift */,
+=======
+				91B0F3F2224C53F600DABFEA /* MSLeagueCell.swift */,
+>>>>>>> dev
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -302,8 +311,10 @@
 				9133E4302236D6B7003213A6 /* MSPortfolioItem.swift in Sources */,
 				0EDFC066224C17D5000DB02B /* transactionPopup.swift in Sources */,
 				0EDFC069224C17DE000DB02B /* GraphViewController.swift in Sources */,
+				910556EA22525F0E0088A264 /* LeagueDetailsViewController.swift in Sources */,
 				0EDFC064224C17BF000DB02B /* ExampleDefaults.swift in Sources */,
 				9188EB27224954FF00F17B4C /* Responses.swift in Sources */,
+				91B0F3F3224C53F600DABFEA /* MSLeagueCell.swift in Sources */,
 				0EDFC06A224C17DE000DB02B /* DetailedViewController.swift in Sources */,
 				91B7F764223FE1C0006F8FBD /* MSPortfolioData.swift in Sources */,
 				91DE5F5D223C5E1200C6D745 /* MSPortfolioItemCell.swift in Sources */,
