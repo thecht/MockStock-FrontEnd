@@ -159,7 +159,7 @@ class DetailedViewController: UIViewController {
         barButtons.append(threeMonth)
         barButtons.append(sixMonth)
         barButtons.append(oneYear)
-        currentlySelectedButton = threeMonth
+        currentlySelectedButton = oneMonth
         
         // Add views to screen
         view.addSubview(graphView)
@@ -175,7 +175,6 @@ class DetailedViewController: UIViewController {
         view.addSubview(lowLabel)
         view.addSubview(yearChangeLabel)
         
-        currentlySelectedButton = oneMonth
         self.addChild(viewControllers[0])
         graphView.insertSubview(viewControllers[0].view, aboveSubview:graphView)
         
@@ -315,69 +314,3 @@ class DetailedViewController: UIViewController {
         
     }
 }
-
-//    extension DetailedViewController: transactionViewDelegate {
-//        
-//        @objc func addBuyTransactionPopup() {
-//            // 1 - Add dim background
-//            let bg = UIView()
-//            bg.backgroundColor = UIColor.gray
-//            bg.alpha = 0.0
-//            bg.frame = view.frame
-//            view.addSubview(bg)
-//            UIView.animate(withDuration: 0.3, animations: {
-//                bg.alpha = 0.45
-//            })
-//            bg.tag = 99
-//            
-//            // 2 - Add popup view
-//            let popup = transactionPopup()
-//            popup.symbolLabel.text = symbolLabel.text
-//            popup.priceLabel.text = priceLabel.text
-//            popup.buttonString = "BUY"
-//            popup.delegate = self
-//            view.addSubview(popup)
-//            
-//        }
-//        @objc func addSellTransactionPopup() {
-//            // 1 - Add dim background
-//            let bg = UIView()
-//            bg.backgroundColor = UIColor.gray
-//            bg.alpha = 0.0
-//            bg.frame = view.frame
-//            view.addSubview(bg)
-//            UIView.animate(withDuration: 0.3, animations: {
-//                bg.alpha = 0.45
-//            })
-//            bg.tag = 99
-//            
-//            // 2 - Add popup view
-//            let popup = transactionPopup()
-//            popup.symbolLabel.text = symbolLabel.text
-//            popup.priceLabel.text = priceLabel.text
-//            popup.buttonString = "SELL"
-//            popup.delegate = self
-//            view.addSubview(popup)
-//            
-//        }
-//        
-//        func hideFoodPopup() {
-//            // 2 - Remove dim background
-//            let bg = self.view.viewWithTag(99)!
-//            UIView.animate(withDuration: 0.3, animations: {
-//                bg.alpha = 0.0
-//            }, completion: { completed in
-//                bg.removeFromSuperview()
-//            })
-//        }
-//        
-//        func closePopup() {
-//            hideFoodPopup()
-//        }
-//        
-//        
-//    }
-
-
-
-
