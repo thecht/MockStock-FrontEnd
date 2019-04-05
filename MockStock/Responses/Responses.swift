@@ -27,6 +27,8 @@ struct PortfolioResponse: Decodable {
 struct Stock: Decodable {
     var StockId: String
     var StockQuantity: Int
+    var StockPrice: Double
+    var ChangePercent: Double
 }
 
 struct LeagueResponse: Decodable {

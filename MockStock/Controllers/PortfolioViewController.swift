@@ -107,6 +107,8 @@ class PortfolioViewController: UIViewController {
                     let item = MSPortfolioItem()
                     item.symbol = stock.StockId
                     item.quantity = stock.StockQuantity
+                    item.percentChange = stock.ChangePercent
+                    item.price = stock.StockPrice
                     items.append(item)
                 }
                 let portfolioSingleton = MSPortfolioData.sharedInstance
