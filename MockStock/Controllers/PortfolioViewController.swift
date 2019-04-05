@@ -102,17 +102,23 @@ class PortfolioViewController: UIViewController {
                 let portfolio = try JSONDecoder().decode(PortfolioResponse.self, from: data)
                 
                 // Populate portfolio items from JSON
+                var portfolioValue: Double = 0.0
                 var items = [MSPortfolioItem]()
                 for stock in portfolio.Stock {
                     let item = MSPortfolioItem()
                     item.symbol = stock.StockId
                     item.quantity = stock.StockQuantity
+                    item.percentChange = stock.ChangePercent
+                    item.price = stock.StockPrice
                     items.append(item)
+                    
+                    portfolioValue += (stock.StockPrice * Double(stock.StockQuantity))
                 }
                 let portfolioSingleton = MSPortfolioData.sharedInstance
                 portfolioSingleton.items.removeAll()
                 portfolioSingleton.items.append(contentsOf: items)
                 portfolioSingleton.buyingPower = portfolio.UserCurrency
+                portfolioSingleton.portfolioValue = portfolioValue
             } catch let jsonErr {
                 print(jsonErr)
             }
