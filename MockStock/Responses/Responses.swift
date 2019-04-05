@@ -46,3 +46,8 @@ struct LeagueUser: Decodable {
     var UserName: String
     var NetWorth: Double
 }
+
+struct BuySellResponse: Decodable {
+    var StockId: String
+    var StockQty: Int
+}
