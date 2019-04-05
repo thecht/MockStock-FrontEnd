@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0EDFC063224C17BF000DB02B /* Env.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EDFC061224C17BF000DB02B /* Env.swift */; };
 		0EDFC064224C17BF000DB02B /* ExampleDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EDFC062224C17BF000DB02B /* ExampleDefaults.swift */; };
-		0EDFC066224C17D5000DB02B /* transactionPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EDFC065224C17D4000DB02B /* transactionPopup.swift */; };
 		0EDFC069224C17DE000DB02B /* GraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EDFC067224C17DE000DB02B /* GraphViewController.swift */; };
 		0EDFC06A224C17DE000DB02B /* DetailedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EDFC068224C17DE000DB02B /* DetailedViewController.swift */; };
 		0EE4B7A522559E580066E3B3 /* MSFeaturedItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE4B7A422559E580066E3B3 /* MSFeaturedItemCell.swift */; };
@@ -39,7 +38,6 @@
 		0A06C4C64695778BCF7B879F /* Pods_MockStock.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MockStock.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0EDFC061224C17BF000DB02B /* Env.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Env.swift; sourceTree = "<group>"; };
 		0EDFC062224C17BF000DB02B /* ExampleDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExampleDefaults.swift; sourceTree = "<group>"; };
-		0EDFC065224C17D4000DB02B /* transactionPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = transactionPopup.swift; sourceTree = "<group>"; };
 		0EDFC067224C17DE000DB02B /* GraphViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphViewController.swift; sourceTree = "<group>"; };
 		0EDFC068224C17DE000DB02B /* DetailedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailedViewController.swift; sourceTree = "<group>"; };
 		0EE4B7A422559E580066E3B3 /* MSFeaturedItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MSFeaturedItemCell.swift; sourceTree = "<group>"; };
@@ -94,7 +92,6 @@
 			children = (
 				0EDFC068224C17DE000DB02B /* DetailedViewController.swift */,
 				0EDFC067224C17DE000DB02B /* GraphViewController.swift */,
-				0EDFC065224C17D4000DB02B /* transactionPopup.swift */,
 				919D2756220485CA00405E04 /* PortfolioViewController.swift */,
 				911AD049222AEB6800B9A361 /* MSTabBarViewController.swift */,
 				91915131222C7EA20078CEA0 /* MarketplaceViewController.swift */,
@@ -311,7 +308,6 @@
 				0EDFC063224C17BF000DB02B /* Env.swift in Sources */,
 				919D2757220485CA00405E04 /* PortfolioViewController.swift in Sources */,
 				9133E4302236D6B7003213A6 /* MSPortfolioItem.swift in Sources */,
-				0EDFC066224C17D5000DB02B /* transactionPopup.swift in Sources */,
 				0EDFC069224C17DE000DB02B /* GraphViewController.swift in Sources */,
 				0EE4B7AB2255B0250066E3B3 /* MSMarketPlaceCell.swift in Sources */,
 				910556EA22525F0E0088A264 /* LeagueDetailsViewController.swift in Sources */,

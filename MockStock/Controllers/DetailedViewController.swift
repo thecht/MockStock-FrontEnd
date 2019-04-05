@@ -1,4 +1,3 @@
-
 import Foundation
 import UIKit
 
@@ -40,7 +39,7 @@ class DetailedViewController: UIViewController {
         b.clipsToBounds = true
         b.layer.borderColor = UIColor.red.cgColor
         b.translatesAutoresizingMaskIntoConstraints = false
-       // b.frame = CGRect(x: 200, y: 200, width: 100, height: 25)
+        // b.frame = CGRect(x: 200, y: 200, width: 100, height: 25)
         return b
     }()
     var sellButton: UIButton = {
@@ -54,7 +53,7 @@ class DetailedViewController: UIViewController {
         b.clipsToBounds = true
         b.layer.borderColor = UIColor.blue.cgColor
         b.translatesAutoresizingMaskIntoConstraints = false
-       // b.frame = CGRect(x: 250, y: 200, width: 100, height: 25)
+        // b.frame = CGRect(x: 250, y: 200, width: 100, height: 25)
         return b
     }()
     var oneMonth: UIButton = {
@@ -197,7 +196,7 @@ class DetailedViewController: UIViewController {
         graphView.insertSubview(viewControllers[0].view, aboveSubview:graphView)
         //view.insertSubview(viewControllers[0].view, belowSubview: contentView)
         // Add autolayout constraints
-    setupLayout()
+        setupLayout()
         // Add button touch handlers
         buyButton.addTarget(self, action: #selector(self.addBuyTransactionPopup), for: .touchUpInside)
         sellButton.addTarget(self, action: #selector(self.addSellTransactionPopup), for: .touchUpInside)
@@ -206,7 +205,6 @@ class DetailedViewController: UIViewController {
         sixMonth.addTarget(self, action: #selector(DetailedViewController.barButtonPressed(button:)), for: .touchUpInside)
         oneYear.addTarget(self, action: #selector(DetailedViewController.barButtonPressed(button:)), for: .touchUpInside)
         backButton.addTarget(self, action: #selector(DetailedViewController.backButtonPressed(button:)), for: .touchUpInside)
-        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self.view, action: #selector(view.endEditing)))
     }
     @objc func barButtonPressed(button: UIButton) {
         // Dont press if already selected.
@@ -235,11 +233,11 @@ class DetailedViewController: UIViewController {
     }
     
     /*@objc func transactionButtonPressed(button:UIButton){
-        let mainVC = transactionView()
-        present(mainVC, animated: true, completion: nil)
-        
-    }
-    */
+     let mainVC = transactionView()
+     present(mainVC, animated: true, completion: nil)
+     
+     }
+     */
     @objc func backButtonPressed(button:UIButton){
         dismiss(animated: true, completion: nil)
     }
@@ -319,73 +317,69 @@ class DetailedViewController: UIViewController {
         sellButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -40).isActive = true
     }
 }
-    extension DetailedViewController: UICollectionViewDelegate {
+extension DetailedViewController: UICollectionViewDelegate {
+    
+}
+
+// MARK: Food Popup Methods
+extension DetailedViewController: transactionViewDelegate {
+    
+    @objc func addBuyTransactionPopup() {
+        // 1 - Add dim background
+        let bg = UIView()
+        bg.backgroundColor = UIColor.gray
+        bg.alpha = 0.0
+        bg.frame = view.frame
+        view.addSubview(bg)
+        UIView.animate(withDuration: 0.3, animations: {
+            bg.alpha = 0.45
+        })
+        bg.tag = 99
+        
+        // 2 - Add popup view
+        let popup = transactionPopup()
+        popup.symbolLabel.text = symbolLabel.text
+        popup.priceLabel.text = priceLabel.text
+        popup.buttonString = "BUY"
+        popup.delegate = self
+        view.addSubview(popup)
+        
+    }
+    @objc func addSellTransactionPopup() {
+        // 1 - Add dim background
+        let bg = UIView()
+        bg.backgroundColor = UIColor.gray
+        bg.alpha = 0.0
+        bg.frame = view.frame
+        view.addSubview(bg)
+        UIView.animate(withDuration: 0.3, animations: {
+            bg.alpha = 0.45
+        })
+        bg.tag = 99
+        
+        // 2 - Add popup view
+        let popup = transactionPopup()
+        popup.symbolLabel.text = symbolLabel.text
+        popup.priceLabel.text = priceLabel.text
+        popup.buttonString = "SELL"
+        popup.delegate = self
+        view.addSubview(popup)
         
     }
     
-    // MARK: Food Popup Methods
-    extension DetailedViewController: transactionViewDelegate {
-        
-        @objc func addBuyTransactionPopup() {
-            // 1 - Add dim background
-            let bg = UIView()
-            bg.backgroundColor = UIColor.gray
+    func hideFoodPopup() {
+        // 2 - Remove dim background
+        let bg = self.view.viewWithTag(99)!
+        UIView.animate(withDuration: 0.3, animations: {
             bg.alpha = 0.0
-            bg.frame = view.frame
-            view.addSubview(bg)
-            UIView.animate(withDuration: 0.3, animations: {
-                bg.alpha = 0.45
-            })
-            bg.tag = 99
-            
-            // 2 - Add popup view
-            let popup = transactionPopup()
-            popup.symbolLabel.text = symbolLabel.text
-            popup.priceLabel.text = priceLabel.text
-            popup.buttonString = "BUY"
-            popup.delegate = self
-            view.addSubview(popup)
-            
-        }
-        @objc func addSellTransactionPopup() {
-            // 1 - Add dim background
-            let bg = UIView()
-            bg.backgroundColor = UIColor.gray
-            bg.alpha = 0.0
-            bg.frame = view.frame
-            view.addSubview(bg)
-            UIView.animate(withDuration: 0.3, animations: {
-                bg.alpha = 0.45
-            })
-            bg.tag = 99
-            
-            // 2 - Add popup view
-            let popup = transactionPopup()
-            popup.symbolLabel.text = symbolLabel.text
-            popup.priceLabel.text = priceLabel.text
-            popup.buttonString = "SELL"
-            popup.delegate = self
-            view.addSubview(popup)
-            
-        }
-        
-        func hideTransactionPopup() {
-            // 2 - Remove dim background
-            let bg = self.view.viewWithTag(99)!
-            UIView.animate(withDuration: 0.3, animations: {
-                bg.alpha = 0.0
-            }, completion: { completed in
-                bg.removeFromSuperview()
-            })
-        }
-        
-        func closePopup() {
-            hideTransactionPopup()
-        }
-        
-        
+        }, completion: { completed in
+            bg.removeFromSuperview()
+        })
     }
-
-
-
-
+    
+    func closePopup() {
+        hideFoodPopup()
+    }
+    
+    
+}
