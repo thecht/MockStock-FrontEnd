@@ -279,16 +279,79 @@ class DetailedViewController: UIViewController {
     }
     
     func buyStockRequest(quantity: String) {
-        print("buy pressed")
-        // Convert quantity to int. (If fail, return early)
+        // 0. Start activity indicator animation
+        //networkActivityIndicator.startAnimating()
+        guard let buyQuantity = Int(quantity) else { return }
         
-        // Then, submit buy network request
+        // 1. Get valid token
+        guard let token = UserDefaults.standard.string(forKey: "Token") else {
+            MSRestMock.fetchAuthenticationToken(callback: fetchData)
+            return
+        }
+        
+        // 2. Send leave league request to server using authentication token
+        let urlString = "https://mockstock.azurewebsites.net/api/stock/buy"
+        guard let url = URL(string: urlString) else { return }
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        urlRequest.addValue(token, forHTTPHeaderField: "Authorization")
+        urlRequest.addValue(String(buyQuantity), forHTTPHeaderField: "amount")
+        urlRequest.addValue(symbolTitle, forHTTPHeaderField: "symbol")
+        URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+            if let e = error { print(e) }
+            guard let d = data else { return }
+            
+            do {
+                // Decode JSON
+                let buyResponse = try JSONDecoder().decode(BuySellResponse.self, from: d)
+                
+                let message = "You bought \(buyResponse.StockQty) shares of \(buyResponse.StockId)"
+                DispatchQueue.main.async {
+                    self.marketResponseRecieved(message: message)
+                }
+            } catch let jsonErr {
+                print(jsonErr)
+            }
+            
+        }.resume() // fires the session
+        
     }
     
     func sellStockRequest(quantity: String) {
-        print("sell pressed")
-        // Convert quantity to int. (If fail, return early)
+        // 0. Start activity indicator animation
+        //networkActivityIndicator.startAnimating()
+        guard let buyQuantity = Int(quantity) else { return }
         
+        // 1. Get valid token
+        guard let token = UserDefaults.standard.string(forKey: "Token") else {
+            MSRestMock.fetchAuthenticationToken(callback: fetchData)
+            return
+        }
+        
+        // 2. Send leave league request to server using authentication token
+        let urlString = "https://mockstock.azurewebsites.net/api/stock/sell"
+        guard let url = URL(string: urlString) else { return }
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        urlRequest.addValue(token, forHTTPHeaderField: "Authorization")
+        urlRequest.addValue(String(buyQuantity), forHTTPHeaderField: "amount")
+        urlRequest.addValue(symbolTitle, forHTTPHeaderField: "symbol")
+        URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+            guard let d = data else { return }
+            
+            do {
+                // Decode JSON
+                let buyResponse = try JSONDecoder().decode(BuySellResponse.self, from: d)
+                
+                let message = "You sold \(buyResponse.StockQty) shares of \(buyResponse.StockId)"
+                DispatchQueue.main.async {
+                    self.marketResponseRecieved(message: message)
+                }
+            } catch let jsonErr {
+                print(jsonErr)
+            }
+            
+        }.resume() // fires the session
         // Then, submit sell network request
     }
     
@@ -302,7 +365,6 @@ class DetailedViewController: UIViewController {
         // Change graph based on selection (use buttonText to determine the selection. E.g. 3M, 6M, etc.)
         guard let buttonText = button.currentTitle else { return }
         
-        
         // Change tab bar button colors.
         for btn in barButtons {
             if btn == button {
@@ -312,5 +374,15 @@ class DetailedViewController: UIViewController {
             }
         }
         
+    }
+    
+    @objc func fetchData() {
+        
+    }
+    
+    @objc func marketResponseRecieved(message: String) {
+        let alert = UIAlertController(title: "Transaction Complete!", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
+        present(alert, animated: true)
     }
 }
