@@ -9,9 +9,20 @@
 import Foundation
 
 class MSMarketPlaceData {
-    var buyingPower = 0.0
     var items = [MSMarketPlaceItem]()
     
     static let sharedInstance = MSMarketPlaceData()
+    private init() { }
+}
+class MSWinnersData {
+    var items = [MSMarketPlaceItem]()
+    
+    static let sharedInstance = MSWinnersData()
+    private init() { }
+}
+class MSLosersData {
+    var items = [MSMarketPlaceItem]()
+    
+    static let sharedInstance = MSLosersData()
     private init() { }
 }

@@ -13,7 +13,7 @@ import UIKit
 
 class MSFeaturedItemCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
-    /*var marketPlaceCategory: MarketPlaceCategory? {
+    var marketPlaceCategory: MarketPlaceCategory? {
         didSet{
             
             if let name = marketPlaceCategory?.name {
@@ -22,7 +22,31 @@ class MSFeaturedItemCell: UICollectionViewCell, UICollectionViewDataSource, UICo
             
         }
         
-    }*/
+    }
+    var priceValueLabel: UILabel = {
+        let l = UILabel()
+        l.text = "123.12"
+        l.font = UIFont(name: "Futura-CondensedMedium", size: 20)
+        l.textColor = .black
+        l.textAlignment = .left
+        return l
+    }()
+    var tickerLabel: UILabel = {
+        let l = UILabel()
+        l.text = "APPL"
+        l.font = UIFont(name: "Futura", size: 18)
+        l.textColor = .black
+        l.textAlignment = .left
+        return l
+    }()
+    var valuePercentLabel: UILabel = {
+        let l = UILabel()
+        l.text = "+3.08%"
+        l.font = UIFont(name: "Futura", size: 20)
+        l.textColor = .black
+        l.textAlignment = .left
+        return l
+    }()
     var categoryLabel: UILabel = {
         let l = UILabel()
         l.text = "Today's Winners"
@@ -81,19 +105,22 @@ class MSFeaturedItemCell: UICollectionViewCell, UICollectionViewDataSource, UICo
        /* addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[categoryLabel(30)][v0][v1(0.5)]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0" : featuredCollectionView, "v1": dividerLineView, "categoryLabel": categoryLabel]))
         */
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[categoryLabel(30)][v0]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0" : featuredCollectionView, "categoryLabel": categoryLabel]))
-        
+        if let layout = featuredCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            layout.minimumInteritemSpacing = 15
+            layout.minimumLineSpacing = 15
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        /*if let count = marketPlaceCategory?.stocks?.count{
+        if let count = marketPlaceCategory?.stocks?.count{
             return count
-        }*/
+        }
         return 5
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell =  collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)as!FeaturedCell
-        //cell.stock = marketPlaceCategory?.stocks?[indexPath.item]
         return cell
     }
     

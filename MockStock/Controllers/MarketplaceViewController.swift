@@ -12,7 +12,9 @@ import UIKit
 
 
 class MarketplaceViewController: UIViewController {
-    
+    var marketPlaceData = MSMarketPlaceData.sharedInstance
+    var gainersData = MSWinnersData.sharedInstance
+    var losersData = MSLosersData.sharedInstance
     var WinnersCollectionView: UICollectionView = {
         let v = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
         v.translatesAutoresizingMaskIntoConstraints = false
@@ -26,7 +28,7 @@ class MarketplaceViewController: UIViewController {
     private let winnersId = "winnersId"
     private let marketId = "marketId"
     private let losersId = "losersId"
-    var marketPlaceCategories: [MarketPlaceCategory]?
+    //var marketPlaceCategories: [MarketPlaceCategory]?
     var button = dropDownBtn()
     
     override func viewDidLoad() {
@@ -41,9 +43,8 @@ class MarketplaceViewController: UIViewController {
         let leftNavBarButton = UIBarButtonItem(customView: searchBar)
         self.navigationItem.leftBarButtonItem = leftNavBarButton
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView:button)
-        
         view.backgroundColor = .white
-        marketPlaceCategories = MarketPlaceCategory.sampleStockCategories()
+        //marketPlaceCategories = MarketPlaceCategory.sampleStockCategories()
         view.addSubview(WinnersCollectionView)
         WinnersCollectionView.delegate = self
         WinnersCollectionView.dataSource = self
@@ -69,9 +70,92 @@ class MarketplaceViewController: UIViewController {
             layout.minimumInteritemSpacing = 15
             layout.minimumLineSpacing = 15
         }
+        fetchData()
+    }
+    func fetchData() {
+        // 0. Start activity indicator animation
+        
+        // 1. Get valid token
+        guard let token = UserDefaults.standard.string(forKey: "Token") else {
+            MSRestMock.fetchAuthenticationToken(callback: fetchData)
+            return
+        }
+        
+        // 2. Send portfolio data request to server using authentication token
+        let urlString = "https://mockstock.azurewebsites.net/api/stock/marketplace" // localhost:5001/api/tests"
+        guard let url = URL(string: urlString) else { return }
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "GET(marketplace)"
+        urlRequest.addValue(token, forHTTPHeaderField: "Authorization")
+        URLSession.shared.dataTask(with: urlRequest) { [weak self] (data, response, error) in
+            if let e = error { print(e) }
+            guard let data = data else { return }
+            // Check for expired token
+            if MSRestMock.checkUnauthorizedStatusCode(response: response) {
+                print("unauthorized: getting token")
+                MSRestMock.fetchAuthenticationToken(callback: self!.fetchData)
+            }
+            
+            do {
+                // Decode JSON
+                //let data2 = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+                /*let marketplace = try JSONDecoder().decode(MarketResponse.stocks.self, from: data2 as! Data)
+                let marketplaceGainers = try JSONDecoder().decode(MarketResponse.gainers.self, from: data2 as! Data)
+                let marketplaceLosers = try JSONDecoder().decode(MarketResponse.losers.self, from: data2 as! Data)*/
+                print("test")
+                let marketplace = try JSONDecoder().decode(MarketResponse.self, from: data)
+                print("test")
+                // Populate portfolio items from JSON
+                var items = [MSMarketPlaceItem]()
+                var winnersItems = [MSMarketPlaceItem]()
+                var losersItems = [MSMarketPlaceItem]()
+                for marketStock in marketplace.stocks {
+                    let item = MSMarketPlaceItem()
+                    item.symbol = marketStock.symbol
+                    item.percent = Double(truncating: marketStock.changePercent as NSNumber)
+                    item.imageName = marketStock.logo
+                    item.price = Double(truncating: marketStock.price as NSNumber)
+                    items.append(item)
+                }
+                for marketStock in marketplace.gainers {
+                    let item = MSMarketPlaceItem()
+                    item.symbol = marketStock.symbol
+                    item.percent = Double(truncating: marketStock.changePercent as NSNumber)
+                    item.imageName = marketStock.logo
+                    item.price = Double(truncating: marketStock.price as NSNumber)
+                    winnersItems.append(item)
+                }
+                for marketStock in marketplace.losers {
+                    let item = MSMarketPlaceItem()
+                    item.symbol = marketStock.symbol
+                    item.percent = Double(truncating: marketStock.changePercent as NSNumber)
+                    item.imageName = marketStock.logo
+                    item.price = Double(truncating: marketStock.price as NSNumber)
+                    losersItems.append(item)
+                }
+                let marketPlaceSingleton = MSMarketPlaceData.sharedInstance
+                marketPlaceSingleton.items.removeAll()
+                marketPlaceSingleton.items.append(contentsOf: items)
+                let gainersSingleton = MSWinnersData.sharedInstance
+                gainersSingleton.items.removeAll()
+                gainersSingleton.items.append(contentsOf: winnersItems)
+                let losersSingleton = MSLosersData.sharedInstance
+                losersSingleton.items.removeAll()
+                losersSingleton.items.append(contentsOf: losersItems)
+            } catch let jsonErr {
+                print(jsonErr)
+            }
+            DispatchQueue.main.async {
+                self?.WinnersCollectionView.reloadData()
+            }
+            }.resume() // fires the session
     }
     
+    @objc func logOut() {
+        present(MSLoginViewController(), animated: false, completion: nil)
     }
+    
+}
 
 protocol dropDownProtocol {
     func dropDownPressed(string : String)
@@ -223,8 +307,10 @@ extension MarketplaceViewController: UICollectionViewDataSource, UICollectionVie
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.section == 0{
+            //let modelItem = MSWinnersData.sharedInstance.items[indexPath.item]
             let cell =  collectionView.dequeueReusableCell(withReuseIdentifier: winnersId, for: indexPath)as!MSFeaturedItemCell
-            
+            cell.translatesAutoresizingMaskIntoConstraints = false
+            cell.backgroundColor = . gray
             cell.categoryLabel.text = "Todays Winners"
             return cell
         } else if indexPath.section == 1{
@@ -234,14 +320,34 @@ extension MarketplaceViewController: UICollectionViewDataSource, UICollectionVie
             return cell
             
         }else{
-            
+            let modelItem = MSMarketPlaceData.sharedInstance.items[indexPath.item]
             let cell =  collectionView.dequeueReusableCell(withReuseIdentifier: marketId, for: indexPath)as!MSMarketPlaceCell
-            
+            cell.translatesAutoresizingMaskIntoConstraints = false
+            cell.backgroundColor = .gray
+            cell.tickerLabel.text = modelItem.symbol.uppercased()
+            cell.priceValueLabel.text = String(format: "%.02f", modelItem.price)
+            var percentDoubleSign = ""
+            if modelItem.percent >= 0 {
+                percentDoubleSign = "+"
+                cell.setColors(topView: UIColor(red: 87, green: 210, blue: 2), bottomViewColor: UIColor(red: 70, green: 166, blue: 1))
+            } else {
+                percentDoubleSign = "-"
+                cell.setColors(topView: UIColor(red: 247, green: 13, blue: 31), bottomViewColor: UIColor(red: 191, green: 11, blue: 25))
+            }
+            cell.priceValueLabel.text = String("\(percentDoubleSign)\(modelItem.percent)%")
             return cell
         }
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return (section == 2) ? 100 : 1
+        if section == 2{
+            return MSMarketPlaceData.sharedInstance.items.count
+        }
+        else if section == 1{
+           return 1
+        }
+        else{
+           return 1
+        }
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if indexPath.section == 2{
@@ -249,5 +355,6 @@ extension MarketplaceViewController: UICollectionViewDataSource, UICollectionVie
         }
         return CGSize(width: collectionView.frame.width , height: 150)
     }
+    
 }
     

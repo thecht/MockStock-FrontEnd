@@ -14,7 +14,18 @@ class MSMarketPlaceItem{
     var price = 0.0
     var imageName = ""
     var percent = 0.0
-    
+}
+class MSWinnersItem{
+    var symbol = ""
+    var price = 0.0
+    var imageName = ""
+    var percent = 0.0
+}
+class MSLosersItem{
+    var symbol = ""
+    var price = 0.0
+    var imageName = ""
+    var percent = 0.0
 }
 
 
