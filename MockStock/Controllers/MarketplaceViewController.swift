@@ -2,7 +2,7 @@
 //  MarketplaceViewController.swift
 //  MockStock
 //
-//  Created by Theodore Hecht on 3/3/19.
+//  Created by Luke Orr on 3/3/19.
 //  Copyright © 2019 Theodore Hecht. All rights reserved.
 //
 
@@ -11,7 +11,10 @@ import UIKit
 
 
 
-class MarketplaceViewController: UIViewController {
+class MarketplaceViewController: UIViewController, UISearchBarDelegate {
+    
+    var sort: String = "asc"
+    var isSearching: Bool = false
     var marketPlaceData = MSMarketPlaceData.sharedInstance
     var gainersData = MSWinnersData.sharedInstance
     var losersData = MSLosersData.sharedInstance
@@ -28,24 +31,28 @@ class MarketplaceViewController: UIViewController {
     private let winnersId = "winnersId"
     private let marketId = "marketId"
     private let losersId = "losersId"
-    //var marketPlaceCategories: [MarketPlaceCategory]?
     var button = dropDownBtn()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.addSubview(button)
         button  = dropDownBtn.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
         button.setImage(UIImage(named: "dropdownicon"), for: .normal)
         button.widthAnchor.constraint(equalToConstant: 30).isActive = true
         button.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        button.dropView.dropDownOptions = ["Ascending", "Descending"]
+        
+        button.translatesAutoresizingMaskIntoConstraints = false
         self.navigationController?.navigationBar.topItem?.title = "MarketPlace"
         self.navigationController?.navigationBar.prefersLargeTitles = true
         let leftNavBarButton = UIBarButtonItem(customView: searchBar)
         self.navigationItem.leftBarButtonItem = leftNavBarButton
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView:button)
+        
+        button.dropView.dropDownOptions = ["Ascending", "Descending"]
+        
         view.backgroundColor = .white
-        //marketPlaceCategories = MarketPlaceCategory.sampleStockCategories()
         view.addSubview(WinnersCollectionView)
+        searchBar.delegate = self
         WinnersCollectionView.delegate = self
         WinnersCollectionView.dataSource = self
         WinnersCollectionView.register(MSMarketPlaceCell.self, forCellWithReuseIdentifier: marketId)
@@ -70,42 +77,99 @@ class MarketplaceViewController: UIViewController {
             layout.minimumInteritemSpacing = 15
             layout.minimumLineSpacing = 15
         }
-        fetchData()
+        fetchData(sortString: sort)
     }
-    func fetchData() {
-        // 0. Start activity indicator animation
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        isSearching = true
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        isSearching = false
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        isSearching = false
         
-        // 1. Get valid token
-        guard let token = UserDefaults.standard.string(forKey: "Token") else {
-            MSRestMock.fetchAuthenticationToken(callback: fetchData)
-            return
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        isSearching = false
+        let predicate = searchBar.text!
+        fetchSearchData(searchString: predicate)
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.characters.count == 0{
+            isSearching = false;
+        }else{
+        isSearching = true;
+            
         }
         
-        // 2. Send portfolio data request to server using authentication token
-        let urlString = "https://mockstock.azurewebsites.net/api/stock/marketplace" // localhost:5001/api/tests"
+    }
+    func fetchSearchData(searchString : String) {
+        // 0. Start activity indicator animation
+        print(searchString)
+        // 2. Send search data request to server using authentication token
+        let urlString = "https://mockstock.azurewebsites.net/api/stock/search" // localhost:5001/api/tests"
         guard let url = URL(string: urlString) else { return }
         var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "GET(marketplace)"
-        urlRequest.addValue(token, forHTTPHeaderField: "Authorization")
+        urlRequest.httpMethod = "GET"
+        urlRequest.addValue(String(searchString), forHTTPHeaderField: "search")
         URLSession.shared.dataTask(with: urlRequest) { [weak self] (data, response, error) in
             if let e = error { print(e) }
             guard let data = data else { return }
-            // Check for expired token
-            if MSRestMock.checkUnauthorizedStatusCode(response: response) {
-                print("unauthorized: getting token")
-                MSRestMock.fetchAuthenticationToken(callback: self!.fetchData)
-            }
             
             do {
                 // Decode JSON
-                //let data2 = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
-                /*let marketplace = try JSONDecoder().decode(MarketResponse.stocks.self, from: data2 as! Data)
-                let marketplaceGainers = try JSONDecoder().decode(MarketResponse.gainers.self, from: data2 as! Data)
-                let marketplaceLosers = try JSONDecoder().decode(MarketResponse.losers.self, from: data2 as! Data)*/
-                print("test")
-                let marketplace = try JSONDecoder().decode(MarketResponse.self, from: data)
-                print("test")
+                let marketplace = try JSONDecoder().decode(SearchResponse.self, from: data)
+                print(marketplace)
                 // Populate portfolio items from JSON
+                var items = [MSMarketPlaceItem]()
+                var model = [MSMarketPlaceItem]()
+                /*for dlc in JSONArray{
+                    model.append(MSMarketPlaceItem(SearchResponse))
+                }
+                for marketStock in marketplace {
+                    let item = MSMarketPlaceItem()
+                    item.symbol = marketStock.symbol
+                    item.percent = Double(truncating: marketStock.changePercent as NSNumber)
+                    item.imageName = marketStock.logo
+                    item.price = Double(truncating: marketStock.price as NSNumber)
+                    items.append(item)
+                }*/
+                let marketPlaceSingleton = MSMarketPlaceData.sharedInstance
+                marketPlaceSingleton.items.removeAll()
+                marketPlaceSingleton.items.append(contentsOf: items)
+            } catch let jsonErr {
+                print(jsonErr)
+            }
+            DispatchQueue.main.async {
+                let indexSet = IndexSet(integer: 2)
+                self?.WinnersCollectionView.reloadSections(indexSet)
+            }
+            }.resume() // fires the session
+    }
+    
+    
+    
+    func fetchData(sortString : String) {
+        let urlString = "https://mockstock.azurewebsites.net/api/stock/marketplace" // localhost:5001/api/tests"
+        guard let url = URL(string: urlString) else { return }
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "GET"
+        urlRequest.addValue(String(sortString), forHTTPHeaderField: "sort")
+        URLSession.shared.dataTask(with: urlRequest) { [weak self] (data, response, error) in
+            if let e = error { print(e) }
+            guard let data = data else { return }
+            
+            do {
+                // Decode JSON
+                let marketplace = try JSONDecoder().decode(MarketResponse.self, from: data)
+                // Populate Marketplace items from JSON
                 var items = [MSMarketPlaceItem]()
                 var winnersItems = [MSMarketPlaceItem]()
                 var losersItems = [MSMarketPlaceItem]()
@@ -164,7 +228,7 @@ protocol dropDownProtocol {
 class dropDownBtn: UIButton, dropDownProtocol {
     
     func dropDownPressed(string: String) {
-        self.setTitle(string, for: .normal)
+        print(string)
         self.dismissDropDown()
     }
     
@@ -184,13 +248,17 @@ class dropDownBtn: UIButton, dropDownProtocol {
     }
     
     override func didMoveToSuperview() {
+        /*let view = UIView()
+        if let window = UIApplication.shared.keyWindow{
+            window.addSubview(dropView)
+        }*/
+        /*view.frame = UIApplication.shared.keyWindow!.frame
+        UIApplication.shared.keyWindow!.addSubview(dropView)*/
         self.superview?.addSubview(dropView)
         self.superview?.bringSubviewToFront(dropView)
         dropView.topAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
         dropView.centerXAnchor.constraint(equalTo: self.centerXAnchor, constant: -30).isActive = true
-        //dropView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         dropView.widthAnchor.constraint(equalToConstant: 130).isActive = true
-        //dropView.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
         height = dropView.heightAnchor.constraint(equalToConstant: 0)
     }
     
@@ -199,9 +267,7 @@ class dropDownBtn: UIButton, dropDownProtocol {
         if isOpen == false {
             
             isOpen = true
-            
             NSLayoutConstraint.deactivate([self.height])
-            
             if self.dropView.tableView.contentSize.height > 150 {
                 self.height.constant = 150
             } else {
@@ -267,7 +333,7 @@ class dropDownView: UIView, UITableViewDelegate, UITableViewDataSource  {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
         self.addSubview(tableView)
-        
+        self.superview?.bringSubviewToFront(tableView)
         tableView.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
         tableView.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
         tableView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
@@ -309,32 +375,45 @@ extension MarketplaceViewController: UICollectionViewDataSource, UICollectionVie
         if indexPath.section == 0{
             //let modelItem = MSWinnersData.sharedInstance.items[indexPath.item]
             let cell =  collectionView.dequeueReusableCell(withReuseIdentifier: winnersId, for: indexPath)as!MSFeaturedItemCell
-            cell.translatesAutoresizingMaskIntoConstraints = false
-            cell.backgroundColor = . gray
+            cell.backgroundColor = .clear
             cell.categoryLabel.text = "Todays Winners"
+            cell.bool = true
+            //cell.gainersData = gainersData
+            print(cell.bool)
             return cell
         } else if indexPath.section == 1{
             let cell =  collectionView.dequeueReusableCell(withReuseIdentifier: losersId, for: indexPath)as!MSFeaturedItemCell
-            
+            cell.backgroundColor = .clear
             cell.categoryLabel.text = "Todays Losers"
+            cell.bool = false
+            //cell.losersData = losersData
+            print(cell.bool)
             return cell
             
         }else{
             let modelItem = MSMarketPlaceData.sharedInstance.items[indexPath.item]
             let cell =  collectionView.dequeueReusableCell(withReuseIdentifier: marketId, for: indexPath)as!MSMarketPlaceCell
             cell.translatesAutoresizingMaskIntoConstraints = false
-            cell.backgroundColor = .gray
+            cell.backgroundColor = .clear
             cell.tickerLabel.text = modelItem.symbol.uppercased()
             cell.priceValueLabel.text = String(format: "%.02f", modelItem.price)
             var percentDoubleSign = ""
-            if modelItem.percent >= 0 {
+            /*if modelItem.percent >= 0 {
                 percentDoubleSign = "+"
                 cell.setColors(topView: UIColor(red: 87, green: 210, blue: 2), bottomViewColor: UIColor(red: 70, green: 166, blue: 1))
             } else {
                 percentDoubleSign = "-"
                 cell.setColors(topView: UIColor(red: 247, green: 13, blue: 31), bottomViewColor: UIColor(red: 191, green: 11, blue: 25))
+            }*/
+            let percentStr = String(format: "%.03f", modelItem.percent)
+            cell.valuePercentLabel.text = String("\(percentDoubleSign)\(percentStr)%")
+            let url = URL(string: modelItem.imageName)
+            do{
+               let data = try Data(contentsOf: url!)
+                cell.imageView.image = UIImage(data: data)
+            }catch let err{
+                cell.imageView.image = UIImage(named: "AAPL")
             }
-            cell.priceValueLabel.text = String("\(percentDoubleSign)\(modelItem.percent)%")
             return cell
         }
     }
@@ -342,7 +421,7 @@ extension MarketplaceViewController: UICollectionViewDataSource, UICollectionVie
         if section == 2{
             return MSMarketPlaceData.sharedInstance.items.count
         }
-        else if section == 1{
+        else if section == 0{
            return 1
         }
         else{
@@ -356,5 +435,14 @@ extension MarketplaceViewController: UICollectionViewDataSource, UICollectionVie
         return CGSize(width: collectionView.frame.width , height: 150)
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let modelItem = marketPlaceData.items[indexPath.item]
+        
+        if let nav = navigationController {
+            let vc = DetailedViewController()
+            vc.symbolLabel.text = modelItem.symbol.uppercased()
+            nav.pushViewController(vc, animated: true)
+        }
+    }
 }
     

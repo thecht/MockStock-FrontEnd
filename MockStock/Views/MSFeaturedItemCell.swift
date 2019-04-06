@@ -12,6 +12,9 @@ import UIKit
 
 
 class MSFeaturedItemCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    var bool = true
+    private let winnersId = "winnersId"
+    private let losersId = "losersId"
     
     var marketPlaceCategory: MarketPlaceCategory? {
         didSet{
@@ -89,13 +92,14 @@ class MSFeaturedItemCell: UICollectionViewCell, UICollectionViewDataSource, UICo
     
     func setupViews() {
         backgroundColor = UIColor.clear
-        
+        //print(losersData.items)
         addSubview(featuredCollectionView)
         addSubview(categoryLabel)
         addSubview(dividerLineView)
         featuredCollectionView.dataSource = self
         featuredCollectionView.delegate = self
-        featuredCollectionView.register(FeaturedCell.self, forCellWithReuseIdentifier: cellId)
+        featuredCollectionView.register(FeaturedCell.self, forCellWithReuseIdentifier: winnersId)
+        featuredCollectionView.register(FeaturedCell.self, forCellWithReuseIdentifier: losersId)
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-14-[v0]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0" : categoryLabel]))
         
        /* addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-14-[v0]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0" : dividerLineView]))
@@ -113,17 +117,79 @@ class MSFeaturedItemCell: UICollectionViewCell, UICollectionViewDataSource, UICo
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if let count = marketPlaceCategory?.stocks?.count{
+        /*if let count = marketPlaceCategory?.stocks?.count{
             return count
         }
-        return 5
+        return 5*/
+        if bool == true{
+            print(MSWinnersData.sharedInstance.items.count)
+            return MSWinnersData.sharedInstance.items.count
+        }
+        print(MSLosersData.sharedInstance.items.count)
+        return MSLosersData.sharedInstance.items.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell =  collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)as!FeaturedCell
+        print("is nothing")
+        if bool == true{
+            print("istrue")
+            let modelItem = MSWinnersData.sharedInstance.items[indexPath.item]
+            let cell =  collectionView.dequeueReusableCell(withReuseIdentifier: winnersId, for: indexPath)as!FeaturedCell
+            cell.translatesAutoresizingMaskIntoConstraints = false
+            cell.backgroundColor = .clear
+            cell.tickerLabel.text = modelItem.symbol.uppercased()
+            cell.priceValueLabel.text = String(format: "%.02f", modelItem.price)
+            var percentDoubleSign = ""
+            /*if modelItem.percent >= 0 {
+             percentDoubleSign = "+"
+             cell.setColors(topView: UIColor(red: 87, green: 210, blue: 2), bottomViewColor: UIColor(red: 70, green: 166, blue: 1))
+             } else {
+             percentDoubleSign = "-"
+             cell.setColors(topView: UIColor(red: 247, green: 13, blue: 31), bottomViewColor: UIColor(red: 191, green: 11, blue: 25))
+             }*/
+            let percentStr = String(format: "%.03f", modelItem.percent)
+            cell.valuePercentLabel.text = String("\(percentDoubleSign)\(percentStr)%")
+            let url = URL(string: modelItem.imageName)
+            do{
+                let data = try Data(contentsOf: url!)
+                cell.imageView.image = UIImage(data: data)
+            }catch let err{
+                cell.imageView.image = UIImage(named: "AAPL")
+            }
+            return cell
+        }
+        print("isfalse")
+        let modelItem = MSLosersData.sharedInstance.items[indexPath.item]
+        let cell =  collectionView.dequeueReusableCell(withReuseIdentifier: losersId, for: indexPath)as!FeaturedCell
+        cell.translatesAutoresizingMaskIntoConstraints = false
+        cell.backgroundColor = .clear
+        cell.tickerLabel.text = modelItem.symbol.uppercased()
+        cell.priceValueLabel.text = String(format: "%.02f", modelItem.price)
+        var percentDoubleSign = ""
+        /*if modelItem.percent >= 0 {
+         percentDoubleSign = "+"
+         cell.setColors(topView: UIColor(red: 87, green: 210, blue: 2), bottomViewColor: UIColor(red: 70, green: 166, blue: 1))
+         } else {
+         percentDoubleSign = "-"
+         cell.setColors(topView: UIColor(red: 247, green: 13, blue: 31), bottomViewColor: UIColor(red: 191, green: 11, blue: 25))
+         }*/
+        let percentStr = String(format: "%.03f", modelItem.percent)
+        cell.valuePercentLabel.text = String("\(percentDoubleSign)\(percentStr)%")
+        let url = URL(string: modelItem.imageName)
+        do{
+            let data = try Data(contentsOf: url!)
+            cell.imageView.image = UIImage(data: data)
+        }catch let err{
+            cell.imageView.image = UIImage(named: "AAPL")
+        }
         return cell
     }
-    
+
+
+            
+
+
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 110, height: 110)
     }
@@ -134,7 +200,7 @@ class MSFeaturedItemCell: UICollectionViewCell, UICollectionViewDataSource, UICo
 
 class FeaturedCell: UICollectionViewCell{
     
-    var stock: stock? {
+    /*var stock: stock? {
         didSet{
             if let name = stock?.tickerSymbol{
                 tickerLabel.text = name
@@ -153,7 +219,7 @@ class FeaturedCell: UICollectionViewCell{
                 valuePercentLabel.text = ""
             }
         }
-    }
+    }*/
     var imageView: UIImageView = {
         let iv = UIImageView()
         iv.image = UIImage(named: "AAPL")
@@ -235,7 +301,7 @@ class FeaturedCell: UICollectionViewCell{
     }
     
     
-    func setupViews(){
+   /* func setupViews(){
         
         addSubview(imageView)
         addSubview(divider)
@@ -254,5 +320,41 @@ class FeaturedCell: UICollectionViewCell{
         priceValueLabel.frame = CGRect(x: 43, y: 25, width: 100, height: 50)
         valuePercentLabel.frame = CGRect(x: 3, y: 50, width: 100, height: 50)
         categoryLabel.frame = CGRect(x: 3, y: 50, width: 100, height: 50)
+    }*/
+    func setupViews(){
+        
+        addSubview(imageView)
+        addSubview(divider)
+        addSubview(priceLabel)
+        addSubview(priceValueLabel)
+        addSubview(tickerLabel)
+        addSubview(valuePercentLabel)
+        addSubview(divider)
+        addSubview(percentLabel)
+        
+    }
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        
+        // Size background views
+        /*.frame = CGRect(x: 0, y: frame.height - frame.height * 0.4, width: frame.width, height: frame.height * 0.4)
+         colorView2.layer.cornerRadius = colorView2.frame.width / 25
+         colorView1.frame = CGRect(x: 0, y: frame.height - frame.height * 0.4, width: frame.width, height: frame.height * 0.2)
+         */
+        setupLabels()
+    }
+    private func setupLabels() {
+        let leftLabelInset = CGFloat(5.0)
+        imageView.frame = CGRect(x: leftLabelInset, y: 150, width: 30, height: 30)
+        divider.frame = CGRect(x: 0, y: 185, width: frame.width, height: 1)
+        tickerLabel.frame = CGRect(x: 40, y: 140, width: 70, height: 50)
+        priceLabel.frame = CGRect(x: 3, y: 175, width: 50, height: 50)
+        priceValueLabel.frame = CGRect(x: 43, y: 175, width: 100, height: 50)
+        valuePercentLabel.frame = CGRect(x: 3, y: 200, width: 100, height: 50)
+    }
+    func setColors(topView: UIColor, bottomViewColor: UIColor) {
+        self.backgroundColor = topView
+        self.colorView1.backgroundColor = bottomViewColor
+        self.colorView2.backgroundColor = bottomViewColor
     }
 }

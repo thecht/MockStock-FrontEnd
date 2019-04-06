@@ -74,3 +74,15 @@ struct ChartResponse : Decodable{
     var closingPrice : Decimal
     
 }
+
+struct SearchResponse : Decodable{
+    var symbol : String
+    var logo : String
+    var price : Decimal
+    var changePercent : Decimal
+}
+
+struct BuySellResponse: Decodable {
+    var StockId: String
+    var StockQty: Int
+}
