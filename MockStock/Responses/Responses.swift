@@ -46,7 +46,7 @@ struct League: Decodable {
 struct LeagueUser: Decodable {
     var UserId: Int
     var UserName: String
-    var NetWorth: Double
+    var UserCurrency: Double
 }
 
 struct BuySellResponse: Decodable {
