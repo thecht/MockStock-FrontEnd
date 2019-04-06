@@ -48,8 +48,6 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDataSource,
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(MSLeagueUserCell.self, forCellWithReuseIdentifier: "cellId")
-        
-        fetchData()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -72,7 +70,7 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDataSource,
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as! MSLeagueUserCell
         cell.userName.text = modelItem.UserName
         cell.userName.textColor = .black
-        cell.netWorth.text = "$\(modelItem.NetWorth)"
+        cell.netWorth.text = "$\(modelItem.UserCurrency)"
         cell.netWorth.textColor = .black
         cell.setColors(topView: UIColor(red: 229, green: 229, blue: 229), bottomViewColor: UIColor(red: 255, green: 255, blue: 255))
         
@@ -84,16 +82,45 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDataSource,
     }
     
     func fetchData() {
-        let lu1 = LeagueUser(UserId: 42, UserName: "SomeDude", NetWorth: 411.13)
-        let lu2 = LeagueUser(UserId: 421, UserName: "SomeDude2", NetWorth: 2311.13)
-        let lu3 = LeagueUser(UserId: 4211, UserName: "SomeDude3", NetWorth: 431.11)
-        let lu4 = LeagueUser(UserId: 42123, UserName: "SomeDude4", NetWorth: 3211.12)
-        let lu5 = LeagueUser(UserId: 42121, UserName: "SomeDude5", NetWorth: 14211.13)
-        let lu6 = LeagueUser(UserId: 4212, UserName: "Another Person", NetWorth: 9000.13)
-        leagueUsers = [lu1, lu2, lu3, lu4, lu5, lu6]
+        guard let lid = leagueId else { return }
         
-        leagueUsers = leagueUsers.sorted(by: {$0.NetWorth > $1.NetWorth})
+        // 1. Get valid token
+        guard let token = UserDefaults.standard.string(forKey: "Token") else {
+            MSRestMock.fetchAuthenticationToken(callback: fetchData)
+            return
+        }
+        
+        // 2. Send portfolio data request to server using authentication token
+        let urlString = "https://mockstock.azurewebsites.net/api/leagues/leaderboard/\(lid)"
+        guard let url = URL(string: urlString) else { return }
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "GET"
+        urlRequest.addValue(token, forHTTPHeaderField: "Authorization")
+        print(urlRequest.debugDescription)
+        URLSession.shared.dataTask(with: urlRequest) { [weak self] (data, response, error) in
+            if let e = error { print(e) }
+            guard let data = data else { return }
+            // Check for expired token
+            if MSRestMock.checkUnauthorizedStatusCode(response: response) {
+                print("unauthorized: getting token")
+                MSRestMock.fetchAuthenticationToken(callback: self!.fetchData)
+            }
+            
+            do {
+                // Decode JSON
+                let leaderboard = try JSONDecoder().decode([LeagueUser].self, from: data)
+                
+                // Populate league user items from JSON
+                self?.leagueUsers = leaderboard
+            } catch let jsonErr {
+                print(jsonErr)
+            }
+            DispatchQueue.main.async {
+                self?.collectionView.reloadData()
+            }
+        }.resume() // fires the session
     }
+    
     @objc func leaveLeaguePressed() {
         guard let hid = self.hostId else { return }
         let userid = UserDefaults.standard.integer(forKey: "UserId")
