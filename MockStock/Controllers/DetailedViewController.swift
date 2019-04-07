@@ -391,20 +391,28 @@ class DetailedViewController: UIViewController {
             do {
                 // Decode JSON
                 let details = try JSONDecoder().decode(DetailedResponse.self, from: d)
-                let priceString = "Price: "
+                let priceString = "Price: $"
                 let percentString = "Weeks Change: "
-                let highString = "High: "
-                let lowString = "Low: "
+                let highString = "High: $"
+                let lowString = "Low: $"
                 let yearString = "Year Change: "
                 let percent = "%"
-                self.priceLabel.text = String("\(priceString)\(details.price)")
-                self.percentLabel.text = String("\(percentString)\(details.changePercent)\(percent)")
-                self.highLabel.text = String("\(highString)\(details.high)")
-                self.lowLabel.text = String("\(lowString)\(details.high)")
-                self.yearChangeLabel.text = String("\(yearString)\(details.ytdChange)\(percent)")
-                
+                let x = Double(truncating: details.changePercent as NSNumber)
+                let y = Double(round(1000*x)/1000)
+                let z = Double(truncating: details.ytdChange as NSNumber)
+                let v = Double(round(1000*z)/1000)
+                let temppriceLabel = String("\(priceString)\(details.price)")
+                let temppercentLabel = String("\(percentString)\(y)\(percent)")
+                let temphighLabel = String("\(highString)\(details.high)")
+                let templowLabel = String("\(lowString)\(details.high)")
+                let tempyearChangeLabel = String("\(yearString)\(v)\(percent)")
                 
                 DispatchQueue.main.async {
+                    self.priceLabel.text = temppriceLabel
+                    self.percentLabel.text = temppercentLabel
+                    self.highLabel.text = temphighLabel
+                    self.lowLabel.text = templowLabel
+                    self.yearChangeLabel.text = tempyearChangeLabel
                 }
             } catch let jsonErr {
                 print(jsonErr)
