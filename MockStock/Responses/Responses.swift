@@ -88,8 +88,3 @@ struct SearchResponse : Decodable{
     var price : Decimal
     var changePercent : Decimal
 }
-
-struct BuySellResponse: Decodable {
-    var StockId: String
-    var StockQty: Int
-}

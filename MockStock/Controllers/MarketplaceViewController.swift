@@ -18,6 +18,7 @@ class MarketplaceViewController: UIViewController, UISearchBarDelegate {
     var marketPlaceData = MSMarketPlaceData.sharedInstance
     var gainersData = MSWinnersData.sharedInstance
     var losersData = MSLosersData.sharedInstance
+    var testCollectionView = MSFeaturedItemCell()
     var WinnersCollectionView: UICollectionView = {
         let v = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
         v.translatesAutoresizingMaskIntoConstraints = false
@@ -35,18 +36,19 @@ class MarketplaceViewController: UIViewController, UISearchBarDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(button)
-        button  = dropDownBtn.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+        //view.addSubview(button)
+        //button  = dropDownBtn.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+        button.setTitle("Sort", for: .normal)
         button.setImage(UIImage(named: "dropdownicon"), for: .normal)
-        button.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        //button.widthAnchor.constraint(equalToConstant: 30).isActive = true
+       // button.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
         button.translatesAutoresizingMaskIntoConstraints = false
         self.navigationController?.navigationBar.topItem?.title = "MarketPlace"
         self.navigationController?.navigationBar.prefersLargeTitles = true
         let leftNavBarButton = UIBarButtonItem(customView: searchBar)
         self.navigationItem.leftBarButtonItem = leftNavBarButton
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView:button)
+        //self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView:button)
         
         button.dropView.dropDownOptions = ["Ascending", "Descending"]
         
@@ -58,7 +60,6 @@ class MarketplaceViewController: UIViewController, UISearchBarDelegate {
         WinnersCollectionView.register(MSMarketPlaceCell.self, forCellWithReuseIdentifier: marketId)
         WinnersCollectionView.register(MSFeaturedItemCell.self, forCellWithReuseIdentifier: winnersId)
         WinnersCollectionView.register(MSFeaturedItemCell.self, forCellWithReuseIdentifier: losersId)
-        
         // collection view constraints
         WinnersCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20).isActive = true
         WinnersCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20).isActive = true
@@ -73,11 +74,22 @@ class MarketplaceViewController: UIViewController, UISearchBarDelegate {
         
         self.view.layoutIfNeeded()
         if let layout = WinnersCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.sectionInset = UIEdgeInsets(top: 15, left: 0, bottom: 45, right: 0)
+            layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             layout.minimumInteritemSpacing = 15
             layout.minimumLineSpacing = 15
-        }
+            
+            /*let flow = WinnersCollectionView.collectionViewLayout as! UICollectionViewFlowLayout // If you create collectionView programmatically then just create this flow by UICollectionViewFlowLayout() and init a collectionView by this flow.
+            
+            let itemSpacing: CGFloat = 3
+            let itemsInOneLine: CGFloat = 3
+            flow.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            let width = UIScreen.main.bounds.size.width - itemSpacing * CGFloat(itemsInOneLine - 1) //collectionView.frame.width is the same as  UIScreen.main.bounds.size.width here.
+            flow.itemSize = CGSize(width: floor(width/itemsInOneLine), height: width/itemsInOneLine)
+            flow.minimumInteritemSpacing = 3
+            flow.minimumLineSpacing = 3*/
+        
         fetchData(sortString: sort)
+    }
     }
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         isSearching = true
@@ -112,7 +124,6 @@ class MarketplaceViewController: UIViewController, UISearchBarDelegate {
     }
     func fetchSearchData(searchString : String) {
         // 0. Start activity indicator animation
-        print(searchString)
         // 2. Send search data request to server using authentication token
         let urlString = "https://mockstock.azurewebsites.net/api/stock/search" // localhost:5001/api/tests"
         guard let url = URL(string: urlString) else { return }
@@ -125,14 +136,9 @@ class MarketplaceViewController: UIViewController, UISearchBarDelegate {
             
             do {
                 // Decode JSON
-                let marketplace = try JSONDecoder().decode(SearchResponse.self, from: data)
-                print(marketplace)
+                let marketplace = try JSONDecoder().decode([SearchResponse].self, from: data)
                 // Populate portfolio items from JSON
                 var items = [MSMarketPlaceItem]()
-                var model = [MSMarketPlaceItem]()
-                /*for dlc in JSONArray{
-                    model.append(MSMarketPlaceItem(SearchResponse))
-                }
                 for marketStock in marketplace {
                     let item = MSMarketPlaceItem()
                     item.symbol = marketStock.symbol
@@ -140,7 +146,7 @@ class MarketplaceViewController: UIViewController, UISearchBarDelegate {
                     item.imageName = marketStock.logo
                     item.price = Double(truncating: marketStock.price as NSNumber)
                     items.append(item)
-                }*/
+                }
                 let marketPlaceSingleton = MSMarketPlaceData.sharedInstance
                 marketPlaceSingleton.items.removeAll()
                 marketPlaceSingleton.items.append(contentsOf: items)
@@ -211,12 +217,17 @@ class MarketplaceViewController: UIViewController, UISearchBarDelegate {
             }
             DispatchQueue.main.async {
                 self?.WinnersCollectionView.reloadData()
+                self?.testCollectionView.setup()
             }
             }.resume() // fires the session
     }
     
     @objc func logOut() {
         present(MSLoginViewController(), animated: false, completion: nil)
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        button.constraints.forEach { $0.isActive = false}
+        button.removeFromSuperview()
     }
     
 }
@@ -333,7 +344,6 @@ class dropDownView: UIView, UITableViewDelegate, UITableViewDataSource  {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
         self.addSubview(tableView)
-        self.superview?.bringSubviewToFront(tableView)
         tableView.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
         tableView.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
         tableView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
@@ -378,6 +388,7 @@ extension MarketplaceViewController: UICollectionViewDataSource, UICollectionVie
             cell.backgroundColor = .clear
             cell.categoryLabel.text = "Todays Winners"
             cell.bool = true
+            (cell ).configure()
             //cell.gainersData = gainersData
             print(cell.bool)
             return cell
@@ -388,6 +399,7 @@ extension MarketplaceViewController: UICollectionViewDataSource, UICollectionVie
             cell.bool = false
             //cell.losersData = losersData
             print(cell.bool)
+            (cell ).configure()
             return cell
             
         }else{
@@ -440,9 +452,12 @@ extension MarketplaceViewController: UICollectionViewDataSource, UICollectionVie
         
         if let nav = navigationController {
             let vc = DetailedViewController()
-            vc.symbolLabel.text = modelItem.symbol.uppercased()
+            print(modelItem.symbol.uppercased())
+            vc.symbolTitle = modelItem.symbol.uppercased()
             nav.pushViewController(vc, animated: true)
         }
     }
+    
 }
+
     

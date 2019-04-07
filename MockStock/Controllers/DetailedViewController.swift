@@ -179,6 +179,8 @@ class DetailedViewController: UIViewController {
         graphView.insertSubview(viewControllers[0].view, aboveSubview:graphView)
         
         setupLayout()
+        print(symbolLabel.text)
+        fetchData()
         // Add button touch handlers
         buyButton.addTarget(self, action: #selector(self.buyPressed), for: .touchUpInside)
         sellButton.addTarget(self, action: #selector(self.sellPressed), for: .touchUpInside)
@@ -376,8 +378,39 @@ class DetailedViewController: UIViewController {
         
     }
     
-    @objc func fetchData() {
-        
+    func fetchData() {
+        let urlString = "https://mockstock.azurewebsites.net/api/stock/details"
+        guard let url = URL(string: urlString) else { return }
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "GET"
+        urlRequest.addValue(symbolTitle, forHTTPHeaderField: "symbol")
+        URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+            if let e = error { print(e) }
+            guard let d = data else { return }
+            
+            do {
+                // Decode JSON
+                let details = try JSONDecoder().decode(DetailedResponse.self, from: d)
+                let priceString = "Price: "
+                let percentString = "Weeks Change: "
+                let highString = "High: "
+                let lowString = "Low: "
+                let yearString = "Year Change: "
+                let percent = "%"
+                self.priceLabel.text = String("\(priceString)\(details.price)")
+                self.percentLabel.text = String("\(percentString)\(details.changePercent)\(percent)")
+                self.highLabel.text = String("\(highString)\(details.high)")
+                self.lowLabel.text = String("\(lowString)\(details.high)")
+                self.yearChangeLabel.text = String("\(yearString)\(details.ytdChange)\(percent)")
+                
+                
+                DispatchQueue.main.async {
+                }
+            } catch let jsonErr {
+                print(jsonErr)
+            }
+            
+            }.resume() // fires the session
     }
     
     @objc func marketResponseRecieved(message: String) {
