@@ -13,12 +13,17 @@ import UIKit
 
 class MarketplaceViewController: UIViewController, UISearchBarDelegate {
     
+    var ascSortButton: UIBarButtonItem!
+    var decSortButton: UIBarButtonItem!
+    var isAnimating : Bool = false
+    var dropDownViewIsDisplayed : Bool = false
     var sort: String = "asc"
     var isSearching: Bool = false
     var marketPlaceData = MSMarketPlaceData.sharedInstance
     var gainersData = MSWinnersData.sharedInstance
     var losersData = MSLosersData.sharedInstance
     var testCollectionView = MSFeaturedItemCell()
+    var losersCollectionView = MSLosersItemCell()
     var WinnersCollectionView: UICollectionView = {
         let v = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
         v.translatesAutoresizingMaskIntoConstraints = false
@@ -40,8 +45,8 @@ class MarketplaceViewController: UIViewController, UISearchBarDelegate {
         //button  = dropDownBtn.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
         button.setTitle("Sort", for: .normal)
         button.setImage(UIImage(named: "dropdownicon"), for: .normal)
-        //button.widthAnchor.constraint(equalToConstant: 30).isActive = true
-       // button.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        button.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
         button.translatesAutoresizingMaskIntoConstraints = false
         self.navigationController?.navigationBar.topItem?.title = "MarketPlace"
@@ -49,6 +54,10 @@ class MarketplaceViewController: UIViewController, UISearchBarDelegate {
         let leftNavBarButton = UIBarButtonItem(customView: searchBar)
         self.navigationItem.leftBarButtonItem = leftNavBarButton
         //self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView:button)
+        
+        ascSortButton = UIBarButtonItem(title: "Sort: A-Z", style: .plain, target: self, action: #selector(didTapAsc))
+        decSortButton = UIBarButtonItem(title: "Sort: Z-A", style: .plain, target: self, action: #selector(didTapDec))
+        self.navigationItem.rightBarButtonItem = self.ascSortButton
         
         button.dropView.dropDownOptions = ["Ascending", "Descending"]
         
@@ -59,7 +68,7 @@ class MarketplaceViewController: UIViewController, UISearchBarDelegate {
         WinnersCollectionView.dataSource = self
         WinnersCollectionView.register(MSMarketPlaceCell.self, forCellWithReuseIdentifier: marketId)
         WinnersCollectionView.register(MSFeaturedItemCell.self, forCellWithReuseIdentifier: winnersId)
-        WinnersCollectionView.register(MSFeaturedItemCell.self, forCellWithReuseIdentifier: losersId)
+        WinnersCollectionView.register(MSLosersItemCell.self, forCellWithReuseIdentifier: losersId)
         // collection view constraints
         WinnersCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20).isActive = true
         WinnersCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20).isActive = true
@@ -67,6 +76,15 @@ class MarketplaceViewController: UIViewController, UISearchBarDelegate {
         WinnersCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50).isActive = true
         
  
+    }
+    @objc func didTapAsc(){
+        self.navigationItem.setRightBarButton(self.decSortButton, animated: false)
+        fetchData(sortString: "dec")
+        
+    }
+    @objc func didTapDec(){
+        self.navigationItem.setRightBarButton(self.ascSortButton, animated: false)
+        fetchData(sortString: "asc")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -77,16 +95,6 @@ class MarketplaceViewController: UIViewController, UISearchBarDelegate {
             layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             layout.minimumInteritemSpacing = 15
             layout.minimumLineSpacing = 15
-            
-            /*let flow = WinnersCollectionView.collectionViewLayout as! UICollectionViewFlowLayout // If you create collectionView programmatically then just create this flow by UICollectionViewFlowLayout() and init a collectionView by this flow.
-            
-            let itemSpacing: CGFloat = 3
-            let itemsInOneLine: CGFloat = 3
-            flow.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            let width = UIScreen.main.bounds.size.width - itemSpacing * CGFloat(itemsInOneLine - 1) //collectionView.frame.width is the same as  UIScreen.main.bounds.size.width here.
-            flow.itemSize = CGSize(width: floor(width/itemsInOneLine), height: width/itemsInOneLine)
-            flow.minimumInteritemSpacing = 3
-            flow.minimumLineSpacing = 3*/
         
         fetchData(sortString: sort)
     }
@@ -218,6 +226,7 @@ class MarketplaceViewController: UIViewController, UISearchBarDelegate {
             DispatchQueue.main.async {
                 self?.WinnersCollectionView.reloadData()
                 self?.testCollectionView.setup()
+                self?.losersCollectionView.setup()
             }
             }.resume() // fires the session
     }
@@ -279,6 +288,7 @@ class dropDownBtn: UIButton, dropDownProtocol {
             
             isOpen = true
             NSLayoutConstraint.deactivate([self.height])
+            
             if self.dropView.tableView.contentSize.height > 150 {
                 self.height.constant = 150
             } else {
@@ -340,7 +350,6 @@ class dropDownView: UIView, UITableViewDelegate, UITableViewDataSource  {
         
         tableView.delegate = self
         tableView.dataSource = self
-        
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
         self.addSubview(tableView)
@@ -383,23 +392,16 @@ extension MarketplaceViewController: UICollectionViewDataSource, UICollectionVie
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.section == 0{
-            //let modelItem = MSWinnersData.sharedInstance.items[indexPath.item]
             let cell =  collectionView.dequeueReusableCell(withReuseIdentifier: winnersId, for: indexPath)as!MSFeaturedItemCell
             cell.backgroundColor = .clear
             cell.categoryLabel.text = "Todays Winners"
-            cell.bool = true
-            (cell ).configure()
-            //cell.gainersData = gainersData
-            print(cell.bool)
+            (testCollectionView = cell)
             return cell
         } else if indexPath.section == 1{
-            let cell =  collectionView.dequeueReusableCell(withReuseIdentifier: losersId, for: indexPath)as!MSFeaturedItemCell
+            let cell =  collectionView.dequeueReusableCell(withReuseIdentifier: losersId, for: indexPath)as!MSLosersItemCell
             cell.backgroundColor = .clear
             cell.categoryLabel.text = "Todays Losers"
-            cell.bool = false
-            //cell.losersData = losersData
-            print(cell.bool)
-            (cell ).configure()
+            (losersCollectionView = cell)
             return cell
             
         }else{
@@ -410,20 +412,25 @@ extension MarketplaceViewController: UICollectionViewDataSource, UICollectionVie
             cell.tickerLabel.text = modelItem.symbol.uppercased()
             cell.priceValueLabel.text = String(format: "%.02f", modelItem.price)
             var percentDoubleSign = ""
-            /*if modelItem.percent >= 0 {
+            if modelItem.percent >= 0 {
                 percentDoubleSign = "+"
                 cell.setColors(topView: UIColor(red: 87, green: 210, blue: 2), bottomViewColor: UIColor(red: 70, green: 166, blue: 1))
             } else {
                 percentDoubleSign = "-"
                 cell.setColors(topView: UIColor(red: 247, green: 13, blue: 31), bottomViewColor: UIColor(red: 191, green: 11, blue: 25))
-            }*/
+            }
             let percentStr = String(format: "%.03f", modelItem.percent)
             cell.valuePercentLabel.text = String("\(percentDoubleSign)\(percentStr)%")
-            let url = URL(string: modelItem.imageName)
+            
+            if let url = URL(string: modelItem.imageName){
             do{
-               let data = try Data(contentsOf: url!)
-                cell.imageView.image = UIImage(data: data)
+                let data = try Data(contentsOf: url)
+                cell.imageView.image = UIImage(data: data)?.resizeImage(targetSize: CGSize(width: 30, height: 30))
+                
             }catch let err{
+            }
+            }
+            else{
                 cell.imageView.image = UIImage(named: "AAPL")
             }
             return cell
@@ -448,13 +455,31 @@ extension MarketplaceViewController: UICollectionViewDataSource, UICollectionVie
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let modelItem = marketPlaceData.items[indexPath.item]
         
+        if indexPath.section == 0{
+            let modelItem = gainersData.items[indexPath.item]
+            if let nav = navigationController {
+                let vc = DetailedViewController()
+                print(modelItem.symbol.uppercased())
+                vc.symbolTitle = modelItem.symbol.uppercased()
+                nav.pushViewController(vc, animated: true)
+            }
+        }else if indexPath.section == 1{
+            let label = losersCollectionView.getItem()
+            if let nav = navigationController {
+                let vc = DetailedViewController()
+                print(label.uppercased())
+                vc.symbolTitle = label.uppercased()
+                nav.pushViewController(vc, animated: true)
+            }
+        }else if indexPath.section == 2{
+            let modelItem = marketPlaceData.items[indexPath.item]
         if let nav = navigationController {
             let vc = DetailedViewController()
             print(modelItem.symbol.uppercased())
             vc.symbolTitle = modelItem.symbol.uppercased()
             nav.pushViewController(vc, animated: true)
+        }
         }
     }
     

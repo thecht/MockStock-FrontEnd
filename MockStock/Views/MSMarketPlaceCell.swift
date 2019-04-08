@@ -14,7 +14,8 @@ class MSMarketPlaceCell: UICollectionViewCell{
     
     var imageView: UIImageView = {
         let iv = UIImageView()
-        iv.image = UIImage(named: "AAPL")
+        let image = UIImage(named: "AAPL")
+        iv.image = image?.resizeImage(targetSize: CGSize(width: 30, height: 30))
         iv.contentMode = .scaleAspectFill
         iv.layer.cornerRadius = 16
         iv.layer.masksToBounds = true
@@ -32,7 +33,7 @@ class MSMarketPlaceCell: UICollectionViewCell{
         let l = UILabel()
         l.text = "123.12"
         l.font = UIFont(name: "Futura-CondensedMedium", size: 20)
-        l.textColor = .black
+        l.textColor = .white
         l.textAlignment = .left
         return l
     }()
@@ -50,7 +51,7 @@ class MSMarketPlaceCell: UICollectionViewCell{
         let l = UILabel()
         l.text = "APPL"
         l.font = UIFont(name: "Futura", size: 18)
-        l.textColor = .black
+        l.textColor = .white
         l.textAlignment = .left
         return l
     }()
@@ -58,7 +59,7 @@ class MSMarketPlaceCell: UICollectionViewCell{
         let l = UILabel()
         l.text = "+3.08%"
         l.font = UIFont(name: "Futura", size: 20)
-        l.textColor = .black
+        l.textColor = .white
         l.textAlignment = .left
         return l
     }()
@@ -66,7 +67,7 @@ class MSMarketPlaceCell: UICollectionViewCell{
         let l = UILabel()
         l.text = "Today's Change: "
         l.font = UIFont(name: "Futura", size: 20)
-        l.textColor = .black
+        l.textColor = .white
         l.textAlignment = .left
         return l
     }()
@@ -108,18 +109,33 @@ class MSMarketPlaceCell: UICollectionViewCell{
         */
         setupLabels()
     }
-    private func setupLabels() {
+        private func setupLabels() {
         let leftLabelInset = CGFloat(5.0)
-        imageView.frame = CGRect(x: leftLabelInset, y: 150, width: 30, height: 30)
-        divider.frame = CGRect(x: 0, y: 185, width: frame.width, height: 1)
-        tickerLabel.frame = CGRect(x: 40, y: 140, width: 70, height: 50)
-        priceLabel.frame = CGRect(x: 3, y: 175, width: 50, height: 50)
-        priceValueLabel.frame = CGRect(x: 43, y: 175, width: 100, height: 50)
-        valuePercentLabel.frame = CGRect(x: 3, y: 200, width: 100, height: 50)
+        imageView.frame = CGRect(x: leftLabelInset, y: 0, width: 30, height: 30)
+        divider.frame = CGRect(x: 0, y: 35, width: frame.width, height: 1)
+        tickerLabel.frame = CGRect(x: 40, y: 0, width: 70, height: 50)
+        priceLabel.frame = CGRect(x: 3, y: 25, width: 50, height: 50)
+        priceValueLabel.frame = CGRect(x: 43, y: 25, width: 100, height: 50)
+        valuePercentLabel.frame = CGRect(x: 3, y: 50, width: 100, height: 50)
     }
     func setColors(topView: UIColor, bottomViewColor: UIColor) {
         self.backgroundColor = topView
         self.colorView1.backgroundColor = bottomViewColor
         self.colorView2.backgroundColor = bottomViewColor
     }
+}
+extension UIImage{
+    func resizeImage(targetSize: CGSize)-> UIImage{
+        let widthRatio = targetSize.width / size.width
+        let heightRatio = targetSize.height / size.height
+        
+        let ratio = max(widthRatio, heightRatio)
+        let newSize = CGSize(width: size.width * ratio, height: size.height * ratio)
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 0)
+        draw(in: CGRect(origin: CGPoint(x: 0, y: 0), size: newSize))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage!
+    }
+
 }

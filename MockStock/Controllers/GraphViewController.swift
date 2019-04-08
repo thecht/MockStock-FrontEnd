@@ -11,6 +11,16 @@ import SwiftCharts
 
 
 class GraphViewController: UIViewController{
+    var test = false
+    var datePoints = MSMarketGraphData.sharedInstance.dates
+    var pricePoints = MSMarketGraphData.sharedInstance.prices
+    var xAxisPoints = [ChartPoint]()
+    var realChartPoints = [ChartPoint]()
+    func setupChartData(graphDates: [MSGraphItemDate], graphPrice: [MSGraphItemPrice]){
+        datePoints = graphDates
+        pricePoints = graphPrice
+    }
+    
     
     
     fileprivate var chart: Chart? // arc
@@ -18,13 +28,20 @@ class GraphViewController: UIViewController{
         super.viewDidLoad()
         
         let labelSettings = ChartLabelSettings(font: ExamplesDefaults.labelFont)
-        
         var readFormatter = DateFormatter()
-        readFormatter.dateFormat = "yyyy.MM.dd"
+        readFormatter.dateFormat = "yyyy-MM-dd"
         
         var displayFormatter = DateFormatter()
-        displayFormatter.dateFormat = "yyyy.MM.dd"
-        
+        displayFormatter.dateFormat = "yyyy-MM-dd"
+        let firstDate = "2019-03-13"
+        let lastData = "2019-03-13"
+        for(e1, e2) in zip(datePoints, pricePoints){
+            let e3 = createChartPoint(dateStr: e1.date, int: e2.closingPrice, readFormatter: readFormatter, displayFormatter: displayFormatter)
+            realChartPoints.append(e3)
+        }
+        setupAxis()
+        print("after setup")
+        print(xAxisPoints)
         let date = {(str: String) -> Date in
             return readFormatter.date(from: str)!
         }
@@ -46,8 +63,8 @@ class GraphViewController: UIViewController{
         }
         
         
-        
-        let chartPoints = [
+        if test == false{
+        let ChartPoints = [
             createChartPoint(dateStr: "2015.10.1", int: 150, readFormatter: readFormatter, displayFormatter: displayFormatter),
             createChartPoint(dateStr: "2015.10.2", int: 160, readFormatter: readFormatter, displayFormatter: displayFormatter),
             createChartPoint(dateStr: "2015.10.3", int: 150, readFormatter: readFormatter, displayFormatter: displayFormatter),
@@ -61,10 +78,10 @@ class GraphViewController: UIViewController{
             createChartPoint(dateStr: "2015.10.11", int: 100, readFormatter: readFormatter, displayFormatter: displayFormatter),
             createChartPoint(dateStr: "2015.10.12", int: 180, readFormatter: readFormatter, displayFormatter: displayFormatter)
         ]
+        }
         
-        let xValues = chartPoints.map{$0.x}
-        
-        let yValues = ChartAxisValuesStaticGenerator.generateYAxisValuesWithChartPoints(chartPoints, minSegmentCount: 0, maxSegmentCount: 500, multiple: 25, axisValueGenerator: {ChartAxisValueDouble($0, labelSettings: labelSettings)}, addPaddingSegmentIfEdge: false)
+        let xValues = xAxisPoints.map{$0.x}
+        let yValues = ChartAxisValuesStaticGenerator.generateYAxisValuesWithChartPoints(realChartPoints, minSegmentCount: 0, maxSegmentCount: 500, multiple: 10, axisValueGenerator: {ChartAxisValueDouble($0, labelSettings: labelSettings)}, addPaddingSegmentIfEdge: false)
         
         let xModel = ChartAxisModel(axisValues: xValues, axisTitleLabel: ChartAxisLabel(text: "Date", settings: labelSettings))
         let yModel = ChartAxisModel(axisValues: yValues, axisTitleLabel: ChartAxisLabel(text: "Price", settings: labelSettings.defaultVertical()))
@@ -75,7 +92,7 @@ class GraphViewController: UIViewController{
         let coordsSpace = ChartCoordsSpaceLeftBottomSingleAxis(chartSettings: chartSettings, chartFrame: chartFrame, xModel: xModel, yModel: yModel)
         let (xAxisLayer, yAxisLayer, innerFrame) = (coordsSpace.xAxisLayer, coordsSpace.yAxisLayer, coordsSpace.chartInnerFrame)
         
-        let lineModel = ChartLineModel(chartPoints: chartPoints, lineColor: UIColor.red, animDuration: 1, animDelay: 0)
+        let lineModel = ChartLineModel(chartPoints: realChartPoints, lineColor: UIColor.red, animDuration: 1, animDelay: 0)
         let chartPointsLineLayer = ChartPointsLineLayer(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, lineModels: [lineModel], useView: false)
         
         let thumbSettings = ChartPointsLineTrackerLayerThumbSettings(thumbSize: Env.iPad ? 20 : 10, thumbBorderWidth: Env.iPad ? 4 : 2)
@@ -83,7 +100,7 @@ class GraphViewController: UIViewController{
         
         var currentPositionLabels: [UILabel] = []
         
-        let chartPointsTrackerLayer = ChartPointsLineTrackerLayer<ChartPoint, Any>(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, lines: [chartPoints], lineColor: UIColor.black, animDuration: 1, animDelay: 2, settings: trackerLayerSettings) {chartPointsWithScreenLoc in
+        let chartPointsTrackerLayer = ChartPointsLineTrackerLayer<ChartPoint, Any>(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, lines: [realChartPoints], lineColor: UIColor.black, animDuration: 1, animDelay: 2, settings: trackerLayerSettings) {chartPointsWithScreenLoc in
             
             currentPositionLabels.forEach{$0.removeFromSuperview()}
             
@@ -127,7 +144,7 @@ class GraphViewController: UIViewController{
     
     func createDateAxisValue(_ dateStr: String, readFormatter: DateFormatter, displayFormatter: DateFormatter) -> ChartAxisValue {
         let date = readFormatter.date(from: dateStr)!
-        let labelSettings = ChartLabelSettings(font: ExamplesDefaults.labelFont, rotation: 45, rotationKeep: .top)
+        let labelSettings = ChartLabelSettings(font: ExamplesDefaults.labelFont, rotation: 70, rotationKeep: .top)
         return ChartAxisValueDate(date: date, formatter: displayFormatter, labelSettings: labelSettings)
     }
     
@@ -136,5 +153,24 @@ class GraphViewController: UIViewController{
             return "\(formatter.string(from: NSNumber(value: scalar))!)"
         }
     }
+    func setupAxis() {
+        let xValues = realChartPoints
+        let quarterPoint = xValues.count / 4
+        var index = quarterPoint
+        xAxisPoints.append(xValues[index])
+        index += quarterPoint
+        print(index)
+        xAxisPoints.append(xValues[index])
+        index += quarterPoint
+        print(index)
+        xAxisPoints.append(xValues[index])
+        index += quarterPoint - 1
+        print(index)
+        xAxisPoints.append(xValues[index])
+        print(xAxisPoints)
+        }
+        
 }
+
+
 

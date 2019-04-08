@@ -11,11 +11,13 @@
 		0EDFC064224C17BF000DB02B /* ExampleDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EDFC062224C17BF000DB02B /* ExampleDefaults.swift */; };
 		0EDFC069224C17DE000DB02B /* GraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EDFC067224C17DE000DB02B /* GraphViewController.swift */; };
 		0EDFC06A224C17DE000DB02B /* DetailedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EDFC068224C17DE000DB02B /* DetailedViewController.swift */; };
+		0EE25A1E225ABA440078844D /* MSGraphItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE25A1D225ABA440078844D /* MSGraphItem.swift */; };
 		0EE3A7152257FC0200607158 /* transactionPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE3A7142257FC0200607158 /* transactionPopup.swift */; };
 		0EE4B7A522559E580066E3B3 /* MSFeaturedItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE4B7A422559E580066E3B3 /* MSFeaturedItemCell.swift */; };
 		0EE4B7A722559E610066E3B3 /* MSMarketPlaceItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE4B7A622559E610066E3B3 /* MSMarketPlaceItem.swift */; };
 		0EE4B7A92255A8550066E3B3 /* MSMarketPlaceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE4B7A82255A8550066E3B3 /* MSMarketPlaceData.swift */; };
 		0EE4B7AB2255B0250066E3B3 /* MSMarketPlaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE4B7AA2255B0250066E3B3 /* MSMarketPlaceCell.swift */; };
+		0EF215BF225AFC59004BA830 /* MSGraphData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF215BE225AFC59004BA830 /* MSGraphData.swift */; };
 		56D46CEFB1AAA216E1E5105F /* Pods_MockStock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A06C4C64695778BCF7B879F /* Pods_MockStock.framework */; };
 		910556EA22525F0E0088A264 /* LeagueDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910556E922525F0E0088A264 /* LeagueDetailsViewController.swift */; };
 		911AD04A222AEB6800B9A361 /* MSTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911AD049222AEB6800B9A361 /* MSTabBarViewController.swift */; };
@@ -41,11 +43,13 @@
 		0EDFC062224C17BF000DB02B /* ExampleDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExampleDefaults.swift; sourceTree = "<group>"; };
 		0EDFC067224C17DE000DB02B /* GraphViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphViewController.swift; sourceTree = "<group>"; };
 		0EDFC068224C17DE000DB02B /* DetailedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailedViewController.swift; sourceTree = "<group>"; };
+		0EE25A1D225ABA440078844D /* MSGraphItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSGraphItem.swift; sourceTree = "<group>"; };
 		0EE3A7142257FC0200607158 /* transactionPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = transactionPopup.swift; sourceTree = "<group>"; };
 		0EE4B7A422559E580066E3B3 /* MSFeaturedItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MSFeaturedItemCell.swift; sourceTree = "<group>"; };
 		0EE4B7A622559E610066E3B3 /* MSMarketPlaceItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MSMarketPlaceItem.swift; sourceTree = "<group>"; };
 		0EE4B7A82255A8550066E3B3 /* MSMarketPlaceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSMarketPlaceData.swift; sourceTree = "<group>"; };
 		0EE4B7AA2255B0250066E3B3 /* MSMarketPlaceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSMarketPlaceCell.swift; sourceTree = "<group>"; };
+		0EF215BE225AFC59004BA830 /* MSGraphData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSGraphData.swift; sourceTree = "<group>"; };
 		3C591927FB463B62565669DD /* Pods-MockStock.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MockStock.release.xcconfig"; path = "Target Support Files/Pods-MockStock/Pods-MockStock.release.xcconfig"; sourceTree = "<group>"; };
 		910556E922525F0E0088A264 /* LeagueDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeagueDetailsViewController.swift; sourceTree = "<group>"; };
 		911AD049222AEB6800B9A361 /* MSTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSTabBarViewController.swift; sourceTree = "<group>"; };
@@ -112,6 +116,8 @@
 				9133E42F2236D6B7003213A6 /* MSPortfolioItem.swift */,
 				91B7F763223FE1C0006F8FBD /* MSPortfolioData.swift */,
 				0EE4B7A82255A8550066E3B3 /* MSMarketPlaceData.swift */,
+				0EE25A1D225ABA440078844D /* MSGraphItem.swift */,
+				0EF215BE225AFC59004BA830 /* MSGraphData.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -328,7 +334,9 @@
 				919D2755220485CA00405E04 /* AppDelegate.swift in Sources */,
 				91915134222C7ECF0078CEA0 /* LeaguesViewController.swift in Sources */,
 				91915132222C7EA20078CEA0 /* MarketplaceViewController.swift in Sources */,
+				0EE25A1E225ABA440078844D /* MSGraphItem.swift in Sources */,
 				911AD04A222AEB6800B9A361 /* MSTabBarViewController.swift in Sources */,
+				0EF215BF225AFC59004BA830 /* MSGraphData.swift in Sources */,
 				912DA0042241167C00978E4E /* MSLoginViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

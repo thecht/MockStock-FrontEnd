@@ -4,6 +4,9 @@ import UIKit
 class DetailedViewController: UIViewController {
     
     // Tab bar widgets
+    var dateData = MSMarketGraphData.sharedInstance.dates
+    var priceData = MSMarketGraphData.sharedInstance.prices
+    var vc = GraphViewController()
     var graphView: UIView = {
         let v = UIView()
         v.translatesAutoresizingMaskIntoConstraints = false
@@ -135,7 +138,7 @@ class DetailedViewController: UIViewController {
     
     var yearChangeLabel: UILabel = {
         let b = UILabel()
-        b.text=("Year Change: 10$")
+        b.text=("Year Change: 10%")
         b.textColor = UIColor.gray
         b.font = UIFont(name: "HelveticaNeue-Thin", size: 18)
         b.translatesAutoresizingMaskIntoConstraints = false
@@ -149,11 +152,12 @@ class DetailedViewController: UIViewController {
     var symbolTitle: String = ""
     override func viewDidLoad() {
         super.viewDidLoad()
+        fetchGraphData(range: "1m")
         view.backgroundColor = .white
         self.navigationItem.title = symbolTitle
         self.navigationController?.navigationBar.barTintColor = .white
         
-        viewControllers.append(GraphViewController())
+        viewControllers.append(vc)
         //Appending buttons to array
         barButtons.append(oneMonth)
         barButtons.append(threeMonth)
@@ -176,11 +180,10 @@ class DetailedViewController: UIViewController {
         view.addSubview(yearChangeLabel)
         
         self.addChild(viewControllers[0])
-        graphView.insertSubview(viewControllers[0].view, aboveSubview:graphView)
-        
+        //graphView.insertSubview(vc.view, aboveSubview:graphView)
         setupLayout()
-        print(symbolLabel.text)
         fetchData()
+        
         // Add button touch handlers
         buyButton.addTarget(self, action: #selector(self.buyPressed), for: .touchUpInside)
         sellButton.addTarget(self, action: #selector(self.sellPressed), for: .touchUpInside)
@@ -188,6 +191,27 @@ class DetailedViewController: UIViewController {
         threeMonth.addTarget(self, action: #selector(DetailedViewController.barButtonPressed(button:)), for: .touchUpInside)
         sixMonth.addTarget(self, action: #selector(DetailedViewController.barButtonPressed(button:)), for: .touchUpInside)
         oneYear.addTarget(self, action: #selector(DetailedViewController.barButtonPressed(button:)), for: .touchUpInside)
+    }
+    @objc func barButtonPressed(button: UIButton) {
+        // Dont press if already selected.
+        if button == currentlySelectedButton { return }
+        
+        // Flag new button as selected.
+        currentlySelectedButton = button
+        
+        // Change graph based on selection (use buttonText to determine the selection. E.g. 3M, 6M, etc.)
+        guard let buttonText = button.currentTitle else { return }
+        print(buttonText)
+        fetchGraphData(range: buttonText)
+        // Change tab bar button colors.
+        for btn in barButtons {
+            if btn == button {
+                btn.setTitleColor(.black, for: .normal)
+            } else {
+                btn.setTitleColor(.gray, for: .normal)
+            }
+        }
+        
     }
     
     func setupLayout(){
@@ -357,26 +381,7 @@ class DetailedViewController: UIViewController {
         // Then, submit sell network request
     }
     
-    @objc func barButtonPressed(button: UIButton) {
-        // Dont press if already selected.
-        if button == currentlySelectedButton { return }
-        
-        // Flag new button as selected.
-        currentlySelectedButton = button
-        
-        // Change graph based on selection (use buttonText to determine the selection. E.g. 3M, 6M, etc.)
-        guard let buttonText = button.currentTitle else { return }
-        
-        // Change tab bar button colors.
-        for btn in barButtons {
-            if btn == button {
-                btn.setTitleColor(.black, for: .normal)
-            } else {
-                btn.setTitleColor(.gray, for: .normal)
-            }
-        }
-        
-    }
+    
     
     func fetchData() {
         let urlString = "https://mockstock.azurewebsites.net/api/stock/details"
@@ -421,9 +426,53 @@ class DetailedViewController: UIViewController {
             }.resume() // fires the session
     }
     
+
+    
     @objc func marketResponseRecieved(message: String) {
         let alert = UIAlertController(title: "Transaction Complete!", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
         present(alert, animated: true)
     }
+    func fetchGraphData(range: String) {
+        let urlString = "https://mockstock.azurewebsites.net/api/stock/chart"
+        guard let url = URL(string: urlString) else { return }
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "GET"
+        urlRequest.addValue(symbolTitle, forHTTPHeaderField: "symbol")
+        urlRequest.addValue(range, forHTTPHeaderField: "range")
+        URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+            if let e = error { print(e) }
+            guard let d = data else { return }
+            
+            do {
+                // Decode JSON
+                let graph = try JSONDecoder().decode([ChartResponse].self, from: d)
+                var dates = [MSGraphItemDate]()
+                var prices = [MSGraphItemPrice]()
+                for graphs in graph{
+                    let date = MSGraphItemDate()
+                    let price = MSGraphItemPrice()
+                    price.closingPrice = Double(truncating: graphs.closingPrice as NSNumber)
+                    date.date = graphs.date
+                    dates.append(date)
+                    prices.append(price)
+                }
+                let graphSingleton = MSMarketGraphData.sharedInstance
+                graphSingleton.prices.removeAll()
+                graphSingleton.dates.removeAll()
+                graphSingleton.prices.append(contentsOf: prices)
+                graphSingleton.dates.append(contentsOf: dates)
+                DispatchQueue.main.async {
+                    self.vc.setupChartData(graphDates: dates, graphPrice: prices)
+                    //self.vc.view.reloadInputViews()
+                    self.graphView.insertSubview(self.vc.view, aboveSubview:self.graphView)
+                    print(range)
+                }
+            } catch let jsonErr {
+                print(jsonErr)
+            }
+            
+            }.resume() // fires the session
+    }
 }
+
