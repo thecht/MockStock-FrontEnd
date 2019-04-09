@@ -184,7 +184,8 @@ extension PortfolioViewController: UICollectionViewDataSource, UICollectionViewD
         
         if let nav = navigationController {
             let vc = DetailedViewController()
-            vc.symbolLabel.text = modelItem.symbol.uppercased()
+            vc.symbolTitle = modelItem.symbol.uppercased()
+            print(vc.symbolLabel)
             nav.pushViewController(vc, animated: true)
         }
     }
