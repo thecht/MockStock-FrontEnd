@@ -152,7 +152,7 @@ class MarketplaceViewController: UIViewController, UISearchBarDelegate {
                 print(jsonErr)
             }
             DispatchQueue.main.async {
-                let indexSet = IndexSet(integer: 2)
+                let indexSet = IndexSet(integer: 3)
                 self?.WinnersCollectionView.reloadSections(indexSet)
             }
             }.resume() // fires the session
@@ -237,6 +237,7 @@ extension MarketplaceViewController: UICollectionViewDataSource, UICollectionVie
             cell.backgroundColor = .clear
             cell.categoryLabel.text = "Todays Winners"
             (testCollectionView = cell)
+            cell.navController = self.navigationController
             return cell
         } else if indexPath.section == 1{
             let cell =  collectionView.dequeueReusableCell(withReuseIdentifier: losersId, for: indexPath)as!MSLosersItemCell

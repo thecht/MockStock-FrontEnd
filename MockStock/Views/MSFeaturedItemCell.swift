@@ -13,7 +13,7 @@ class MSFeaturedItemCell: UICollectionViewCell, UICollectionViewDataSource, UICo
     private let winnersId = "winnersId"
     var detailedViewController: DetailedViewController?
     let label : String = ""
-    
+    var navController: UINavigationController?
     var categoryLabel: UILabel = {
         let l = UILabel()
         l.text = "Today's Winners"
@@ -144,6 +144,12 @@ class MSFeaturedItemCell: UICollectionViewCell, UICollectionViewDataSource, UICo
     @objc func cellTapped(_ recognizer: UITapGestureRecognizer) {
         print("Cell #: \(recognizer.view!.tag)")
         print("Cell Symbol: \((recognizer.view! as! FeaturedCell).tickerLabel.text)")
+        if let n = navController {
+            let vc = DetailedViewController()
+            vc.symbolTitle = (recognizer.view! as! FeaturedCell).tickerLabel.text!.uppercased()
+            print(vc.symbolLabel)
+            n.pushViewController(vc, animated: true)
+        }
     }
 }
 
