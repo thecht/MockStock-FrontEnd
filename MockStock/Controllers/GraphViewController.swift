@@ -12,7 +12,6 @@ import SwiftCharts
 
 class GraphViewController: UIViewController{
     
-    var test = false
     var datePoints = MSMarketGraphData.sharedInstance.dates
     var pricePoints = MSMarketGraphData.sharedInstance.prices
     var xAxisPoints = [ChartPoint]()
@@ -36,11 +35,6 @@ class GraphViewController: UIViewController{
         readFormatter.dateFormat = "yyyy-MM-dd"
         
         var displayFormatter = DateFormatter()
-        if test == true{
-        displayFormatter.dateFormat = "MM-dd"
-        }else{
-            displayFormatter.dateFormat = "yyyy-MM"
-        }
         var touchFormatter = DateFormatter()
         touchFormatter.dateFormat = "yyyy-MM-dd"
         for(e1, e2) in zip(datePoints, pricePoints){

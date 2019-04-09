@@ -12,11 +12,8 @@ import UIKit
 
 
 class MarketplaceViewController: UIViewController, UISearchBarDelegate {
-    
     var ascSortButton: UIBarButtonItem!
     var decSortButton: UIBarButtonItem!
-    var isAnimating : Bool = false
-    var dropDownViewIsDisplayed : Bool = false
     var sort: String = "asc"
     var isSearching: Bool = false
     var marketPlaceData = MSMarketPlaceData.sharedInstance

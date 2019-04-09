@@ -477,18 +477,13 @@ class DetailedViewController: UIViewController {
                         v.removeFromSuperview()
                     }
                     self.vc = GraphViewController()
-                    if range == "1M"{
-                    self.vc.test = true
-                    }
-                    else{
-                        self.vc.test = false
-                    }
                     self.vc.setupChartData(graphDates: dates, graphPrice: prices)
                     self.graphView.insertSubview(self.vc.view, aboveSubview:self.graphView)
-                    self.graphView.superview!.setNeedsLayout()
-                    self.graphView.superview!.layoutIfNeeded()
+                    self.graphView.layoutIfNeeded()
+                    
                     
                 }
+                
             } catch let jsonErr {
                 print(jsonErr)
             }
