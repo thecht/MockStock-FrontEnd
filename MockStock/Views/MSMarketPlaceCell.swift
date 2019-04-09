@@ -25,7 +25,7 @@ class MSMarketPlaceCell: UICollectionViewCell{
         let l = UILabel()
         l.text = "PRICE:"
         l.font = UIFont(name: "Futura-CondensedMedium", size: 20)
-        l.textColor = .black
+        l.textColor = .white
         l.textAlignment = .left
         return l
     }()

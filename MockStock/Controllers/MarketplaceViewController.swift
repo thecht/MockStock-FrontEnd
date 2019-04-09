@@ -37,29 +37,18 @@ class MarketplaceViewController: UIViewController, UISearchBarDelegate {
     private let winnersId = "winnersId"
     private let marketId = "marketId"
     private let losersId = "losersId"
-    var button = dropDownBtn()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //view.addSubview(button)
-        //button  = dropDownBtn.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
-        button.setTitle("Sort", for: .normal)
-        button.setImage(UIImage(named: "dropdownicon"), for: .normal)
-        button.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
-        button.translatesAutoresizingMaskIntoConstraints = false
         self.navigationController?.navigationBar.topItem?.title = "MarketPlace"
         self.navigationController?.navigationBar.prefersLargeTitles = true
         let leftNavBarButton = UIBarButtonItem(customView: searchBar)
         self.navigationItem.leftBarButtonItem = leftNavBarButton
-        //self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView:button)
         
         ascSortButton = UIBarButtonItem(title: "Sort: A-Z", style: .plain, target: self, action: #selector(didTapAsc))
         decSortButton = UIBarButtonItem(title: "Sort: Z-A", style: .plain, target: self, action: #selector(didTapDec))
         self.navigationItem.rightBarButtonItem = self.ascSortButton
-        
-        button.dropView.dropDownOptions = ["Ascending", "Descending"]
         
         view.backgroundColor = .white
         view.addSubview(WinnersCollectionView)
@@ -69,14 +58,15 @@ class MarketplaceViewController: UIViewController, UISearchBarDelegate {
         WinnersCollectionView.register(MSMarketPlaceCell.self, forCellWithReuseIdentifier: marketId)
         WinnersCollectionView.register(MSFeaturedItemCell.self, forCellWithReuseIdentifier: winnersId)
         WinnersCollectionView.register(MSLosersItemCell.self, forCellWithReuseIdentifier: losersId)
+        WinnersCollectionView.register(Header.self, forCellWithReuseIdentifier: "header")
         // collection view constraints
         WinnersCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20).isActive = true
         WinnersCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20).isActive = true
         WinnersCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
         WinnersCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50).isActive = true
-        
  
     }
+    
     @objc func didTapAsc(){
         self.navigationItem.setRightBarButton(self.decSortButton, animated: false)
         fetchData(sortString: "dec")
@@ -234,161 +224,12 @@ class MarketplaceViewController: UIViewController, UISearchBarDelegate {
     @objc func logOut() {
         present(MSLoginViewController(), animated: false, completion: nil)
     }
-    override func viewDidDisappear(_ animated: Bool) {
-        button.constraints.forEach { $0.isActive = false}
-        button.removeFromSuperview()
-    }
     
 }
 
-protocol dropDownProtocol {
-    func dropDownPressed(string : String)
-}
-
-class dropDownBtn: UIButton, dropDownProtocol {
-    
-    func dropDownPressed(string: String) {
-        print(string)
-        self.dismissDropDown()
-    }
-    
-    var dropView = dropDownView()
-    
-    var height = NSLayoutConstraint()
-    
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        self.backgroundColor = UIColor.white
-        
-        dropView = dropDownView.init(frame: CGRect.init(x: 0, y: 0, width: 0, height: 0))
-        dropView.delegate = self
-        dropView.translatesAutoresizingMaskIntoConstraints = false
-    }
-    
-    override func didMoveToSuperview() {
-        /*let view = UIView()
-        if let window = UIApplication.shared.keyWindow{
-            window.addSubview(dropView)
-        }*/
-        /*view.frame = UIApplication.shared.keyWindow!.frame
-        UIApplication.shared.keyWindow!.addSubview(dropView)*/
-        self.superview?.addSubview(dropView)
-        self.superview?.bringSubviewToFront(dropView)
-        dropView.topAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-        dropView.centerXAnchor.constraint(equalTo: self.centerXAnchor, constant: -30).isActive = true
-        dropView.widthAnchor.constraint(equalToConstant: 130).isActive = true
-        height = dropView.heightAnchor.constraint(equalToConstant: 0)
-    }
-    
-    var isOpen = false
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if isOpen == false {
-            
-            isOpen = true
-            NSLayoutConstraint.deactivate([self.height])
-            
-            if self.dropView.tableView.contentSize.height > 150 {
-                self.height.constant = 150
-            } else {
-                self.height.constant = self.dropView.tableView.contentSize.height
-            }
-            
-            
-            NSLayoutConstraint.activate([self.height])
-            
-            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: .curveEaseInOut, animations: {
-                self.dropView.layoutIfNeeded()
-                self.dropView.center.y += self.dropView.frame.height / 2
-            }, completion: nil)
-            
-        } else {
-            isOpen = false
-            
-            NSLayoutConstraint.deactivate([self.height])
-            self.height.constant = 0
-            NSLayoutConstraint.activate([self.height])
-            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: .curveEaseInOut, animations: {
-                self.dropView.center.y -= self.dropView.frame.height / 2
-                self.dropView.layoutIfNeeded()
-            }, completion: nil)
-            
-        }
-    }
-    
-    func dismissDropDown() {
-        isOpen = false
-        NSLayoutConstraint.deactivate([self.height])
-        self.height.constant = 0
-        NSLayoutConstraint.activate([self.height])
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: .curveEaseInOut, animations: {
-            self.dropView.center.y -= self.dropView.frame.height / 2
-            self.dropView.layoutIfNeeded()
-        }, completion: nil)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
-class dropDownView: UIView, UITableViewDelegate, UITableViewDataSource  {
-    
-    var dropDownOptions = [String]()
-    
-    var tableView = UITableView()
-    
-    var delegate : dropDownProtocol!
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        tableView.backgroundColor = UIColor.white
-        self.backgroundColor = UIColor.white
-        
-        
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        
-        self.addSubview(tableView)
-        tableView.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
-        tableView.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
-        tableView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-        
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dropDownOptions.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        
-        cell.textLabel?.text = dropDownOptions[indexPath.row]
-        cell.backgroundColor = UIColor.white
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.delegate.dropDownPressed(string: dropDownOptions[indexPath.row])
-        self.tableView.deselectRow(at: indexPath, animated: true)
-    }
-    
-}
 extension MarketplaceViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 3
+        return 4
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.section == 0{
@@ -399,12 +240,20 @@ extension MarketplaceViewController: UICollectionViewDataSource, UICollectionVie
             return cell
         } else if indexPath.section == 1{
             let cell =  collectionView.dequeueReusableCell(withReuseIdentifier: losersId, for: indexPath)as!MSLosersItemCell
+            
             cell.backgroundColor = .clear
             cell.categoryLabel.text = "Todays Losers"
             (losersCollectionView = cell)
             return cell
             
-        }else{
+        } else if indexPath.section == 2{
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "header", for: indexPath)as!Header
+            cell.translatesAutoresizingMaskIntoConstraints = false
+            cell.backgroundColor = .clear
+            cell.Label.textAlignment = .center
+            return cell
+        }
+        else{
             let modelItem = MSMarketPlaceData.sharedInstance.items[indexPath.item]
             let cell =  collectionView.dequeueReusableCell(withReuseIdentifier: marketId, for: indexPath)as!MSMarketPlaceCell
             cell.translatesAutoresizingMaskIntoConstraints = false
@@ -426,18 +275,18 @@ extension MarketplaceViewController: UICollectionViewDataSource, UICollectionVie
             do{
                 let data = try Data(contentsOf: url)
                 cell.imageView.image = UIImage(data: data)?.resizeImage(targetSize: CGSize(width: 30, height: 30))
-                
+                if cell.imageView.image == nil{
+                    cell.imageView.image = UIImage(named: "generic")
+                }
             }catch let err{
+                print(err)
             }
-            }
-            else{
-                cell.imageView.image = UIImage(named: "AAPL")
             }
             return cell
         }
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if section == 2{
+        if section == 3{
             return MSMarketPlaceData.sharedInstance.items.count
         }
         else if section == 0{
@@ -448,8 +297,11 @@ extension MarketplaceViewController: UICollectionViewDataSource, UICollectionVie
         }
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if indexPath.section == 2{
+        if indexPath.section == 3{
             return CGSize(width: 110, height: 110)
+        }
+        else if indexPath.section == 2{
+            return CGSize(width: 50, height: 50)
         }
         return CGSize(width: collectionView.frame.width , height: 150)
     }
@@ -457,32 +309,63 @@ extension MarketplaceViewController: UICollectionViewDataSource, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         if indexPath.section == 0{
+            print("section 50")
             let modelItem = gainersData.items[indexPath.item]
             if let nav = navigationController {
                 let vc = DetailedViewController()
-                print(modelItem.symbol.uppercased())
                 vc.symbolTitle = modelItem.symbol.uppercased()
                 nav.pushViewController(vc, animated: true)
             }
-        }else if indexPath.section == 1{
-            let label = losersCollectionView.getItem()
-            if let nav = navigationController {
-                let vc = DetailedViewController()
-                print(label.uppercased())
-                vc.symbolTitle = label.uppercased()
-                nav.pushViewController(vc, animated: true)
-            }
-        }else if indexPath.section == 2{
+        }
+         else if indexPath.section == 3{
             let modelItem = marketPlaceData.items[indexPath.item]
         if let nav = navigationController {
             let vc = DetailedViewController()
-            print(modelItem.symbol.uppercased())
             vc.symbolTitle = modelItem.symbol.uppercased()
             nav.pushViewController(vc, animated: true)
         }
         }
+        else if indexPath.section == 1{
+            print("section 1")
+        }
+        else if indexPath.section == 2{
+            print("section 2")
+        }
     }
-    
+    func collectionView(_ CollectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets{
+        if section == 2{
+            let totalCellWidth = 80 * CollectionView.numberOfItems(inSection: 2)
+            let totalSpacingWidth = 10 * (CollectionView.numberOfItems(inSection:2) - 1)
+            let leftInset = (CollectionView.frame.size.width - CGFloat(totalCellWidth + totalSpacingWidth)) / 2
+            let rightInset = leftInset
+            return UIEdgeInsets(top: 20, left: leftInset-50, bottom: 0, right: rightInset)
+            
+        }
+        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    }
 }
+class Header: UICollectionViewCell{
+    var Label: UILabel = {
+        let l = UILabel(frame: CGRect(x: 200, y: 200, width: 0, height: 0))
+        l.text = "Marketplace"
+        l.textColor = .black
+        l.font = UIFont(name: "Helvetica", size: 30)
+        l.translatesAutoresizingMaskIntoConstraints = false
+        return l
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupHeaderViews()
+    }
+    func setupHeaderViews(){
+        addSubview(Label)
+    }
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("blah blah")
+    }
+}
+
+
 
     

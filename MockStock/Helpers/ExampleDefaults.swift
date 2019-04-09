@@ -21,7 +21,7 @@ struct ExamplesDefaults {
     
     static var chartSettingsWithPanZoom: ChartSettings {
         if Env.iPad {
-            return iPadChartSettingsWithPanZoom
+            return iPhoneChartSettingsWithPanZoom
         } else {
             return iPhoneChartSettingsWithPanZoom
         }
@@ -47,12 +47,12 @@ struct ExamplesDefaults {
         var chartSettings = ChartSettings()
         chartSettings.leading = 10
         chartSettings.top = 10
-        chartSettings.trailing = 10
+        chartSettings.trailing = 36
         chartSettings.bottom = 10
-        chartSettings.labelsToAxisSpacingX = 5
+        chartSettings.labelsToAxisSpacingX = 30
         chartSettings.labelsToAxisSpacingY = 5
         chartSettings.axisTitleLabelsToLabelsSpacing = 4
-        chartSettings.axisStrokeWidth = 0.2
+        chartSettings.axisStrokeWidth = 1
         chartSettings.spacingBetweenAxesX = 8
         chartSettings.spacingBetweenAxesY = 8
         chartSettings.labelsSpacing = 0
@@ -84,13 +84,16 @@ struct ExamplesDefaults {
     static var labelFont: UIFont {
         return ExamplesDefaults.fontWithSize(Env.iPad ? 14 : 11)
     }
+    static var yLabelFont: UIFont{
+        return ExamplesDefaults.fontWithSize(20)
+    }
     
     static var labelFontSmall: UIFont {
         return ExamplesDefaults.fontWithSize(Env.iPad ? 12 : 10)
     }
     
     static func fontWithSize(_ size: CGFloat) -> UIFont {
-        return UIFont(name: "Helvetica", size: size) ?? UIFont.systemFont(ofSize: size)
+        return UIFont(name: "HelveticaNeue-Thin", size: size) ?? UIFont.systemFont(ofSize: size)
     }
     
     static var guidelinesWidth: CGFloat {

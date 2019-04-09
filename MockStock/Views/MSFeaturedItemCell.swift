@@ -9,13 +9,8 @@
 import Foundation
 import UIKit
 
-class testClass: UICollectionView{
-    
-}
-
 class MSFeaturedItemCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     private let winnersId = "winnersId"
-    private let losersId = "losersId"
     var detailedViewController: DetailedViewController?
     let label : String = ""
     
@@ -74,7 +69,6 @@ class MSFeaturedItemCell: UICollectionViewCell, UICollectionViewDataSource, UICo
         featuredCollectionView.dataSource = self
         featuredCollectionView.delegate = self
         featuredCollectionView.register(FeaturedCell.self, forCellWithReuseIdentifier: winnersId)
-        featuredCollectionView.register(FeaturedCell.self, forCellWithReuseIdentifier: losersId)
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-14-[v0]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0" : categoryLabel]))
         
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0" : featuredCollectionView]))
@@ -111,13 +105,17 @@ class MSFeaturedItemCell: UICollectionViewCell, UICollectionViewDataSource, UICo
              }
             let percentStr = String(format: "%.03f", modelItem.percent)
             cell.valuePercentLabel.text = String("\(percentDoubleSign)\(percentStr)%")
-            let url = URL(string: modelItem.imageName)
+        if let url = URL(string: modelItem.imageName){
             do{
-                let data = try Data(contentsOf: url!)
-                cell.imageView.image = UIImage(data: data)
+                let data = try Data(contentsOf: url)
+                cell.imageView.image = UIImage(data: data)?.resizeImage(targetSize: CGSize(width: 30, height: 30))
+                if cell.imageView.image == nil{
+                    cell.imageView.image = UIImage(named: "generic")
+                }
             }catch let err{
-                cell.imageView.image = UIImage(named: "AAPL")
+                print(err)
             }
+        }
             return cell
         }
         
@@ -128,6 +126,11 @@ class MSFeaturedItemCell: UICollectionViewCell, UICollectionViewDataSource, UICo
     }
     private func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionView, insetForSectionAtIndex section: Int) -> UIEdgeInsets{
         return UIEdgeInsets(top: 0, left: 14, bottom: 0, right: 14)
+    }
+    func getItem() -> String{
+        print("lavel")
+        print(label)
+        return label
     }
 }
 
@@ -248,6 +251,7 @@ class FeaturedCell: UICollectionViewCell{
     }
 }
 class MSLosersItemCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    weak var delegate:MarketplaceViewController?
     private let losersId = "losersId"
     var label = ""
     
@@ -306,6 +310,8 @@ class MSLosersItemCell: UICollectionViewCell, UICollectionViewDataSource, UIColl
         featuredCollectionView.dataSource = self
         featuredCollectionView.delegate = self
         featuredCollectionView.register(FeaturedCell.self, forCellWithReuseIdentifier: losersId)
+        featuredCollectionView.register(Header.self, forCellWithReuseIdentifier: "header")
+        // collection view constraints
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-14-[v0]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0" : categoryLabel]))
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0" : featuredCollectionView]))
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[categoryLabel(30)][v0]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0" : featuredCollectionView, "categoryLabel": categoryLabel]))
@@ -342,12 +348,16 @@ class MSLosersItemCell: UICollectionViewCell, UICollectionViewDataSource, UIColl
          }
         let percentStr = String(format: "%.03f", modelItem.percent)
         cell.valuePercentLabel.text = String("\(percentDoubleSign)\(percentStr)%")
-        let url = URL(string: modelItem.imageName)
-        do{
-            let data = try Data(contentsOf: url!)
-            cell.imageView.image = UIImage(data: data)
-        }catch let err{
-            cell.imageView.image = UIImage(named: "AAPL")
+        if let url = URL(string: modelItem.imageName){
+            do{
+                let data = try Data(contentsOf: url)
+                cell.imageView.image = UIImage(data: data)?.resizeImage(targetSize: CGSize(width: 30, height: 30))
+                if cell.imageView.image == nil{
+                    cell.imageView.image = UIImage(named: "generic")
+                }
+            }catch let err{
+                print(err)
+            }
         }
         return cell
     }
@@ -358,16 +368,12 @@ class MSLosersItemCell: UICollectionViewCell, UICollectionViewDataSource, UIColl
         return UIEdgeInsets(top: 0, left: 14, bottom: 0, right: 14)
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        //collectionView.selectItem(at: indexPath, animated: false, scrollPosition: .bottom)
         let modelItem = MSLosersData.sharedInstance.items[indexPath.item]
         label = modelItem.symbol
-        print(label)
     }
     func getItem() -> String{
         print("lavel")
         print(label)
         return label
-    }
-    
 }
-
+}

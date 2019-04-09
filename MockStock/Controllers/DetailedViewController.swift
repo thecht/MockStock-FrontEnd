@@ -152,7 +152,7 @@ class DetailedViewController: UIViewController {
     var symbolTitle: String = ""
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchGraphData(range: "1m")
+        
         view.backgroundColor = .white
         self.navigationItem.title = symbolTitle
         self.navigationController?.navigationBar.barTintColor = .white
@@ -166,7 +166,7 @@ class DetailedViewController: UIViewController {
         currentlySelectedButton = oneMonth
         
         // Add views to screen
-        view.addSubview(graphView)
+        
         view.addSubview(oneMonth)
         view.addSubview(threeMonth)
         view.addSubview(sixMonth)
@@ -178,11 +178,12 @@ class DetailedViewController: UIViewController {
         view.addSubview(highLabel)
         view.addSubview(lowLabel)
         view.addSubview(yearChangeLabel)
-        
+        view.addSubview(graphView)
         self.addChild(viewControllers[0])
-        //graphView.insertSubview(vc.view, aboveSubview:graphView)
+        
         setupLayout()
         fetchData()
+        fetchGraphData(range: "1M")
         
         // Add button touch handlers
         buyButton.addTarget(self, action: #selector(self.buyPressed), for: .touchUpInside)
@@ -201,7 +202,6 @@ class DetailedViewController: UIViewController {
         
         // Change graph based on selection (use buttonText to determine the selection. E.g. 3M, 6M, etc.)
         guard let buttonText = button.currentTitle else { return }
-        print(buttonText)
         fetchGraphData(range: buttonText)
         // Change tab bar button colors.
         for btn in barButtons {
@@ -242,7 +242,7 @@ class DetailedViewController: UIViewController {
         
         graphView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         graphView.topAnchor.constraint(equalTo: lowLabel.bottomAnchor, constant: 80).isActive = true
-        graphView.widthAnchor.constraint(equalToConstant: 365).isActive = true
+        graphView.widthAnchor.constraint(equalToConstant: 370).isActive = true
         graphView.heightAnchor.constraint(equalToConstant: 300).isActive = true
         
         oneMonth.leadingAnchor.constraint(equalTo: graphView.leadingAnchor).isActive = true
@@ -273,6 +273,7 @@ class DetailedViewController: UIViewController {
         percentLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
         percentLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor, constant: 0).isActive = true
         percentLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        
         
         yearChangeLabel.topAnchor.constraint(equalTo: oneYear.bottomAnchor, constant: 20).isActive = true
         yearChangeLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
@@ -406,13 +407,20 @@ class DetailedViewController: UIViewController {
                 let y = Double(round(1000*x)/1000)
                 let z = Double(truncating: details.ytdChange as NSNumber)
                 let v = Double(round(1000*z)/1000)
-                let temppriceLabel = String("\(priceString)\(details.price)")
+                let c = Double(truncating: details.price as NSNumber)
+                let b = Double(round(100*c)/100)
+                let h = Double(truncating: details.high as NSNumber)
+                let j = Double(round(100*h)/100)
+                let p = Double(truncating: details.low as NSNumber)
+                let n = Double(round(100*p)/100)
+                let temppriceLabel = String("\(priceString)\(b)")
                 let temppercentLabel = String("\(percentString)\(y)\(percent)")
-                let temphighLabel = String("\(highString)\(details.high)")
-                let templowLabel = String("\(lowString)\(details.high)")
+                let temphighLabel = String("\(highString)\(j)")
+                let templowLabel = String("\(lowString)\(n)")
                 let tempyearChangeLabel = String("\(yearString)\(v)\(percent)")
                 
                 DispatchQueue.main.async {
+                    
                     self.priceLabel.text = temppriceLabel
                     self.percentLabel.text = temppercentLabel
                     self.highLabel.text = temphighLabel
@@ -462,11 +470,24 @@ class DetailedViewController: UIViewController {
                 graphSingleton.dates.removeAll()
                 graphSingleton.prices.append(contentsOf: prices)
                 graphSingleton.dates.append(contentsOf: dates)
+                
+                
                 DispatchQueue.main.async {
+                    for v in self.graphView.subviews{
+                        v.removeFromSuperview()
+                    }
+                    self.vc = GraphViewController()
+                    if range == "1M"{
+                    self.vc.test = true
+                    }
+                    else{
+                        self.vc.test = false
+                    }
                     self.vc.setupChartData(graphDates: dates, graphPrice: prices)
-                    //self.vc.view.reloadInputViews()
                     self.graphView.insertSubview(self.vc.view, aboveSubview:self.graphView)
-                    print(range)
+                    self.graphView.superview!.setNeedsLayout()
+                    self.graphView.superview!.layoutIfNeeded()
+                    
                 }
             } catch let jsonErr {
                 print(jsonErr)
