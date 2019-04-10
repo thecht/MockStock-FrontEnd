@@ -53,3 +53,38 @@ struct BuySellResponse: Decodable {
     var StockId: String
     var StockQty: Int
 }
+
+struct MarketResponse: Decodable{
+        var stocks : [MarketStock]
+        var gainers : [MarketStock]
+        var losers : [MarketStock]
+}
+
+struct MarketStock: Decodable{
+    var symbol : String
+    var logo : String
+    var price : Decimal
+    var changePercent : Decimal
+}
+
+struct DetailedResponse: Decodable{
+    var symbol : String
+    var price : Decimal
+    var changePercent : Decimal
+    var ytdChange : Decimal
+    var high : Decimal
+    var low : Decimal
+}
+
+struct ChartResponse : Decodable{
+    var date : String
+    var closingPrice : Decimal
+    
+}
+
+struct SearchResponse : Decodable{
+    var symbol : String
+    var logo : String
+    var price : Decimal
+    var changePercent : Decimal
+}
