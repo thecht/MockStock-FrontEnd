@@ -128,7 +128,13 @@ class PortfolioViewController: UIViewController {
             }
         }.resume() // fires the session
     }
-    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        MSPortfolioData.sharedInstance.items.removeAll()
+        MSPortfolioData.sharedInstance.buyingPower = 0
+        MSPortfolioData.sharedInstance.portfolioValue = 0
+        collectionView.reloadData()
+    }
     @objc func logOut() {
         present(MSLoginViewController(), animated: false, completion: nil)
     }
