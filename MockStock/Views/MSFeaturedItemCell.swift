@@ -9,9 +9,9 @@
 import Foundation
 import UIKit
 
+//Cell class for the winners section
 class MSFeaturedItemCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     private let winnersId = "winnersId"
-    var detailedViewController: DetailedViewController?
     let label : String = ""
     var navController: UINavigationController?
     var categoryLabel: UILabel = {
@@ -40,11 +40,6 @@ class MSFeaturedItemCell: UICollectionViewCell, UICollectionViewDataSource, UICo
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(){
-        let count = MSWinnersData.sharedInstance.items.count
-        print("count")
-        print(count)
-    }
     func setup(){
         featuredCollectionView.reloadData()
     }
@@ -60,7 +55,7 @@ class MSFeaturedItemCell: UICollectionViewCell, UICollectionViewDataSource, UICo
     }()
     
     
-    
+    //Sets up the view for the winners cell section
     func setupViews() {
         backgroundColor = UIColor.clear
         addSubview(featuredCollectionView)
@@ -80,14 +75,15 @@ class MSFeaturedItemCell: UICollectionViewCell, UICollectionViewDataSource, UICo
             layout.minimumLineSpacing = 22
         }
     }
+    //Sets the number of section to 1
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
-    
+    //Sets the number of cells to be equal to the amount of stocks
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
             return MSWinnersData.sharedInstance.items.count
     }
-    
+    //Sets up the cells in the collectionview to be of the appropriate stock data retrieved from the fetchData method
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
             let modelItem = MSWinnersData.sharedInstance.items[indexPath.item]
             let cell =  collectionView.dequeueReusableCell(withReuseIdentifier: winnersId, for: indexPath)as!FeaturedCell
@@ -128,31 +124,24 @@ class MSFeaturedItemCell: UICollectionViewCell, UICollectionViewDataSource, UICo
         }
         
 
-
+    //Sets up the size of each cell
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 110, height: 110)
     }
+    //Sets up the spacing of the cells
     private func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionView, insetForSectionAtIndex section: Int) -> UIEdgeInsets{
         return UIEdgeInsets(top: 0, left: 14, bottom: 0, right: 14)
     }
-    func getItem() -> String{
-        print("lavel")
-        print(label)
-        return label
-    }
-    
+    //Sets up what to do if a cell is clicked by the user
     @objc func cellTapped(_ recognizer: UITapGestureRecognizer) {
-        print("Cell #: \(recognizer.view!.tag)")
-        print("Cell Symbol: \((recognizer.view! as! FeaturedCell).tickerLabel.text)")
         if let n = navController {
             let vc = DetailedViewController()
             vc.symbolTitle = (recognizer.view! as! FeaturedCell).tickerLabel.text!.uppercased()
-            print(vc.symbolLabel)
             n.pushViewController(vc, animated: true)
         }
     }
 }
-
+//Featured item cells for winners and losers
 class FeaturedCell: UICollectionViewCell{
     
     var imageView: UIImageView = {
@@ -247,13 +236,11 @@ class FeaturedCell: UICollectionViewCell{
         addSubview(percentLabel)
         
     }
-    func configure(){
-        
-    }
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
         setupLabels()
     }
+    //Sets up the view for the cell
     private func setupLabels() {
         let leftLabelInset = CGFloat(5.0)
         imageView.frame = CGRect(x: leftLabelInset, y: 0, width: 30, height: 30)
@@ -269,11 +256,10 @@ class FeaturedCell: UICollectionViewCell{
         self.colorView2.backgroundColor = bottomViewColor
     }
 }
+//Cell class for the losers section
 class MSLosersItemCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    weak var delegate:MarketplaceViewController?
+    var navController: UINavigationController?
     private let losersId = "losersId"
-    var label = ""
-    
     var categoryLabel: UILabel = {
         let l = UILabel()
         l.text = "Today's Winners"
@@ -299,12 +285,6 @@ class MSLosersItemCell: UICollectionViewCell, UICollectionViewDataSource, UIColl
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    func configure(){
-        let count = MSWinnersData.sharedInstance.items.count
-        print("count")
-        print(count)
-    }
     func setup(){
         featuredCollectionView.reloadData()
     }
@@ -320,7 +300,7 @@ class MSLosersItemCell: UICollectionViewCell, UICollectionViewDataSource, UIColl
     }()
     
     
-    
+    //Sets up the view for the cell section
     func setupViews() {
         backgroundColor = UIColor.clear
         addSubview(featuredCollectionView)
@@ -340,15 +320,16 @@ class MSLosersItemCell: UICollectionViewCell, UICollectionViewDataSource, UIColl
             layout.minimumLineSpacing = 22
         }
     }
+    //Sets the number of section to be 1
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
-    
+    //Sets the number of cells in the section to be equal to the amount of stocks
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return MSLosersData.sharedInstance.items.count
         
     }
-    
+    //Sets up the cells with the stocks retrieved from the FetchData method
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let modelItem = MSLosersData.sharedInstance.items[indexPath.item]
@@ -357,6 +338,13 @@ class MSLosersItemCell: UICollectionViewCell, UICollectionViewDataSource, UIColl
         cell.backgroundColor = .clear
         cell.tickerLabel.text = modelItem.symbol.uppercased()
         cell.priceValueLabel.text = String(format: "%.02f", modelItem.price)
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: "losersCellTapped:")
+        tapRecognizer.numberOfTapsRequired = 1
+        cell.tag = indexPath.item
+        cell.addGestureRecognizer(tapRecognizer)
+        cell.isUserInteractionEnabled = true
+        
+        
         var percentDoubleSign = ""
         if modelItem.percent >= 0 {
          percentDoubleSign = "+"
@@ -380,19 +368,20 @@ class MSLosersItemCell: UICollectionViewCell, UICollectionViewDataSource, UIColl
         }
         return cell
     }
+    //Sets up the size of each cell
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 110, height: 110)
     }
+    //Sets up the spacing between the cells
     private func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionView, insetForSectionAtIndex section: Int) -> UIEdgeInsets{
         return UIEdgeInsets(top: 0, left: 14, bottom: 0, right: 14)
     }
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let modelItem = MSLosersData.sharedInstance.items[indexPath.item]
-        label = modelItem.symbol
+    //Sets up what to do if a cell is clicked
+    @objc func losersCellTapped(_ recognizer: UITapGestureRecognizer) {
+        if let n = navController {
+            let vc = DetailedViewController()
+            vc.symbolTitle = (recognizer.view! as! FeaturedCell).tickerLabel.text!.uppercased()
+            n.pushViewController(vc, animated: true)
+        }
     }
-    func getItem() -> String{
-        print("lavel")
-        print(label)
-        return label
-}
 }

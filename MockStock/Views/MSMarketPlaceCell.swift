@@ -102,13 +102,9 @@ class MSMarketPlaceCell: UICollectionViewCell{
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
         
-        // Size background views
-        /*.frame = CGRect(x: 0, y: frame.height - frame.height * 0.4, width: frame.width, height: frame.height * 0.4)
-        colorView2.layer.cornerRadius = colorView2.frame.width / 25
-        colorView1.frame = CGRect(x: 0, y: frame.height - frame.height * 0.4, width: frame.width, height: frame.height * 0.2)
-        */
         setupLabels()
     }
+    //Sets up the view for marketplace cells
         private func setupLabels() {
         let leftLabelInset = CGFloat(5.0)
         imageView.frame = CGRect(x: leftLabelInset, y: 0, width: 30, height: 30)
@@ -124,6 +120,7 @@ class MSMarketPlaceCell: UICollectionViewCell{
         self.colorView2.backgroundColor = bottomViewColor
     }
 }
+//Function that takes an image and resizes it to the given measurements
 extension UIImage{
     func resizeImage(targetSize: CGSize)-> UIImage{
         let widthRatio = targetSize.width / size.width

@@ -32,7 +32,6 @@ class DetailedViewController: UIViewController {
         b.clipsToBounds = true
         b.layer.borderColor = UIColor(red: 70, green: 166, blue: 1).cgColor
         b.translatesAutoresizingMaskIntoConstraints = false
-        // b.frame = CGRect(x: 200, y: 200, width: 100, height: 25)
         return b
     }()
     var sellButton: UIButton = {
@@ -46,7 +45,6 @@ class DetailedViewController: UIViewController {
         b.clipsToBounds = true
         b.layer.borderColor = UIColor(red: 70, green: 166, blue: 1).cgColor
         b.translatesAutoresizingMaskIntoConstraints = false
-        // b.frame = CGRect(x: 250, y: 200, width: 100, height: 25)
         return b
     }()
     var oneMonth: UIButton = {
@@ -102,7 +100,6 @@ class DetailedViewController: UIViewController {
         b.textColor = UIColor.gray
         b.font = UIFont(name: "HelveticaNeue-Thin", size: 18)
         b.translatesAutoresizingMaskIntoConstraints = false
-        //b.textAlignment = .left
         return b
     }()
     
@@ -213,7 +210,7 @@ class DetailedViewController: UIViewController {
         }
         
     }
-    
+    //Setup layout
     func setupLayout(){
         priceLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
         priceLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 30).isActive = true
@@ -383,7 +380,7 @@ class DetailedViewController: UIViewController {
     }
     
     
-    
+    //Fetches detailed view data
     func fetchData() {
         let urlString = "https://mockstock.azurewebsites.net/api/stock/details"
         guard let url = URL(string: urlString) else { return }
@@ -435,12 +432,14 @@ class DetailedViewController: UIViewController {
     }
     
 
-    
+    //Message that lets user know if transaction is complete
     @objc func marketResponseRecieved(message: String) {
         let alert = UIAlertController(title: "Transaction Complete!", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
         present(alert, animated: true)
     }
+    
+    //Fetches graph data based off which button was seletected
     func fetchGraphData(range: String) {
         let urlString = "https://mockstock.azurewebsites.net/api/stock/chart"
         guard let url = URL(string: urlString) else { return }
@@ -477,18 +476,13 @@ class DetailedViewController: UIViewController {
                         v.removeFromSuperview()
                     }
                     self.vc = GraphViewController()
-                    if range == "1M"{
-                    self.vc.test = true
-                    }
-                    else{
-                        self.vc.test = false
-                    }
                     self.vc.setupChartData(graphDates: dates, graphPrice: prices)
                     self.graphView.insertSubview(self.vc.view, aboveSubview:self.graphView)
-                    self.graphView.superview!.setNeedsLayout()
-                    self.graphView.superview!.layoutIfNeeded()
+                    self.graphView.layoutIfNeeded()
+                    
                     
                 }
+                
             } catch let jsonErr {
                 print(jsonErr)
             }
