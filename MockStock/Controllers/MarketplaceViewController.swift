@@ -63,12 +63,13 @@ class MarketplaceViewController: UIViewController, UISearchBarDelegate {
         WinnersCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50).isActive = true
  
     }
-    
+    //Function that calls fetchdata method to sort by decending if the button was hit
     @objc func didTapAsc(){
         self.navigationItem.setRightBarButton(self.decSortButton, animated: false)
         fetchData(sortString: "dec")
         
     }
+    //Function that calls fetchdata method to sort by ascending if the button was hit
     @objc func didTapDec(){
         self.navigationItem.setRightBarButton(self.ascSortButton, animated: false)
         fetchData(sortString: "asc")
@@ -86,6 +87,8 @@ class MarketplaceViewController: UIViewController, UISearchBarDelegate {
         fetchData(sortString: sort)
     }
     }
+    
+    //Search bar methods
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         isSearching = true
     }
@@ -100,7 +103,7 @@ class MarketplaceViewController: UIViewController, UISearchBarDelegate {
         isSearching = false
         
     }
-    
+    //If search bar was hit, the fetchSearchData function is called with the users requested search
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         isSearching = false
@@ -117,6 +120,8 @@ class MarketplaceViewController: UIViewController, UISearchBarDelegate {
         }
         
     }
+    
+    //Function that retrieves relevent stocks based off the users search request
     func fetchSearchData(searchString : String) {
         // 0. Start activity indicator animation
         // 2. Send search data request to server using authentication token
@@ -156,7 +161,7 @@ class MarketplaceViewController: UIViewController, UISearchBarDelegate {
     }
     
     
-    
+    //Function that retrieves all the marketplace view stocks based off the requested sort
     func fetchData(sortString : String) {
         let urlString = "https://mockstock.azurewebsites.net/api/stock/marketplace" // localhost:5001/api/tests"
         guard let url = URL(string: urlString) else { return }
@@ -218,16 +223,16 @@ class MarketplaceViewController: UIViewController, UISearchBarDelegate {
             }.resume() // fires the session
     }
     
-    @objc func logOut() {
-        present(MSLoginViewController(), animated: false, completion: nil)
-    }
-    
 }
 
 extension MarketplaceViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    //Sets up 4 seperate sections in the collection view
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 4
     }
+    
+    //Sets up the cells in the collection views with the appropriate stock data retrieved from the fetchData methods
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.section == 0{
             let cell =  collectionView.dequeueReusableCell(withReuseIdentifier: winnersId, for: indexPath)as!MSFeaturedItemCell
@@ -242,6 +247,7 @@ extension MarketplaceViewController: UICollectionViewDataSource, UICollectionVie
             cell.backgroundColor = .clear
             cell.categoryLabel.text = "Todays Losers"
             (losersCollectionView = cell)
+            cell.navController = self.navigationController
             return cell
             
         } else if indexPath.section == 2{
@@ -283,6 +289,8 @@ extension MarketplaceViewController: UICollectionViewDataSource, UICollectionVie
             return cell
         }
     }
+    
+    //Sets up the number of items in each section
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 3{
             return MSMarketPlaceData.sharedInstance.items.count
@@ -294,6 +302,8 @@ extension MarketplaceViewController: UICollectionViewDataSource, UICollectionVie
            return 1
         }
     }
+    
+    //Sets up the size of the cells in each section
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if indexPath.section == 3{
             return CGSize(width: 110, height: 110)
@@ -304,10 +314,10 @@ extension MarketplaceViewController: UICollectionViewDataSource, UICollectionVie
         return CGSize(width: collectionView.frame.width , height: 150)
     }
     
+    //Sets up what to do when the cells are clicked by the user
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         if indexPath.section == 0{
-            print("section 50")
             let modelItem = gainersData.items[indexPath.item]
             if let nav = navigationController {
                 let vc = DetailedViewController()
@@ -324,12 +334,19 @@ extension MarketplaceViewController: UICollectionViewDataSource, UICollectionVie
         }
         }
         else if indexPath.section == 1{
-            print("section 1")
+            let modelItem = losersData.items[indexPath.item]
+            if let nav = navigationController {
+                let vc = DetailedViewController()
+                vc.symbolTitle = modelItem.symbol.uppercased()
+                nav.pushViewController(vc, animated: true)
+            }
         }
         else if indexPath.section == 2{
             print("section 2")
         }
     }
+    
+    //Sets up the spacing of the cells in each section
     func collectionView(_ CollectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets{
         if section == 2{
             let totalCellWidth = 80 * CollectionView.numberOfItems(inSection: 2)
@@ -342,10 +359,12 @@ extension MarketplaceViewController: UICollectionViewDataSource, UICollectionVie
         return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
 }
+
+//Title cell for the IEX stocks
 class Header: UICollectionViewCell{
     var Label: UILabel = {
         let l = UILabel(frame: CGRect(x: 200, y: 200, width: 0, height: 0))
-        l.text = "Marketplace"
+        l.text = "IEX Stocks"
         l.textColor = .black
         l.font = UIFont(name: "Helvetica", size: 30)
         l.translatesAutoresizingMaskIntoConstraints = false

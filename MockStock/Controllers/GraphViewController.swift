@@ -17,6 +17,8 @@ class GraphViewController: UIViewController{
     var xAxisPoints = [ChartPoint]()
     var realChartPoints = [ChartPoint]()
     var mid = [ChartAxisValue]()
+    
+    //Creates two array, one for date points and the other for price points based off the information recieved from the detailed view controller
     func setupChartData(graphDates: [MSGraphItemDate], graphPrice: [MSGraphItemPrice]){
         datePoints.removeAll()
         pricePoints.removeAll()
@@ -37,6 +39,7 @@ class GraphViewController: UIViewController{
         var displayFormatter = DateFormatter()
         var touchFormatter = DateFormatter()
         touchFormatter.dateFormat = "yyyy-MM-dd"
+        //Creates an array of chart points based off data recieved from detailed view controller
         for(e1, e2) in zip(datePoints, pricePoints){
             let e3 = createChartPoint(dateStr: e1.date, int: e2.closingPrice, readFormatter: readFormatter, displayFormatter: touchFormatter)
             realChartPoints.append(e3)
@@ -47,7 +50,7 @@ class GraphViewController: UIViewController{
         }
         
         let calendar = Calendar.current
-        
+        //Sets up date formating
         let dateWithComponents = {(year: Int, month: Int, day: Int) -> Date in
             var components = DateComponents()
             components.day = day
@@ -68,7 +71,6 @@ class GraphViewController: UIViewController{
         let xModel = ChartAxisModel(axisValues: xValues, axisTitleLabel: ChartAxisLabel(text: "Date", settings: labelSettings))
         let yModel = ChartAxisModel(axisValues: yValues, axisTitleLabel: ChartAxisLabel(text: "Price", settings: labelSettings.defaultVertical()))
         let chartFrame = CGRect(x: -30 , y: -40, width: 400, height: 340)
-        //let chartFrame = ExamplesDefaults.chartFrame(view.bounds)
         let chartSettings = ExamplesDefaults.chartSettingsWithPanZoom
         
         let coordsSpace = ChartCoordsSpaceLeftBottomSingleAxis(chartSettings: chartSettings, chartFrame: chartFrame, xModel: xModel, yModel: yModel)
@@ -82,6 +84,7 @@ class GraphViewController: UIViewController{
         
         var currentPositionLabels: [UILabel] = []
         
+        //Sets up and creates tracker view for when the user clicks on a point on the graph
         let chartPointsTrackerLayer = ChartPointsLineTrackerLayer<ChartPoint, Any>(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, lines: [realChartPoints], lineColor: UIColor.black, animDuration: 1, animDelay: 2, settings: trackerLayerSettings) {chartPointsWithScreenLoc in
             
             currentPositionLabels.forEach{$0.removeFromSuperview()}
@@ -104,6 +107,7 @@ class GraphViewController: UIViewController{
         let settings = ChartGuideLinesDottedLayerSettings(linesColor: UIColor.black, linesWidth: ExamplesDefaults.guidelinesWidth)
         let guidelinesLayer = ChartGuideLinesDottedLayer(xAxisLayer: xAxisLayer, yAxisLayer: yAxisLayer, settings: settings)
         
+        //Sets up the chart
         let chart = Chart(
             frame: chartFrame,
             innerFrame: innerFrame,
@@ -120,21 +124,23 @@ class GraphViewController: UIViewController{
         view.addSubview(chart.view)
         self.chart = chart
     }
+    //Creates a chart point
     func createChartPoint(dateStr: String, int: Double, readFormatter: DateFormatter, displayFormatter: DateFormatter) -> ChartPoint {
         return ChartPoint(x: createDateAxisValue(dateStr, readFormatter: readFormatter, displayFormatter: displayFormatter), y: ChartAxisValuePrice(int))
     }
-    
+    //Creates axis values based off chartpoint data recieved
     func createDateAxisValue(_ dateStr: String, readFormatter: DateFormatter, displayFormatter: DateFormatter) -> ChartAxisValue {
         let date = readFormatter.date(from: dateStr)!
         let labelSettings = ChartLabelSettings(font: ExamplesDefaults.labelFont, fontColor: .black, rotation: 0, rotationKeep: .top, shiftXOnRotation: false, textAlignment: .left)
         return ChartAxisValueDate(date: date, formatter: displayFormatter, labelSettings: labelSettings)
     }
-    
+    //Formats the price axis
     class ChartAxisValuePrice: ChartAxisValueDouble {
         override var description: String {
             return "\(formatter.string(from: NSNumber(value: scalar))!)"
         }
     }
+    //Function that calculates that axis points for display
     func setupAxis() {
         xAxisPoints.removeAll()
         let xValues = realChartPoints
@@ -146,8 +152,8 @@ class GraphViewController: UIViewController{
         index += quarterPoint
         mid = [findMid[index]]
         xAxisPoints.append(xValues[index])
-        index += quarterPoint - 1
-        xAxisPoints.append(xValues[index])
+        let last = xValues.count - 1
+        xAxisPoints.append(xValues[last])
         }
         
 }
