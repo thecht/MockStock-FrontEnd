@@ -81,8 +81,8 @@ class MarketplaceViewController: UIViewController, UISearchBarDelegate {
         self.view.layoutIfNeeded()
         if let layout = WinnersCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            layout.minimumInteritemSpacing = 15
-            layout.minimumLineSpacing = 15
+            layout.minimumInteritemSpacing = 0
+            layout.minimumLineSpacing = self.WinnersCollectionView.frame.width * 0.05
         
         fetchData(sortString: sort)
     }
@@ -264,6 +264,7 @@ extension MarketplaceViewController: UICollectionViewDataSource, UICollectionVie
             cell.backgroundColor = .clear
             cell.tickerLabel.text = modelItem.symbol.uppercased()
             cell.priceValueLabel.text = String(format: "%.02f", modelItem.price)
+            cell.layer.cornerRadius = 5.0
             var percentDoubleSign = ""
             if modelItem.percent >= 0 {
                 percentDoubleSign = "+"
@@ -306,7 +307,7 @@ extension MarketplaceViewController: UICollectionViewDataSource, UICollectionVie
     //Sets up the size of the cells in each section
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if indexPath.section == 3{
-            return CGSize(width: 110, height: 110)
+            return CGSize(width: collectionView.frame.width / 3 * 0.95, height: collectionView.frame.width / 3 * 0.95) // 110, 110
         }
         else if indexPath.section == 2{
             return CGSize(width: 50, height: 50)

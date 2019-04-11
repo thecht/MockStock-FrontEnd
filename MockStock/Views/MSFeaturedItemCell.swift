@@ -70,9 +70,8 @@ class MSFeaturedItemCell: UICollectionViewCell, UICollectionViewDataSource, UICo
         
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[categoryLabel(30)][v0]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0" : featuredCollectionView, "categoryLabel": categoryLabel]))
         if let layout = featuredCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            layout.minimumInteritemSpacing = 15
-            layout.minimumLineSpacing = 22
+            layout.minimumInteritemSpacing = 0
+            layout.minimumLineSpacing = 10
         }
     }
     //Sets the number of section to 1
@@ -96,7 +95,7 @@ class MSFeaturedItemCell: UICollectionViewCell, UICollectionViewDataSource, UICo
         cell.tag = indexPath.item
         cell.addGestureRecognizer(tapRecognizer)
         cell.isUserInteractionEnabled = true
-        
+        cell.layer.cornerRadius = 5.0
         
         
             var percentDoubleSign = ""
@@ -126,11 +125,11 @@ class MSFeaturedItemCell: UICollectionViewCell, UICollectionViewDataSource, UICo
 
     //Sets up the size of each cell
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 110, height: 110)
+        return CGSize(width: collectionView.frame.width / 3 * 0.95, height: collectionView.frame.width / 3 * 0.95)
     }
     //Sets up the spacing of the cells
     private func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionView, insetForSectionAtIndex section: Int) -> UIEdgeInsets{
-        return UIEdgeInsets(top: 0, left: 14, bottom: 0, right: 14)
+        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
     //Sets up what to do if a cell is clicked by the user
     @objc func cellTapped(_ recognizer: UITapGestureRecognizer) {
@@ -316,8 +315,8 @@ class MSLosersItemCell: UICollectionViewCell, UICollectionViewDataSource, UIColl
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[categoryLabel(30)][v0]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: ["v0" : featuredCollectionView, "categoryLabel": categoryLabel]))
         if let layout = featuredCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            layout.minimumInteritemSpacing = 15
-            layout.minimumLineSpacing = 22
+            layout.minimumInteritemSpacing = 0
+            layout.minimumLineSpacing = 10
         }
     }
     //Sets the number of section to be 1
@@ -343,7 +342,7 @@ class MSLosersItemCell: UICollectionViewCell, UICollectionViewDataSource, UIColl
         cell.tag = indexPath.item
         cell.addGestureRecognizer(tapRecognizer)
         cell.isUserInteractionEnabled = true
-        
+        cell.layer.cornerRadius = 5.0
         
         var percentDoubleSign = ""
         if modelItem.percent >= 0 {
@@ -370,11 +369,11 @@ class MSLosersItemCell: UICollectionViewCell, UICollectionViewDataSource, UIColl
     }
     //Sets up the size of each cell
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 110, height: 110)
+        return CGSize(width: collectionView.frame.width / 3 * 0.95, height: collectionView.frame.width / 3 * 0.95)
     }
     //Sets up the spacing between the cells
     private func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionView, insetForSectionAtIndex section: Int) -> UIEdgeInsets{
-        return UIEdgeInsets(top: 0, left: 14, bottom: 0, right: 14)
+        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
     //Sets up what to do if a cell is clicked
     @objc func losersCellTapped(_ recognizer: UITapGestureRecognizer) {
