@@ -126,7 +126,7 @@ class MSFeaturedItemCell: UICollectionViewCell, UICollectionViewDataSource, UICo
 
     //Sets up the size of each cell
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 110, height: 110)
+        return CGSize(width: collectionView.frame.width / 3 * 0.95, height: collectionView.frame.width / 3 * 0.95)
     }
     //Sets up the spacing of the cells
     private func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionView, insetForSectionAtIndex section: Int) -> UIEdgeInsets{
@@ -370,7 +370,7 @@ class MSLosersItemCell: UICollectionViewCell, UICollectionViewDataSource, UIColl
     }
     //Sets up the size of each cell
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 110, height: 110)
+        return CGSize(width: collectionView.frame.width / 3 * 0.95, height: collectionView.frame.width / 3 * 0.95)
     }
     //Sets up the spacing between the cells
     private func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionView, insetForSectionAtIndex section: Int) -> UIEdgeInsets{
