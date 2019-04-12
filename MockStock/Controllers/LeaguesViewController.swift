@@ -163,7 +163,7 @@ class LeaguesViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
         alert.addAction(UIAlertAction(title: "Submit", style: .default, handler: {(action) in
             if let alertTextField = alert.textFields?.first, alertTextField.text != nil {
-                self.joinLeagueRequest(leagueCode: alertTextField.text!)
+                self.joinLeagueRequest(leagueCode: alertTextField.text!.uppercased())
             }
         }))
         present(alert, animated: true)
