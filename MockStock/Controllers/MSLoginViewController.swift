@@ -199,11 +199,11 @@ class MSLoginViewController: UIViewController, UITextFieldDelegate {
         urlRequest.addValue(trimmedPasswordText, forHTTPHeaderField: "password")
         URLSession.shared.dataTask(with: urlRequest) { [weak self] (data, response, error) in
             if let e = error {
-                print(e)
+                print("ERROR: \(e)")
                 return
             }
             guard let data = data else { return }
-            print(String(data: data, encoding: .utf8) ?? "")
+            var showErrorAlert = false
             do {
                 let tokenData = try JSONDecoder().decode(TokenResponse.self, from: data)
                 UserDefaults.standard.set(tokenData.userId, forKey: "UserId")
@@ -215,21 +215,40 @@ class MSLoginViewController: UIViewController, UITextFieldDelegate {
                     self?.showMainApp()
                 }
             } catch let jsonErr {
+                print("JSON ERROR")
+                showErrorAlert = true
                 print(jsonErr)
             }
             DispatchQueue.main.async {
                 self?.networkActivityIndicator.stopAnimating()
                 self?.view.endEditing(true)
+                if showErrorAlert {
+                    self?.loginBadInputAlert()
+                }
             }
         }.resume() // fires the session
+    }
+    
+    @objc func loginBadInputAlert() {
+        let alert = UIAlertController(title: "Incorrect Login", message: "Please check that the login information is correct.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true)
+    }
+    
+    @objc func registrationBadInputAlert() {
+        let alert = UIAlertController(title: "Registration Error", message: "It appears this username is taken! Please try another one.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true)
     }
     
     @objc func registerClicked() {
         guard let usernameText = loginField.text else { return }
         guard let passwordText = passwordField.text else { return }
         if usernameText.isEmpty || passwordText.isEmpty {
-            // set error message
-            print("Cannot be empty.")
+            DispatchQueue.main.async {
+                self.view.endEditing(true)
+                self.registrationBadInputAlert()
+            }
             return
         }
         let trimmedUsernameText = removeCharacters(string: usernameText, characterSet: [.whitespaces, .illegalCharacters, .controlCharacters, .newlines, .punctuationCharacters, .symbols])
@@ -256,6 +275,7 @@ class MSLoginViewController: UIViewController, UITextFieldDelegate {
                 return
             }
             guard let data = data else { return }
+            var showErrorAlert = false
             do {
                 let registrationData = try JSONDecoder().decode(RegistrationResponse.self, from: data)
                 UserDefaults.standard.set(registrationData.UserId, forKey: "UserId")
@@ -268,10 +288,14 @@ class MSLoginViewController: UIViewController, UITextFieldDelegate {
                 }
             } catch let jsonErr {
                 print(jsonErr)
+                showErrorAlert = true
             }
             DispatchQueue.main.async {
                 self?.networkActivityIndicator.stopAnimating()
                 self?.view.endEditing(true)
+                if showErrorAlert {
+                    self?.registrationBadInputAlert()
+                }
             }
         }.resume() // fires the session
     }
