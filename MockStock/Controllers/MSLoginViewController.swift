@@ -168,7 +168,7 @@ class MSLoginViewController: UIViewController, UITextFieldDelegate {
         if let password = UserDefaults.standard.object(forKey: "Password") as! String? {
             passwordField.text = password
         }
-        
+        UserDefaults.standard.set("", forKey: "Token")
         
     }
     
@@ -186,7 +186,7 @@ class MSLoginViewController: UIViewController, UITextFieldDelegate {
             print("Invalid username or password text.")
             return
         }
-        
+        UserDefaults.standard.removeObject(forKey: "Token")
         networkActivityIndicator.startAnimating()
         let urlString = "https://mockstock.azurewebsites.net/api/users/token"
         guard let url = URL(string: urlString) else {
@@ -237,7 +237,7 @@ class MSLoginViewController: UIViewController, UITextFieldDelegate {
             print("Invalid username or password text.")
             return
         }
-        
+        UserDefaults.standard.removeObject(forKey: "Token")
         networkActivityIndicator.startAnimating()
         
         let urlString = "https://mockstock.azurewebsites.net/api/users"
@@ -260,7 +260,7 @@ class MSLoginViewController: UIViewController, UITextFieldDelegate {
                 UserDefaults.standard.set(registrationData.UserId, forKey: "UserId")
                 UserDefaults.standard.set(registrationData.UserName, forKey: "UserName")
                 UserDefaults.standard.set(trimmedPasswordText, forKey: "Password")
-                
+                UserDefaults.standard.set("", forKey: "Token")
                 DispatchQueue.main.async {
                     self?.networkActivityIndicator.stopAnimating()
                     self?.showMainApp()
