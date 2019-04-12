@@ -219,6 +219,7 @@ class MSLoginViewController: UIViewController, UITextFieldDelegate {
             }
             DispatchQueue.main.async {
                 self?.networkActivityIndicator.stopAnimating()
+                self?.view.endEditing(true)
             }
         }.resume() // fires the session
     }
@@ -270,6 +271,7 @@ class MSLoginViewController: UIViewController, UITextFieldDelegate {
             }
             DispatchQueue.main.async {
                 self?.networkActivityIndicator.stopAnimating()
+                self?.view.endEditing(true)
             }
         }.resume() // fires the session
     }
