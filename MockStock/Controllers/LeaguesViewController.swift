@@ -213,11 +213,26 @@ class LeaguesViewController: UIViewController {
         urlRequest.addValue(token, forHTTPHeaderField: "Authorization")
         URLSession.shared.dataTask(with: urlRequest) { [weak self] (data, response, error) in
             if let e = error { print(e) }
+            
+            var showErrorAlert = false
+            if String(data: data!, encoding: .utf8)!.count == 0 {
+                showErrorAlert = true
+            }
+            
             DispatchQueue.main.async {
                 self?.networkActivityIndicator.stopAnimating()
                 self?.fetchData()
+                if showErrorAlert {
+                    self?.showLeagueCodeNotFoundAlert()
+                }
             }
         }.resume() // fires the session
+    }
+    
+    func showLeagueCodeNotFoundAlert() {
+        let alert = UIAlertController(title: "Bad Code", message: "League code not valid. Please check that you typed the code correctly.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true)
     }
 }
 
