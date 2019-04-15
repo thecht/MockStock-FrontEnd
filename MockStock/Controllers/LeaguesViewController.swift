@@ -214,11 +214,13 @@ class LeaguesViewController: UIViewController {
         URLSession.shared.dataTask(with: urlRequest) { [weak self] (data, response, error) in
             if let e = error { print(e) }
             
+            // Flat error alert to appear if response found no matching league
             var showErrorAlert = false
             if String(data: data!, encoding: .utf8)!.count == 0 {
                 showErrorAlert = true
             }
             
+            // UI response to getting data
             DispatchQueue.main.async {
                 self?.networkActivityIndicator.stopAnimating()
                 self?.fetchData()
@@ -230,8 +232,11 @@ class LeaguesViewController: UIViewController {
     }
     
     func showLeagueCodeNotFoundAlert() {
+        // Create and configure alert
         let alert = UIAlertController(title: "Bad Code", message: "League code not valid. Please check that you typed the code correctly.", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        
+        // Display alert
         present(alert, animated: true)
     }
 }

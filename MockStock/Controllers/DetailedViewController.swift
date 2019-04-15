@@ -325,6 +325,7 @@ class DetailedViewController: UIViewController {
             if let e = error { print(e) }
             guard let d = data else { return }
             
+            var showErrorAlert = false
             do {
                 // Decode JSON
                 let buyResponse = try JSONDecoder().decode(BuySellResponse.self, from: d)
@@ -335,9 +336,15 @@ class DetailedViewController: UIViewController {
                 }
             } catch let jsonErr {
                 print(jsonErr)
+                showErrorAlert = true
+            }
+            DispatchQueue.main.async {
+                if showErrorAlert {
+                    self.showTransactionQuantityErrorAlert()
+                }
             }
             
-            }.resume() // fires the session
+        }.resume() // fires the session
         
     }
     
@@ -362,7 +369,7 @@ class DetailedViewController: UIViewController {
         urlRequest.addValue(symbolTitle, forHTTPHeaderField: "symbol")
         URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
             guard let d = data else { return }
-            
+            var showErrorAlert = false
             do {
                 // Decode JSON
                 let buyResponse = try JSONDecoder().decode(BuySellResponse.self, from: d)
@@ -373,12 +380,23 @@ class DetailedViewController: UIViewController {
                 }
             } catch let jsonErr {
                 print(jsonErr)
+                showErrorAlert = true
+            }
+            DispatchQueue.main.async {
+                if showErrorAlert {
+                    self.showTransactionQuantityErrorAlert()
+                }
             }
             
-            }.resume() // fires the session
-        // Then, submit sell network request
+        }.resume() // fires the session
+        
     }
     
+    func showTransactionQuantityErrorAlert() {
+        let alert = UIAlertController(title: "Transaction Failed", message: "The quantity entered was invalid.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true)
+    }
     
     //Fetches detailed view data
     func fetchData() {
