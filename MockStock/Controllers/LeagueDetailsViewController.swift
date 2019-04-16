@@ -91,7 +91,7 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDataSource,
         }
         
         // 2. Send portfolio data request to server using authentication token
-        let urlString = "https://mockstock.azurewebsites.net/api/leagues/leaderboard/\(lid)"
+        let urlString = "\(MSRestMock.baseUrl)/api/leagues/leaderboard/\(lid)"
         guard let url = URL(string: urlString) else { return }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "GET"
@@ -158,7 +158,7 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDataSource,
         }
         
         // 2. Send leave league request to server using authentication token
-        let urlString = "https://mockstock.azurewebsites.net/api/leagues/leave/\(lid)"
+        let urlString = "\(MSRestMock.baseUrl)/api/leagues/leave/\(lid)"
         guard let url = URL(string: urlString) else { return }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "DELETE"
@@ -183,7 +183,7 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDataSource,
         }
         
         // 2. Send delete league request to server using authentication token
-        let urlString = "https://mockstock.azurewebsites.net/api/leagues/deleteLeague"
+        let urlString = "\(MSRestMock.baseUrl)/api/leagues/deleteLeague"
         guard let url = URL(string: urlString) else { return }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "DELETE"

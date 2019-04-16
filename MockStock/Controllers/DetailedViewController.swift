@@ -314,7 +314,7 @@ class DetailedViewController: UIViewController {
         }
         
         // 2. Send leave league request to server using authentication token
-        let urlString = "https://mockstock.azurewebsites.net/api/stock/buy"
+        let urlString = "\(MSRestMock.baseUrl)/api/stock/buy"
         guard let url = URL(string: urlString) else { return }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
@@ -360,7 +360,7 @@ class DetailedViewController: UIViewController {
         }
         
         // 2. Send leave league request to server using authentication token
-        let urlString = "https://mockstock.azurewebsites.net/api/stock/sell"
+        let urlString = "\(MSRestMock.baseUrl)/api/stock/sell"
         guard let url = URL(string: urlString) else { return }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
@@ -400,7 +400,7 @@ class DetailedViewController: UIViewController {
     
     //Fetches detailed view data
     func fetchData() {
-        let urlString = "https://mockstock.azurewebsites.net/api/stock/details"
+        let urlString = "\(MSRestMock.baseUrl)/api/stock/details"
         guard let url = URL(string: urlString) else { return }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "GET"
@@ -459,7 +459,7 @@ class DetailedViewController: UIViewController {
     
     //Fetches graph data based off which button was seletected
     func fetchGraphData(range: String) {
-        let urlString = "https://mockstock.azurewebsites.net/api/stock/chart"
+        let urlString = "\(MSRestMock.baseUrl)/api/stock/chart"
         guard let url = URL(string: urlString) else { return }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "GET"

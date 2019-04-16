@@ -100,7 +100,7 @@ class LeaguesViewController: UIViewController {
         }
         
         // 2. Send portfolio data request to server using authentication token
-        let urlString = "https://mockstock.azurewebsites.net/api/leagues"
+        let urlString = "\(MSRestMock.baseUrl)/api/leagues"
         guard let url = URL(string: urlString) else { return }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "GET"
@@ -180,7 +180,7 @@ class LeaguesViewController: UIViewController {
         }
         
         // 2. Send create league request to server using authentication token
-        let urlString = "https://mockstock.azurewebsites.net/api/leagues/createleague"
+        let urlString = "\(MSRestMock.baseUrl)/api/leagues/createleague"
         guard let url = URL(string: urlString) else { return }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
@@ -206,7 +206,7 @@ class LeaguesViewController: UIViewController {
         }
         
         // 2. Send create league request to server using authentication token
-        let urlString = "https://mockstock.azurewebsites.net/api/leagues/join/\(leagueCode)"
+        let urlString = "\(MSRestMock.baseUrl)/api/leagues/join/\(leagueCode)"
         guard let url = URL(string: urlString) else { return }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"

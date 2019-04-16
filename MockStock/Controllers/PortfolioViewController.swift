@@ -82,7 +82,7 @@ class PortfolioViewController: UIViewController {
         }
         
         // 2. Send portfolio data request to server using authentication token
-        let urlString = "https://mockstock.azurewebsites.net/api/portfolio" // localhost:5001/api/tests"
+        let urlString = "\(MSRestMock.baseUrl)/api/portfolio"
         guard let url = URL(string: urlString) else { return }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "GET"
