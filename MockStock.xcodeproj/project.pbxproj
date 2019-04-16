@@ -12,7 +12,6 @@
 		0EDFC069224C17DE000DB02B /* GraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EDFC067224C17DE000DB02B /* GraphViewController.swift */; };
 		0EDFC06A224C17DE000DB02B /* DetailedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EDFC068224C17DE000DB02B /* DetailedViewController.swift */; };
 		0EE25A1E225ABA440078844D /* MSGraphItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE25A1D225ABA440078844D /* MSGraphItem.swift */; };
-		0EE3A7152257FC0200607158 /* transactionPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE3A7142257FC0200607158 /* transactionPopup.swift */; };
 		0EE4B7A522559E580066E3B3 /* MSFeaturedItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE4B7A422559E580066E3B3 /* MSFeaturedItemCell.swift */; };
 		0EE4B7A722559E610066E3B3 /* MSMarketPlaceItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE4B7A622559E610066E3B3 /* MSMarketPlaceItem.swift */; };
 		0EE4B7A92255A8550066E3B3 /* MSMarketPlaceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE4B7A82255A8550066E3B3 /* MSMarketPlaceData.swift */; };
@@ -44,7 +43,6 @@
 		0EDFC067224C17DE000DB02B /* GraphViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphViewController.swift; sourceTree = "<group>"; };
 		0EDFC068224C17DE000DB02B /* DetailedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailedViewController.swift; sourceTree = "<group>"; };
 		0EE25A1D225ABA440078844D /* MSGraphItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSGraphItem.swift; sourceTree = "<group>"; };
-		0EE3A7142257FC0200607158 /* transactionPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = transactionPopup.swift; sourceTree = "<group>"; };
 		0EE4B7A422559E580066E3B3 /* MSFeaturedItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MSFeaturedItemCell.swift; sourceTree = "<group>"; };
 		0EE4B7A622559E610066E3B3 /* MSMarketPlaceItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MSMarketPlaceItem.swift; sourceTree = "<group>"; };
 		0EE4B7A82255A8550066E3B3 /* MSMarketPlaceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSMarketPlaceData.swift; sourceTree = "<group>"; };
@@ -104,7 +102,6 @@
 				91915133222C7ECF0078CEA0 /* LeaguesViewController.swift */,
 				912DA0032241167C00978E4E /* MSLoginViewController.swift */,
 				910556E922525F0E0088A264 /* LeagueDetailsViewController.swift */,
-				0EE3A7142257FC0200607158 /* transactionPopup.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -317,7 +314,6 @@
 				0EDFC063224C17BF000DB02B /* Env.swift in Sources */,
 				919D2757220485CA00405E04 /* PortfolioViewController.swift in Sources */,
 				9133E4302236D6B7003213A6 /* MSPortfolioItem.swift in Sources */,
-				0EE3A7152257FC0200607158 /* transactionPopup.swift in Sources */,
 				0EDFC069224C17DE000DB02B /* GraphViewController.swift in Sources */,
 				0EE4B7AB2255B0250066E3B3 /* MSMarketPlaceCell.swift in Sources */,
 				910556EA22525F0E0088A264 /* LeagueDetailsViewController.swift in Sources */,
