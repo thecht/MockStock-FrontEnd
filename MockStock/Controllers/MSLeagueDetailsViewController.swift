@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class LeagueDetailsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class MSLeagueDetailsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     var leagueUsers = [LeagueUser]()
     var leagueName = "League Name"
     var leagueId: String?

@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class LeaguesViewController: UIViewController {
+class MSLeaguesViewController: UIViewController {
     
     // Fields
     var leagueData = [League]()
@@ -241,7 +241,7 @@ class LeaguesViewController: UIViewController {
     }
 }
 
-extension LeaguesViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension MSLeaguesViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -272,7 +272,7 @@ extension LeaguesViewController: UICollectionViewDataSource, UICollectionViewDel
         let modelItem = leagueData[indexPath.item]
 
         if let nav = navigationController {
-            let vc = LeagueDetailsViewController()
+            let vc = MSLeagueDetailsViewController()
             vc.leagueName = modelItem.LeagueName
             vc.leagueId = modelItem.LeagueId
             vc.hostId = modelItem.LeagueHost

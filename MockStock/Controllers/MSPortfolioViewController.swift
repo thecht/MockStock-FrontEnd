@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PortfolioViewController: UIViewController {
+class MSPortfolioViewController: UIViewController {
     // MARK: Data Properties
     var portfolioData = MSPortfolioData.sharedInstance
     
@@ -141,7 +141,7 @@ class PortfolioViewController: UIViewController {
 
 }
 
-extension PortfolioViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension MSPortfolioViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
