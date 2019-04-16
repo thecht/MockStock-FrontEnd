@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class LeaguesViewController: UIViewController {
+class MSLeaguesViewController: UIViewController {
     
     // Fields
     var leagueData = [League]()
@@ -95,12 +95,12 @@ class LeaguesViewController: UIViewController {
         
         // 1. Get valid token
         guard let token = UserDefaults.standard.string(forKey: "Token") else {
-            MSRestMock.fetchAuthenticationToken(callback: fetchData)
+            MSAPI.fetchAuthenticationToken(callback: fetchData)
             return
         }
         
         // 2. Send portfolio data request to server using authentication token
-        let urlString = "https://mockstock.azurewebsites.net/api/leagues"
+        let urlString = "\(MSAPI.baseUrl)/api/leagues"
         guard let url = URL(string: urlString) else { return }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "GET"
@@ -110,9 +110,9 @@ class LeaguesViewController: UIViewController {
             guard let data = data else { return }
             
             // Check for expired token
-            if MSRestMock.checkUnauthorizedStatusCode(response: response) {
+            if MSAPI.checkUnauthorizedStatusCode(response: response) {
                 print("unauthorized: getting token")
-                MSRestMock.fetchAuthenticationToken(callback: self!.fetchData)
+                MSAPI.fetchAuthenticationToken(callback: self!.fetchData)
             }
             
             do {
@@ -175,12 +175,12 @@ class LeaguesViewController: UIViewController {
         
         // 1. Get valid token
         guard let token = UserDefaults.standard.string(forKey: "Token") else {
-            MSRestMock.fetchAuthenticationToken(callback: fetchData)
+            MSAPI.fetchAuthenticationToken(callback: fetchData)
             return
         }
         
         // 2. Send create league request to server using authentication token
-        let urlString = "https://mockstock.azurewebsites.net/api/leagues/createleague"
+        let urlString = "\(MSAPI.baseUrl)/api/leagues/createleague"
         guard let url = URL(string: urlString) else { return }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
@@ -201,12 +201,12 @@ class LeaguesViewController: UIViewController {
         
         // 1. Get valid token
         guard let token = UserDefaults.standard.string(forKey: "Token") else {
-            MSRestMock.fetchAuthenticationToken(callback: fetchData)
+            MSAPI.fetchAuthenticationToken(callback: fetchData)
             return
         }
         
         // 2. Send create league request to server using authentication token
-        let urlString = "https://mockstock.azurewebsites.net/api/leagues/join/\(leagueCode)"
+        let urlString = "\(MSAPI.baseUrl)/api/leagues/join/\(leagueCode)"
         guard let url = URL(string: urlString) else { return }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
@@ -241,7 +241,7 @@ class LeaguesViewController: UIViewController {
     }
 }
 
-extension LeaguesViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension MSLeaguesViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -272,7 +272,7 @@ extension LeaguesViewController: UICollectionViewDataSource, UICollectionViewDel
         let modelItem = leagueData[indexPath.item]
 
         if let nav = navigationController {
-            let vc = LeagueDetailsViewController()
+            let vc = MSLeagueDetailsViewController()
             vc.leagueName = modelItem.LeagueName
             vc.leagueId = modelItem.LeagueId
             vc.hostId = modelItem.LeagueHost

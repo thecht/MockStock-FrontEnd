@@ -9,12 +9,15 @@
 import Foundation
 import UIKit
 
-class LeagueDetailsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class MSLeagueDetailsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    // MARK: Data Properties
     var leagueUsers = [LeagueUser]()
     var leagueName = "League Name"
     var leagueId: String?
     var hostId: Int?
     
+    // MARK: View Properties
     var tableView: UITableView = {
         let tv = UITableView()
         tv.translatesAutoresizingMaskIntoConstraints = false
@@ -28,6 +31,7 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDataSource,
         return v
     }()
 
+    // MARK: ViewController Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -58,6 +62,7 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDataSource,
         fetchData()
     }
     
+    // MARK: CollectionView DataSource+Delegate Methods
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return leagueUsers.count
     }
@@ -81,17 +86,18 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDataSource,
         return CGSize(width: collectionView.frame.width - 60, height: collectionView.frame.width * 0.15)
     }
     
+    // MARK: API Requests
     func fetchData() {
         guard let lid = leagueId else { return }
         
         // 1. Get valid token
         guard let token = UserDefaults.standard.string(forKey: "Token") else {
-            MSRestMock.fetchAuthenticationToken(callback: fetchData)
+            MSAPI.fetchAuthenticationToken(callback: fetchData)
             return
         }
         
         // 2. Send portfolio data request to server using authentication token
-        let urlString = "https://mockstock.azurewebsites.net/api/leagues/leaderboard/\(lid)"
+        let urlString = "\(MSAPI.baseUrl)/api/leagues/leaderboard/\(lid)"
         guard let url = URL(string: urlString) else { return }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "GET"
@@ -101,9 +107,9 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDataSource,
             if let e = error { print(e) }
             guard let data = data else { return }
             // Check for expired token
-            if MSRestMock.checkUnauthorizedStatusCode(response: response) {
+            if MSAPI.checkUnauthorizedStatusCode(response: response) {
                 print("unauthorized: getting token")
-                MSRestMock.fetchAuthenticationToken(callback: self!.fetchData)
+                MSAPI.fetchAuthenticationToken(callback: self!.fetchData)
             }
             
             do {
@@ -153,12 +159,12 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDataSource,
         
         // 1. Get valid token
         guard let token = UserDefaults.standard.string(forKey: "Token") else {
-            MSRestMock.fetchAuthenticationToken(callback: fetchData)
+            MSAPI.fetchAuthenticationToken(callback: fetchData)
             return
         }
         
         // 2. Send leave league request to server using authentication token
-        let urlString = "https://mockstock.azurewebsites.net/api/leagues/leave/\(lid)"
+        let urlString = "\(MSAPI.baseUrl)/api/leagues/leave/\(lid)"
         guard let url = URL(string: urlString) else { return }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "DELETE"
@@ -178,12 +184,12 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDataSource,
         
         // 1. Get valid token
         guard let token = UserDefaults.standard.string(forKey: "Token") else {
-            MSRestMock.fetchAuthenticationToken(callback: fetchData)
+            MSAPI.fetchAuthenticationToken(callback: fetchData)
             return
         }
         
         // 2. Send delete league request to server using authentication token
-        let urlString = "https://mockstock.azurewebsites.net/api/leagues/deleteLeague"
+        let urlString = "\(MSAPI.baseUrl)/api/leagues/deleteLeague"
         guard let url = URL(string: urlString) else { return }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "DELETE"
@@ -198,90 +204,4 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDataSource,
         }.resume() // fires the session
     }
     
-}
-
-class MSLeagueUserCell: UICollectionViewCell {
-    
-    // Background bars
-    var colorView1: UIView = {
-        let v = UIView()
-        v.backgroundColor = UIColor.darkGray
-        return v
-    }()
-    var colorView2: UIView = {
-        let v = UIView()
-        v.backgroundColor = UIColor.darkGray
-        return v
-    }()
-    
-    // Labels
-    var userName: UILabel = {
-        let l = UILabel()
-        l.text = "Someone"
-        l.font = UIFont(name: "Futura-CondensedMedium", size: 24)
-        l.textColor = .white
-        l.textAlignment = .left
-        return l
-    }()
-    var netWorth: UILabel = {
-        let l = UILabel()
-        l.text = "$500"
-        l.font = UIFont(name: "Futura-CondensedMedium", size: 24)
-        l.textColor = .white
-        l.textAlignment = .left
-        return l
-    }()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupViews()
-    }
-    
-    func setupViews() {
-        // Configure view properties
-        layer.cornerRadius = self.frame.width / 25
-//        layer.shadowColor = UIColor.black.cgColor
-//        layer.shadowOffset = CGSize(width: 1.0, height: 2.0)
-//        layer.shadowOpacity = 0.4
-//        layer.shadowRadius = 4.0
-        layer.borderColor = UIColor.black.cgColor
-        layer.borderWidth = 4.0
-        clipsToBounds = true
-        
-        // Add & Configure subviews
-        addSubview(colorView1)
-        addSubview(colorView2)
-        
-        addSubview(userName)
-        addSubview(netWorth)
-        
-        netWorth.textAlignment = .right
-        
-    }
-    
-    override func didMoveToSuperview() {
-        super.didMoveToSuperview()
-        
-        // Size background views
-        colorView2.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height * 0.5)
-        //colorView2.layer.cornerRadius = colorView2.frame.width / 25
-        colorView1.frame = CGRect(x: 0, y: frame.height * 0.5, width: frame.width, height: frame.height * 0.5)
-        
-        setupLabels()
-    }
-    
-    private func setupLabels() {
-        userName.frame = CGRect(x: 15, y: frame.height/2 - 20, width: frame.width, height: 40)
-        netWorth.frame = CGRect(x: frame.width/2, y: frame.height/2 - 20, width: frame.width/2 - 15, height: 40)
-    }
-    
-    func setColors(topView: UIColor, bottomViewColor: UIColor) {
-        self.backgroundColor = topView
-        self.colorView1.backgroundColor = topView
-        self.colorView2.backgroundColor = bottomViewColor
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 }

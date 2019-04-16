@@ -14,16 +14,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // For Testing the MSLoginController
-//        UserDefaults.standard.removeObject(forKey: "UserName")
-//        UserDefaults.standard.removeObject(forKey: "Password")
-//        UserDefaults.standard.removeObject(forKey: "Token")
         // Override point for customization after application launch.
         window = UIWindow(frame: UIScreen.main.bounds)
+        
+        // Gets current login information, if any.
         let username = UserDefaults.standard.string(forKey: "UserName")
         let password = UserDefaults.standard.string(forKey: "Password")
+        
+        // Presents the login controller if no login information is present, or the main app otherwise.
         if username == nil || password == nil {
             let loginViewController = MSLoginViewController()
             window!.rootViewController = loginViewController
@@ -33,6 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             window!.rootViewController = tabBarController
             window!.makeKeyAndVisible()
         }
+        
         return true
     }
 

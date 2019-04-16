@@ -8,7 +8,9 @@
 
 import Foundation
 
-class MSRestMock {
+class MSAPI {
+    
+    static let baseUrl = "https://mockstock.azurewebsites.net"
     
     static func fetchPortfolioData() {
         let item = MSPortfolioItem()
@@ -26,7 +28,7 @@ class MSRestMock {
     }
     
     static func fetchAuthenticationToken(callback: @escaping ()->Void) {
-        let urlString = "https://mockstock.azurewebsites.net/api/users/token"
+        let urlString = "\(MSAPI.baseUrl)/api/users/token"
         guard let username = UserDefaults.standard.string(forKey: "UserName") else { return }
         guard let password = UserDefaults.standard.string(forKey: "Password") else { return }
         guard let url = URL(string: urlString) else { return }
