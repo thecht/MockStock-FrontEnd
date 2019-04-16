@@ -11,6 +11,7 @@ import UIKit
 
 class MSLoginViewController: UIViewController, UITextFieldDelegate {
     
+    // MARK: View Properties
     var welcomeLabel: UILabel = {
         var l = UILabel()
         l.text = "MOCK STOCK"
@@ -83,8 +84,10 @@ class MSLoginViewController: UIViewController, UITextFieldDelegate {
         return b
     }()
     
+    // MARK: ViewController Methods
     override func viewDidLoad() {
         
+        // Set background color
         view.backgroundColor = UIColor.white
         
         // Add views to container
@@ -104,6 +107,8 @@ class MSLoginViewController: UIViewController, UITextFieldDelegate {
         loginButton.addTarget(self, action: #selector(MSLoginViewController.loginClicked), for: .touchUpInside)
         registerButton.addTarget(self, action: #selector(MSLoginViewController.registerClicked), for: .touchUpInside)
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self.view, action: #selector(view.endEditing)))
+        
+        // Set textfield delegates
         loginField.delegate = self
         passwordField.delegate = self
     }
@@ -149,76 +154,93 @@ class MSLoginViewController: UIViewController, UITextFieldDelegate {
         registerButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -25).isActive = true
         registerButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         registerButton.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 20).isActive = true
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        // Round corners
+        // Configure textfield view
         loginBackground.layer.cornerRadius = loginBackground.frame.height/12
         passwordBackground.layer.cornerRadius = passwordBackground.frame.height/12
         loginButton.layer.cornerRadius = loginButton.frame.height/12
         registerButton.layer.cornerRadius = registerButton.frame.height/12
         
-        // Set default if exists
+        // Set default text for textfields if login information exists
         if let username = UserDefaults.standard.object(forKey: "UserName") as! String? {
             loginField.text = username
         }
         if let password = UserDefaults.standard.object(forKey: "Password") as! String? {
             passwordField.text = password
         }
+        
+        // Discard the old token
         UserDefaults.standard.set("", forKey: "Token")
         
     }
     
+    // MARK: Button Handlers
     @objc func loginClicked() {
+        // Ensure textfields are populated
         guard let usernameText = loginField.text else { return }
         guard let passwordText = passwordField.text else { return }
-        if usernameText.isEmpty || passwordText.isEmpty {
-            // set error message
-            print("Cannot be empty.")
-            return
-        }
+        if usernameText.isEmpty || passwordText.isEmpty { return }
+        
+        // Ensure textfields contain valid text
         let trimmedUsernameText = removeCharacters(string: usernameText, characterSet: [.whitespaces, .illegalCharacters, .controlCharacters, .newlines, .punctuationCharacters, .symbols])
         let trimmedPasswordText = removeCharacters(string: passwordText, characterSet: [.whitespaces, .illegalCharacters, .controlCharacters, .newlines, .punctuationCharacters, .symbols])
-        if usernameText != trimmedUsernameText || passwordText != trimmedPasswordText {
-            print("Invalid username or password text.")
-            return
-        }
+        if usernameText != trimmedUsernameText || passwordText != trimmedPasswordText { return }
+        
+        // Reset the previously stored token, if any exists.
         UserDefaults.standard.removeObject(forKey: "Token")
+        
+        // Begin network activity animation
         networkActivityIndicator.startAnimating()
+        
+        // Get the request url
         let urlString = "\(MSAPI.baseUrl)/api/users/token"
         guard let url = URL(string: urlString) else {
             self.view.isUserInteractionEnabled = true
             return
         }
+        
+        // Configure the http request
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
         urlRequest.addValue(trimmedUsernameText, forHTTPHeaderField: "username")
         urlRequest.addValue(trimmedPasswordText, forHTTPHeaderField: "password")
+        
+        // Send the request and handle the response
         URLSession.shared.dataTask(with: urlRequest) { [weak self] (data, response, error) in
             if let e = error {
                 print("ERROR: \(e)")
                 return
             }
+            
+            // Ensure data exists
             guard let data = data else { return }
+            
+            // Attempt to parse JSON response
             var showErrorAlert = false
             do {
+                // JSON decoding
                 let tokenData = try JSONDecoder().decode(TokenResponse.self, from: data)
+                
+                // Set new login details
                 UserDefaults.standard.set(tokenData.userId, forKey: "UserId")
                 UserDefaults.standard.set(trimmedUsernameText, forKey: "UserName")
                 UserDefaults.standard.set(trimmedPasswordText, forKey: "Password")
                 UserDefaults.standard.set("Bearer \(tokenData.token)", forKey: "Token")
+                
+                // Transition past the login view
                 DispatchQueue.main.async {
                     self?.networkActivityIndicator.stopAnimating()
                     self?.showMainApp()
                 }
-            } catch let jsonErr {
-                print("JSON ERROR")
+            } catch { // let jsonErr
                 showErrorAlert = true
-                print(jsonErr)
             }
+            
+            // Clean up UI after response
             DispatchQueue.main.async {
                 self?.networkActivityIndicator.stopAnimating()
                 self?.view.endEditing(true)
@@ -229,6 +251,86 @@ class MSLoginViewController: UIViewController, UITextFieldDelegate {
         }.resume() // fires the session
     }
     
+    @objc func registerClicked() {
+        // Ensure textfields are populated
+        guard let usernameText = loginField.text else { return }
+        guard let passwordText = passwordField.text else { return }
+        if usernameText.isEmpty || passwordText.isEmpty {
+            DispatchQueue.main.async {
+                self.view.endEditing(true)
+                self.registrationBadInputAlert()
+            }
+            return
+        }
+        
+        // Ensure textfields contain valid characters
+        let trimmedUsernameText = removeCharacters(string: usernameText, characterSet: [.whitespaces, .illegalCharacters, .controlCharacters, .newlines, .punctuationCharacters, .symbols])
+        let trimmedPasswordText = removeCharacters(string: passwordText, characterSet: [.whitespaces, .illegalCharacters, .controlCharacters, .newlines, .punctuationCharacters, .symbols])
+        if usernameText != trimmedUsernameText || passwordText != trimmedPasswordText {
+            print("Invalid username or password text.")
+            return
+        }
+        UserDefaults.standard.removeObject(forKey: "Token")
+        
+        // Prepare UI for request
+        networkActivityIndicator.startAnimating()
+        
+        // Construct URL
+        let urlString = "\(MSAPI.baseUrl)/api/users"
+        guard let url = URL(string: urlString) else {
+            self.view.isUserInteractionEnabled = true
+            return
+        }
+        
+        // Configure HTTP request
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        urlRequest.addValue(trimmedUsernameText, forHTTPHeaderField: "username")
+        urlRequest.addValue(trimmedPasswordText, forHTTPHeaderField: "password")
+        
+        // Send HTTP request and handle response
+        URLSession.shared.dataTask(with: urlRequest) { [weak self] (data, response, error) in
+            if let e = error {
+                print(e)
+                return
+            }
+            
+            // Ensure data exists
+            guard let data = data else { return }
+            
+            // Handle JSON parsing and response
+            var showErrorAlert = false
+            do {
+                // JSON decoding
+                let registrationData = try JSONDecoder().decode(RegistrationResponse.self, from: data)
+                
+                // Set local login information
+                UserDefaults.standard.set(registrationData.UserId, forKey: "UserId")
+                UserDefaults.standard.set(registrationData.UserName, forKey: "UserName")
+                UserDefaults.standard.set(trimmedPasswordText, forKey: "Password")
+                UserDefaults.standard.set("", forKey: "Token")
+                
+                // Transition from login view
+                DispatchQueue.main.async {
+                    self?.networkActivityIndicator.stopAnimating()
+                    self?.showMainApp()
+                }
+            } catch { // let jsonErr
+                showErrorAlert = true
+            }
+            
+            // Clean up UI after request
+            DispatchQueue.main.async {
+                self?.networkActivityIndicator.stopAnimating()
+                self?.view.endEditing(true)
+                if showErrorAlert {
+                    self?.registrationBadInputAlert()
+                }
+            }
+        }.resume() // fires the session
+    }
+
+    // MARK: Alert Popups
     @objc func loginBadInputAlert() {
         let alert = UIAlertController(title: "Incorrect Login", message: "Please check that the login information is correct.", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
@@ -241,72 +343,7 @@ class MSLoginViewController: UIViewController, UITextFieldDelegate {
         present(alert, animated: true)
     }
     
-    @objc func registerClicked() {
-        guard let usernameText = loginField.text else { return }
-        guard let passwordText = passwordField.text else { return }
-        if usernameText.isEmpty || passwordText.isEmpty {
-            DispatchQueue.main.async {
-                self.view.endEditing(true)
-                self.registrationBadInputAlert()
-            }
-            return
-        }
-        let trimmedUsernameText = removeCharacters(string: usernameText, characterSet: [.whitespaces, .illegalCharacters, .controlCharacters, .newlines, .punctuationCharacters, .symbols])
-        let trimmedPasswordText = removeCharacters(string: passwordText, characterSet: [.whitespaces, .illegalCharacters, .controlCharacters, .newlines, .punctuationCharacters, .symbols])
-        if usernameText != trimmedUsernameText || passwordText != trimmedPasswordText {
-            print("Invalid username or password text.")
-            return
-        }
-        UserDefaults.standard.removeObject(forKey: "Token")
-        networkActivityIndicator.startAnimating()
-        
-        let urlString = "\(MSAPI.baseUrl)/api/users"
-        guard let url = URL(string: urlString) else {
-            self.view.isUserInteractionEnabled = true
-            return
-        }
-        var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "POST"
-        urlRequest.addValue(trimmedUsernameText, forHTTPHeaderField: "username")
-        urlRequest.addValue(trimmedPasswordText, forHTTPHeaderField: "password")
-        URLSession.shared.dataTask(with: urlRequest) { [weak self] (data, response, error) in
-            if let e = error {
-                print(e)
-                return
-            }
-            guard let data = data else { return }
-            var showErrorAlert = false
-            do {
-                let registrationData = try JSONDecoder().decode(RegistrationResponse.self, from: data)
-                UserDefaults.standard.set(registrationData.UserId, forKey: "UserId")
-                UserDefaults.standard.set(registrationData.UserName, forKey: "UserName")
-                UserDefaults.standard.set(trimmedPasswordText, forKey: "Password")
-                UserDefaults.standard.set("", forKey: "Token")
-                DispatchQueue.main.async {
-                    self?.networkActivityIndicator.stopAnimating()
-                    self?.showMainApp()
-                }
-            } catch let jsonErr {
-                print(jsonErr)
-                showErrorAlert = true
-            }
-            DispatchQueue.main.async {
-                self?.networkActivityIndicator.stopAnimating()
-                self?.view.endEditing(true)
-                if showErrorAlert {
-                    self?.registrationBadInputAlert()
-                }
-            }
-        }.resume() // fires the session
-    }
-    
-    
-    func loginResponse(data: Data) {
-        networkActivityIndicator.stopAnimating()
-    }
-    func registrationResponse() {
-        
-    }
+    // MARK: Helper Methods
     func removeCharacters(string: String, characterSet: [CharacterSet]) -> String {
         var retVal = string
         for set in characterSet {
