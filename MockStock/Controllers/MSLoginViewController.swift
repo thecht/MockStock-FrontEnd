@@ -270,6 +270,8 @@ class MSLoginViewController: UIViewController, UITextFieldDelegate {
             print("Invalid username or password text.")
             return
         }
+        
+        // Remove any old tokens
         UserDefaults.standard.removeObject(forKey: "Token")
         
         // Prepare UI for request
