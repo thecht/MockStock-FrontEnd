@@ -86,12 +86,12 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDataSource,
         
         // 1. Get valid token
         guard let token = UserDefaults.standard.string(forKey: "Token") else {
-            MSRestMock.fetchAuthenticationToken(callback: fetchData)
+            MSAPI.fetchAuthenticationToken(callback: fetchData)
             return
         }
         
         // 2. Send portfolio data request to server using authentication token
-        let urlString = "\(MSRestMock.baseUrl)/api/leagues/leaderboard/\(lid)"
+        let urlString = "\(MSAPI.baseUrl)/api/leagues/leaderboard/\(lid)"
         guard let url = URL(string: urlString) else { return }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "GET"
@@ -101,9 +101,9 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDataSource,
             if let e = error { print(e) }
             guard let data = data else { return }
             // Check for expired token
-            if MSRestMock.checkUnauthorizedStatusCode(response: response) {
+            if MSAPI.checkUnauthorizedStatusCode(response: response) {
                 print("unauthorized: getting token")
-                MSRestMock.fetchAuthenticationToken(callback: self!.fetchData)
+                MSAPI.fetchAuthenticationToken(callback: self!.fetchData)
             }
             
             do {
@@ -153,12 +153,12 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDataSource,
         
         // 1. Get valid token
         guard let token = UserDefaults.standard.string(forKey: "Token") else {
-            MSRestMock.fetchAuthenticationToken(callback: fetchData)
+            MSAPI.fetchAuthenticationToken(callback: fetchData)
             return
         }
         
         // 2. Send leave league request to server using authentication token
-        let urlString = "\(MSRestMock.baseUrl)/api/leagues/leave/\(lid)"
+        let urlString = "\(MSAPI.baseUrl)/api/leagues/leave/\(lid)"
         guard let url = URL(string: urlString) else { return }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "DELETE"
@@ -178,12 +178,12 @@ class LeagueDetailsViewController: UIViewController, UICollectionViewDataSource,
         
         // 1. Get valid token
         guard let token = UserDefaults.standard.string(forKey: "Token") else {
-            MSRestMock.fetchAuthenticationToken(callback: fetchData)
+            MSAPI.fetchAuthenticationToken(callback: fetchData)
             return
         }
         
         // 2. Send delete league request to server using authentication token
-        let urlString = "\(MSRestMock.baseUrl)/api/leagues/deleteLeague"
+        let urlString = "\(MSAPI.baseUrl)/api/leagues/deleteLeague"
         guard let url = URL(string: urlString) else { return }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "DELETE"

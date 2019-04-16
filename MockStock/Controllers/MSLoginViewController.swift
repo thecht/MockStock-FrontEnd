@@ -188,7 +188,7 @@ class MSLoginViewController: UIViewController, UITextFieldDelegate {
         }
         UserDefaults.standard.removeObject(forKey: "Token")
         networkActivityIndicator.startAnimating()
-        let urlString = "\(MSRestMock.baseUrl)/api/users/token"
+        let urlString = "\(MSAPI.baseUrl)/api/users/token"
         guard let url = URL(string: urlString) else {
             self.view.isUserInteractionEnabled = true
             return
@@ -260,7 +260,7 @@ class MSLoginViewController: UIViewController, UITextFieldDelegate {
         UserDefaults.standard.removeObject(forKey: "Token")
         networkActivityIndicator.startAnimating()
         
-        let urlString = "\(MSRestMock.baseUrl)/api/users"
+        let urlString = "\(MSAPI.baseUrl)/api/users"
         guard let url = URL(string: urlString) else {
             self.view.isUserInteractionEnabled = true
             return

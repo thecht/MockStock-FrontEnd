@@ -30,7 +30,7 @@
 		919D2757220485CA00405E04 /* PortfolioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 919D2756220485CA00405E04 /* PortfolioViewController.swift */; };
 		919D275C220485CC00405E04 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 919D275B220485CC00405E04 /* Assets.xcassets */; };
 		91B0F3F3224C53F600DABFEA /* MSLeagueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B0F3F2224C53F600DABFEA /* MSLeagueCell.swift */; };
-		91B7F762223FD11D006F8FBD /* MSRestMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B7F761223FD11D006F8FBD /* MSRestMock.swift */; };
+		91B7F762223FD11D006F8FBD /* MSAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B7F761223FD11D006F8FBD /* MSAPI.swift */; };
 		91B7F764223FE1C0006F8FBD /* MSPortfolioData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B7F763223FE1C0006F8FBD /* MSPortfolioData.swift */; };
 		91B7F76722401560006F8FBD /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B7F76622401560006F8FBD /* ColorExtensions.swift */; };
 		91C4141F2208C767004A8807 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 91C4141E2208C767004A8807 /* .gitignore */; };
@@ -64,7 +64,7 @@
 		919D275B220485CC00405E04 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		919D2760220485CC00405E04 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		91B0F3F2224C53F600DABFEA /* MSLeagueCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSLeagueCell.swift; sourceTree = "<group>"; };
-		91B7F761223FD11D006F8FBD /* MSRestMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSRestMock.swift; sourceTree = "<group>"; };
+		91B7F761223FD11D006F8FBD /* MSAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSAPI.swift; sourceTree = "<group>"; };
 		91B7F763223FE1C0006F8FBD /* MSPortfolioData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSPortfolioData.swift; sourceTree = "<group>"; };
 		91B7F76622401560006F8FBD /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
 		91C4141E2208C767004A8807 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
@@ -169,7 +169,7 @@
 			children = (
 				0EDFC061224C17BF000DB02B /* Env.swift */,
 				0EDFC062224C17BF000DB02B /* ExampleDefaults.swift */,
-				91B7F761223FD11D006F8FBD /* MSRestMock.swift */,
+				91B7F761223FD11D006F8FBD /* MSAPI.swift */,
 				91B7F76622401560006F8FBD /* ColorExtensions.swift */,
 			);
 			path = Helpers;
@@ -329,7 +329,7 @@
 				0EDFC06A224C17DE000DB02B /* DetailedViewController.swift in Sources */,
 				91B7F764223FE1C0006F8FBD /* MSPortfolioData.swift in Sources */,
 				91DE5F5D223C5E1200C6D745 /* MSPortfolioItemCell.swift in Sources */,
-				91B7F762223FD11D006F8FBD /* MSRestMock.swift in Sources */,
+				91B7F762223FD11D006F8FBD /* MSAPI.swift in Sources */,
 				0EE4B7A522559E580066E3B3 /* MSFeaturedItemCell.swift in Sources */,
 				919D2755220485CA00405E04 /* AppDelegate.swift in Sources */,
 				91915134222C7ECF0078CEA0 /* LeaguesViewController.swift in Sources */,

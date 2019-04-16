@@ -77,12 +77,12 @@ class PortfolioViewController: UIViewController {
         
         // 1. Get valid token
         guard let token = UserDefaults.standard.string(forKey: "Token") else {
-            MSRestMock.fetchAuthenticationToken(callback: fetchData)
+            MSAPI.fetchAuthenticationToken(callback: fetchData)
             return
         }
         
         // 2. Send portfolio data request to server using authentication token
-        let urlString = "\(MSRestMock.baseUrl)/api/portfolio"
+        let urlString = "\(MSAPI.baseUrl)/api/portfolio"
         guard let url = URL(string: urlString) else { return }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "GET"
@@ -92,9 +92,9 @@ class PortfolioViewController: UIViewController {
             guard let data = data else { return }
             
             // Check for expired token
-            if MSRestMock.checkUnauthorizedStatusCode(response: response) {
+            if MSAPI.checkUnauthorizedStatusCode(response: response) {
                 print("unauthorized: getting token")
-                MSRestMock.fetchAuthenticationToken(callback: self!.fetchData)
+                MSAPI.fetchAuthenticationToken(callback: self!.fetchData)
             }
 
             do {

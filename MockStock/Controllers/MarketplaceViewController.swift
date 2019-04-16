@@ -125,7 +125,7 @@ class MarketplaceViewController: UIViewController, UISearchBarDelegate {
     func fetchSearchData(searchString : String) {
         // 0. Start activity indicator animation
         // 2. Send search data request to server using authentication token
-        let urlString = "\(MSRestMock.baseUrl)/api/stock/search" // localhost:5001/api/tests"
+        let urlString = "\(MSAPI.baseUrl)/api/stock/search" // localhost:5001/api/tests"
         guard let url = URL(string: urlString) else { return }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "GET"
@@ -163,7 +163,7 @@ class MarketplaceViewController: UIViewController, UISearchBarDelegate {
     
     //Function that retrieves all the marketplace view stocks based off the requested sort
     func fetchData(sortString : String) {
-        let urlString = "\(MSRestMock.baseUrl)/api/stock/marketplace" // localhost:5001/api/tests"
+        let urlString = "\(MSAPI.baseUrl)/api/stock/marketplace" // localhost:5001/api/tests"
         guard let url = URL(string: urlString) else { return }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "GET"
