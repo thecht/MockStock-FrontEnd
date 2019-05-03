@@ -307,8 +307,8 @@ class MSLoginViewController: UIViewController, UITextFieldDelegate {
                 let registrationData = try JSONDecoder().decode(RegistrationResponse.self, from: data)
                 
                 // Set local login information
-                UserDefaults.standard.set(registrationData.UserId, forKey: "UserId")
-                UserDefaults.standard.set(registrationData.UserName, forKey: "UserName")
+                UserDefaults.standard.set(registrationData.userId, forKey: "UserId")
+                UserDefaults.standard.set(registrationData.userName, forKey: "UserName")
                 UserDefaults.standard.set(trimmedPasswordText, forKey: "Password")
                 UserDefaults.standard.set("", forKey: "Token")
                 

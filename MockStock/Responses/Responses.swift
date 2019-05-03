@@ -9,9 +9,9 @@
 import Foundation
 
 struct RegistrationResponse: Decodable {
-    var UserId: Int
-    var UserName: String
-    var UserCurrency: Double
+    var userId: Int
+    var userName: String
+    var userCurrency: Double
 }
 
 struct TokenResponse: Decodable {
@@ -55,9 +55,9 @@ struct BuySellResponse: Decodable {
 }
 
 struct MarketResponse: Decodable{
-        var stocks : [MarketStock]
-        var gainers : [MarketStock]
-        var losers : [MarketStock]
+    var stocks : [MarketStock]
+    var gainers : [MarketStock]
+    var losers : [MarketStock]
 }
 
 struct MarketStock: Decodable{
@@ -79,7 +79,6 @@ struct DetailedResponse: Decodable{
 struct ChartResponse : Decodable{
     var date : String
     var closingPrice : Decimal
-    
 }
 
 struct SearchResponse : Decodable{
