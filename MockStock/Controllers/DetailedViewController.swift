@@ -309,12 +309,12 @@ class DetailedViewController: UIViewController {
         
         // 1. Get valid token
         guard let token = UserDefaults.standard.string(forKey: "Token") else {
-            MSRestMock.fetchAuthenticationToken(callback: fetchData)
+            MSAPI.fetchAuthenticationToken(callback: fetchData)
             return
         }
         
         // 2. Send leave league request to server using authentication token
-        let urlString = "https://mockstock.azurewebsites.net/api/stock/buy"
+        let urlString = "\(MSAPI.baseUrl)/api/stock/buy"
         guard let url = URL(string: urlString) else { return }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
@@ -325,6 +325,7 @@ class DetailedViewController: UIViewController {
             if let e = error { print(e) }
             guard let d = data else { return }
             
+            var showErrorAlert = false
             do {
                 // Decode JSON
                 let buyResponse = try JSONDecoder().decode(BuySellResponse.self, from: d)
@@ -335,9 +336,15 @@ class DetailedViewController: UIViewController {
                 }
             } catch let jsonErr {
                 print(jsonErr)
+                showErrorAlert = true
+            }
+            DispatchQueue.main.async {
+                if showErrorAlert {
+                    self.showTransactionQuantityErrorAlert()
+                }
             }
             
-            }.resume() // fires the session
+        }.resume() // fires the session
         
     }
     
@@ -348,12 +355,12 @@ class DetailedViewController: UIViewController {
         
         // 1. Get valid token
         guard let token = UserDefaults.standard.string(forKey: "Token") else {
-            MSRestMock.fetchAuthenticationToken(callback: fetchData)
+            MSAPI.fetchAuthenticationToken(callback: fetchData)
             return
         }
         
         // 2. Send leave league request to server using authentication token
-        let urlString = "https://mockstock.azurewebsites.net/api/stock/sell"
+        let urlString = "\(MSAPI.baseUrl)/api/stock/sell"
         guard let url = URL(string: urlString) else { return }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
@@ -362,7 +369,7 @@ class DetailedViewController: UIViewController {
         urlRequest.addValue(symbolTitle, forHTTPHeaderField: "symbol")
         URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
             guard let d = data else { return }
-            
+            var showErrorAlert = false
             do {
                 // Decode JSON
                 let buyResponse = try JSONDecoder().decode(BuySellResponse.self, from: d)
@@ -373,16 +380,27 @@ class DetailedViewController: UIViewController {
                 }
             } catch let jsonErr {
                 print(jsonErr)
+                showErrorAlert = true
+            }
+            DispatchQueue.main.async {
+                if showErrorAlert {
+                    self.showTransactionQuantityErrorAlert()
+                }
             }
             
-            }.resume() // fires the session
-        // Then, submit sell network request
+        }.resume() // fires the session
+        
     }
     
+    func showTransactionQuantityErrorAlert() {
+        let alert = UIAlertController(title: "Transaction Failed", message: "The quantity entered was invalid.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true)
+    }
     
     //Fetches detailed view data
     func fetchData() {
-        let urlString = "https://mockstock.azurewebsites.net/api/stock/details"
+        let urlString = "\(MSAPI.baseUrl)/api/stock/details"
         guard let url = URL(string: urlString) else { return }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "GET"
@@ -441,7 +459,7 @@ class DetailedViewController: UIViewController {
     
     //Fetches graph data based off which button was seletected
     func fetchGraphData(range: String) {
-        let urlString = "https://mockstock.azurewebsites.net/api/stock/chart"
+        let urlString = "\(MSAPI.baseUrl)/api/stock/chart"
         guard let url = URL(string: urlString) else { return }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "GET"
